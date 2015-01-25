@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from plugin_api import register_plugin
 
+# http://www.minddesk.com/wiki/index.php?title=Qubicle_Constructor_1:Data_Exchange_With_Qubicle_Binary
 class QubicleFile(object):
 
     # Description of file type
@@ -55,7 +56,7 @@ class QubicleFile(object):
         # Open our file
         f = open(filename,"wb")
 
-        # Version 
+        # Version
         self.uint32(f, 0x00000101)
         # Colour format RGBA
         self.uint32(f, 0)
@@ -63,17 +64,17 @@ class QubicleFile(object):
         self.uint32(f, 0)
         # Uncompressed
         self.uint32(f, 0)
-        # Visability mask 
+        # Visability mask
         self.uint32(f, 0)
         # Matrix count
         self.uint32(f, 1)
-        
+
         # Model name length
         name = "Model"
         f.write(str(chr(len(name))))
         # Model name
         f.write(name)
-        
+
         # X, Y, Z dimensions
         self.uint32(f, voxels.width)
         self.uint32(f, voxels.height)
@@ -101,6 +102,15 @@ class QubicleFile(object):
         # Tidy up
         f.close()
 
+    # sets alpha to ff and converts brga to rgba if format
+    def formatVox(self, vox, format):
+        r = (vox & 0x000000ff)>>0
+        g = (vox & 0x0000ff00)>>8
+        b = (vox & 0x00ff0000)>>16
+        if format:
+            return (b<<24) | (g<<16) | (r<<8) | 0xff
+        return (r<<24) | (g<<16) | (b<<8) | 0xff
+
     # Load a Qubicle Constructor binary file
     def load(self, filename):
         # grab the voxel data
@@ -109,74 +119,91 @@ class QubicleFile(object):
         # Open our file
         f = open(filename,"rb")
 
-        # Version 
+        # Version
         version = self.uint32(f)
-        # Colour format RGBA
-        format =self.uint32(f)
-        if format:
-            raise Exception("Unsupported colour format")
+        # Colour format 0 for RGBA and 1 for BRGA
+        format = self.uint32(f)
         # Left handed coords
         coords = self.uint32(f)
         # Uncompressed
         compression = self.uint32(f)
-        if compression:
-            raise Exception("Compressed .qb files not yet supported")
-        # Visability mask 
+        # Visability mask
         mask = self.uint32(f)
         # Matrix count
         matrix_count = self.uint32(f)
-        
+
         # Warn about multiple matrices
         if matrix_count > 1:
             self.api.warning("Qubicle files with more than 1 matrix"
                              " are not yet properly supported. All "
                              " matrices will be (badly) merged.")
-        
+
         max_width = 0
         max_height = 0
         max_depth = 0
-        
+
         for i in xrange(matrix_count):
-        
+
             # Name length
             namelen = int(ord(f.read(1)))
             name = f.read(namelen)
-        
+
             # X, Y, Z dimensions
             width = self.uint32(f)
             height = self.uint32(f)
             depth = self.uint32(f)
-            
+
             # Don't allow huge models
             if width > 127 or height > 127 or depth > 127:
                 raise Exception("Model to large - max 127x127x127")
-    
+
             if width > max_width:
                 max_width = width
             if height > max_height:
                 max_height = height
             if depth > max_depth:
                 max_depth = depth
-    
+
             voxels.resize(max_width, max_height, max_depth)
-    
-            # Matrix position - FIXME not yet supported
+
+            # Matrix position - FIXME not yet supported (positions are Int32 )
             dx = self.uint32(f)
             dy = self.uint32(f)
             dz = self.uint32(f)
-    
+
             # Data
-            for z in xrange(depth):
-                for y in xrange(height):
-                    for x in xrange(width):
-                        vox = self.uint32(f)
-                        vox = (vox & 0x00ffffff)
-                        if vox:
-                            r = (vox & 0x000000ff)>>0
-                            g = (vox & 0x0000ff00)>>8
-                            b = (vox & 0x00ff0000)>>16
-                            vox = (r<<24) | (g<<16) | (b<<8) | 0xff
-                            voxels.set(x, y, z, vox)
+            if compression:
+                for z in xrange(depth):
+                    index = 0
+                    while True:
+                        data = self.uint32(f)
+                        if (data == 6):
+                            break;
+                        elif (data == 2):
+                            count = self.uint32(f)
+                            vox = self.uint32(f)
+                            if (vox & 0xff000000) >> 24:
+                                vox = self.formatVox(vox, format)
+                                for j in xrange(count):
+                                    x = index % width
+                                    y = index / width
+                                    index += 1
+                                    voxels.set(x, y, coords and (depth - z - 1) or z, vox)
+                            else:
+                                index += count
+                        else:
+                            x = index % width
+                            y = index / width
+                            index += 1
+                            if (data & 0xff000000) >> 24:
+                               voxels.set(x, y, coords and (depth - z - 1) or z, self.formatVox(data, format))
+            else:
+                for z in xrange(depth):
+                    for y in xrange(height):
+                        for x in xrange(width):
+                            vox = self.uint32(f)
+                            if (vox & 0xff000000) >> 24:
+                                voxels.set(x, y, coords and (depth - z - 1) or z, self.formatVox(vox, format))
 
         f.close()
 
