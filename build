@@ -1,0 +1,9 @@
+#!/bin/bash
+/Library/Python/2.7/site-packages/PySide/pyside-rcc -o src/resources_rc.py src/resources.qrc
+src=.
+for file in $( find $src -name "*.ui")
+do
+  out=`basename $file .ui`
+  outdir=`dirname $file`
+  pyside-uic $file -o ${outdir}/ui_${out}.py
+done

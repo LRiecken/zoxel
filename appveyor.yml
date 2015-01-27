@@ -1,0 +1,42 @@
+os: Windows Server 2012 R2
+version: '{branch}'
+branches:
+  only:
+    - /v?\d+(\.\d+)*/
+
+init:
+  - ps: "ls -Name \"C:/\""
+  - SET PATH=C:\Python27;C:\Python27\Scripts;%PATH%
+
+install:
+  - ps: Start-FileDownload 'https://bootstrap.pypa.io/get-pip.py'
+  - python get-pip.py
+  - python --version
+  - python -c "import struct; print(struct.calcsize('P') * 8)"
+  - pip --version
+  - pip install PySide
+  - python -c "import PySide"
+  - pip install cx_freeze
+  - pip install PyOpenGL
+  - pip install PyOpenGL_accelerate
+
+build_script:
+  - cd /D %APPVEYOR_BUILD_FOLDER%
+  - build.bat
+  - cd src
+  - python C:\Python27\Scripts\cxfreeze zoxel.py --target-dir ..\dist --base-name Win32GUI --include-modules atexit,PySide.QtNetwork,PySide.QtWebKit,OpenGL,OpenGL.platform.win32,OpenGL.arrays.nones,OpenGL.arrays.lists,OpenGL.arrays.strings,OpenGL.arrays.numbers,OpenGL.arrays.ctypesarrays,OpenGL.arrays.ctypesparameters,OpenGL.arrays.ctypespointers --include-path .
+  - cd ..\dist
+  - ps: "& 7z a -r zoxel-0.5-win32.zip ."
+
+test: off
+
+artifacts:
+  - path: dist/zoxel-0.5-win32.zip
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
+  artifact: dist/zoxel-0.5-win32.zip
+  on:
+    appveyor_repo_tag: true
