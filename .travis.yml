@@ -26,14 +26,14 @@ script:
 - python setup.py py2app
 - cd dist
 - ls -la
-- tar czf ../../zoxel-0.5-osx.tar.gz zoxel.app
+- tar czf zoxel-0.5-osx.tar.gz zoxel.app
 
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
     secure: yUf0zKDRpTvShF1nw7I+FlZQ522Hb0x8yg+aw53aVmqEVe8oZSHk0U1IwJ47uIVGARbC3V/Z4Ly93jDtZZIGQTFYd/bfcBIbX0mEzMlGtOblzaXXWmeB0Il7Zr945t1MnhAQbsK90v4NCaDFsoZkUIcc1pCt1uIAdw34xYt+980=
-  file: zoxel-0.5-osx.tar.gz
+  file: src/dist/zoxel-0.5-osx.tar.gz
   on:
     repo: chrmoritz/zoxel
     tags: true

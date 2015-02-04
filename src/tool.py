@@ -39,7 +39,7 @@ class Face(object):
     FACES_PLANE_X = [LEFT, RIGHT]
     FACES_PLANE_Y = [TOP, BOTTOM]
     FACES_PLANE_Z = [BACK, FRONT]
-    # Defining the faces for each plane used in the collision detection 
+    # Defining the faces for each plane used in the collision detection
     # algorithm, where the Y plane is collidable (But X and Z are not).
     COLLIDABLE_FACES_PLANE_X = FACES_PLANE_X
     COLLIDABLE_FACES_PLANE_Y = FACES_PLANE_Y + [None]
@@ -112,9 +112,9 @@ class EventData(object):
 
     def __repr__(self):
         return ('EventData(face={0},world_x={1},world_y={2},world_z={3},'
-                'mouse_x={4},mouse_y={5},mouse_button={6},key_modifiers={7})'.format( 
+                'mouse_x={4},mouse_y={5},mouse_button={6},key_modifiers={7})'.format(
                 self._face, self._world_x, self._world_y, self._world_z,
-                   self._mouse_x, self._mouse_y, self._mouse_button, 
+                   self._mouse_x, self._mouse_y, self._mouse_button,
                    self._key_modifiers))
 
     def __init__(self):
@@ -175,15 +175,15 @@ class Tool(object):
     # Mouse click - a mouse button has been pressed and released
     def on_mouse_click(self, data):
         pass
-    
+
     # A mouse drag has started
     def on_drag_start(self, data):
         pass
-    
+
     # Mouse is dragging
     def on_drag(self, data):
         pass
-    
+
     # A mouse drag ended
     def on_drag_end(self, data):
         pass
@@ -192,7 +192,7 @@ class Tool(object):
     # back to default
     def on_cancel(self, data):
         pass
-    
+
     # Should return the action for the tool
     def get_action(self):
         return self.action

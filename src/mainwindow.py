@@ -45,7 +45,7 @@ class MainWindow(QtGui.QMainWindow):
         self.state = {}
         # Our animation timer
         self._timer = QtCore.QTimer(self)
-        self.connect(self._timer, QtCore.SIGNAL("timeout()"), 
+        self.connect(self._timer, QtCore.SIGNAL("timeout()"),
             self.on_animation_tick)
         self._anim_speed = 200
         # Load our state if possible
@@ -170,7 +170,7 @@ class MainWindow(QtGui.QMainWindow):
         # Undo
         self.display.voxels.undo()
         self.display.refresh()
-    
+
     @QtCore.Slot()
     def on_action_redo_triggered(self):
         # Redo
@@ -254,7 +254,7 @@ class MainWindow(QtGui.QMainWindow):
         self.display.voxels.select_previous_frame()
         self.display.refresh()
         self.refresh_actions()
-    
+
     @QtCore.Slot()
     def on_action_anim_settings_triggered(self):
         pass
@@ -499,7 +499,7 @@ class MainWindow(QtGui.QMainWindow):
         filename, filetype = QtGui.QFileDialog.getOpenFileName(self,
                 caption="Open file",
                 filter=choices,
-                dir = directory, 
+                dir = directory,
                 selectedFilter="Zoxel Files (*.zox)")
         if not filename:
             return
@@ -565,7 +565,7 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.action_anim_delete.setEnabled(num_frames > 1)
         self.ui.action_anim_previous.setEnabled(num_frames > 1)
         self.ui.action_anim_next.setEnabled(num_frames > 1)
-        self.ui.action_anim_play.setEnabled(num_frames > 1 
+        self.ui.action_anim_play.setEnabled(num_frames > 1
             and not self._timer.isActive())
         self.ui.action_anim_stop.setEnabled(self._timer.isActive())
         self.update_caption()

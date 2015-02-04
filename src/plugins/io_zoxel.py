@@ -45,7 +45,7 @@ class ZoxelFile(object):
         # Build data structure
         data = {'version': version, 'frames': voxels.get_frame_count(),
                 "creator": "Zoxel Version "+ZOXEL_VERSION}
-        
+
         for f in xrange(voxels.get_frame_count()):
             frame = []
             voxels.select_frame(f)
@@ -55,7 +55,7 @@ class ZoxelFile(object):
                         v = voxels.get(x, y, z)
                         if v:
                             frame.append((x,y,z,v))
-    
+
             data['frame{0}'.format(f+1)] = frame
 
         data['width'] = voxels.width
@@ -72,7 +72,7 @@ class ZoxelFile(object):
 
     # Called when we need to load a file. Should raise an exception if there
     # is a problem.
-    def load(self, filename):        
+    def load(self, filename):
         # grab the voxel data
         voxels = self.api.get_voxel_data()
 
@@ -93,7 +93,7 @@ class ZoxelFile(object):
 
         # Load the data
         frame = data['frame1']
-        
+
         # Do we have model dimensions
         if 'width' in data:
             # Yes, so resize to them
@@ -112,7 +112,7 @@ class ZoxelFile(object):
                     maxZ = z
             # Resize
             voxels.resize(maxX+1, maxY+1, maxZ+1)
-        
+
         # Read the voxel data
         for f in xrange(frames):
             frame = data['frame{0}'.format(f+1)]
@@ -121,7 +121,7 @@ class ZoxelFile(object):
             # Add another frame if required
             if f < frames-1:
                 voxels.add_frame(False)
-                
+
         # Select the first frame by default
         if frames > 1:
             voxels.select_frame(0)

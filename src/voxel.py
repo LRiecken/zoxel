@@ -49,7 +49,7 @@ class VoxelData(object):
     X_AXIS = 1
     Y_AXIS = 2
     Z_AXIS = 3
-    
+
     # World dimension properties
     @property
     def width(self):
@@ -203,7 +203,7 @@ class VoxelData(object):
         if ( self.is_valid_bounds(x, y, z ) ):
             # Add to undo
             if undo:
-                self._undo.add(UndoItem(Undo.SET_VOXEL, 
+                self._undo.add(UndoItem(Undo.SET_VOXEL,
                 (x, y, z, self._data[x][y][z]), (x, y, z, state)))
             self._data[x][y][z] = state
             if state != EMPTY:
@@ -719,12 +719,12 @@ class VoxelData(object):
             depth = self.depth
 
         for i, frame in enumerate(self._frames):
-                    
+
             # Create new temporary data structure
             data = [[[0 for _ in xrange(depth)]
                 for _ in xrange(height)]
                     for _ in xrange(width)]
-            
+
             # Copy data over at new location
             for tx in xrange(0, self.width):
                 for ty in xrange(0, self.height):
@@ -743,27 +743,27 @@ class VoxelData(object):
                             dz = tz
                         data[dx][dy][dz] = frame[tx][ty][tz]
             self._frames[i] = data
-        
+
         self._width = width
         self._height = height
         self._depth = depth
-        
+
         self._data = self._frames[self._current_frame]
         # Rebuild our cache
         self._cache_rebuild()
         self.changed = True
-    
+
     # Translate the voxel data.
     def translate(self, x, y, z, undo = True):
         # Sanity
         if x == 0 and y == 0 and z == 0:
             return
-        
+
         # Add to undo
         if undo:
-            self._undo.add(UndoItem(Undo.TRANSLATE, 
+            self._undo.add(UndoItem(Undo.TRANSLATE,
             (-x, -y, -z), (x, y, z)))
-        
+
         # Create new temporary data structure
         data = [[[0 for _ in xrange(self.depth)]
             for _ in xrange(self.height)]
@@ -793,7 +793,7 @@ class VoxelData(object):
         elif op and op.operation == Undo.TRANSLATE:
             data = op.olddata
             self.translate(data[0], data[1], data[2], False)
-            
+
     # Redo an undone operation
     def redo(self):
         op = self._undo.redo()

@@ -37,52 +37,52 @@ class DragTool(Tool):
 
     # Drag the model in voxel space
     def on_drag(self, target):
-            dx = target.mouse_x - self._mouse[0]
-            dy = target.mouse_y - self._mouse[1]
-            # Work out some sort of vague translation between screen and voxels
-            sx = self.api.mainwindow.width() / target.voxels.width
-            sy = self.api.mainwindow.height() / target.voxels.height
-            dx = int(round(dx / float(sx)))
-            dy = int(round(dy / float(sy)))
-            # Work out translation for x,y
-            ax, ay = self.api.mainwindow.display.view_axis()
-            tx = 0
-            ty = 0
-            tz = 0
-            if ax == self.api.mainwindow.display.X_AXIS:
-                if dx > 0:
-                    tx = 1
-                elif dx < 0:
-                    tx = -1
-            if ax == self.api.mainwindow.display.Y_AXIS:
-                if dx > 0:
-                    ty = 1
-                elif dx < 0:
-                    ty = -1
-            if ax == self.api.mainwindow.display.Z_AXIS:
-                if dx > 0:
-                    tz = 1
-                elif dx < 0:
-                    tz = -1
-            if ay == self.api.mainwindow.display.X_AXIS:
-                if dy > 0:
-                    tx = 1
-                elif dy < 0:
-                    tx = -1
-            if ay == self.api.mainwindow.display.Y_AXIS:
-                if dy > 0:
-                    ty = -1
-                elif dy < 0:
-                    ty = 1
-            if ay == self.api.mainwindow.display.Z_AXIS:
-                if dy > 0:
-                    tz = 1
-                elif dy < 0:
-                    tz = -1
-            
-            if ty != 0 or tx != 0 or tz != 0:
-                self._mouse = (target.mouse_x, target.mouse_y)
-            
-            target.voxels.translate(tx, ty, tz)
-            
+        dx = target.mouse_x - self._mouse[0]
+        dy = target.mouse_y - self._mouse[1]
+        # Work out some sort of vague translation between screen and voxels
+        sx = self.api.mainwindow.width() / target.voxels.width
+        sy = self.api.mainwindow.height() / target.voxels.height
+        dx = int(round(dx / float(sx)))
+        dy = int(round(dy / float(sy)))
+        # Work out translation for x,y
+        ax, ay = self.api.mainwindow.display.view_axis()
+        tx = 0
+        ty = 0
+        tz = 0
+        if ax == self.api.mainwindow.display.X_AXIS:
+            if dx > 0:
+                tx = 1
+            elif dx < 0:
+                tx = -1
+        if ax == self.api.mainwindow.display.Y_AXIS:
+            if dx > 0:
+                ty = 1
+            elif dx < 0:
+                ty = -1
+        if ax == self.api.mainwindow.display.Z_AXIS:
+            if dx > 0:
+                tz = 1
+            elif dx < 0:
+                tz = -1
+        if ay == self.api.mainwindow.display.X_AXIS:
+            if dy > 0:
+                tx = 1
+            elif dy < 0:
+                tx = -1
+        if ay == self.api.mainwindow.display.Y_AXIS:
+            if dy > 0:
+                ty = -1
+            elif dy < 0:
+                ty = 1
+        if ay == self.api.mainwindow.display.Z_AXIS:
+            if dy > 0:
+                tz = 1
+            elif dy < 0:
+                tz = -1
+
+        if ty != 0 or tx != 0 or tz != 0:
+            self._mouse = (target.mouse_x, target.mouse_y)
+
+        target.voxels.translate(tx, ty, tz)
+
 register_plugin(DragTool, "Drag Tool", "1.0")

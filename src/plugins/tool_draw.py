@@ -43,9 +43,9 @@ class DrawingTool(Tool):
             target.world_x = pos[0]
             target.world_y = pos[1]
             target.world_z = pos[2]
-        # Tries to set the voxel on the matrix and then returns the Target 
+        # Tries to set the voxel on the matrix and then returns the Target
         # with it's coordinates, if it exists.
-        if( target.voxels.set(target.world_x, target.world_y, target.world_z, 
+        if( target.voxels.set(target.world_x, target.world_y, target.world_z,
                               self.colour) ):
             return target
         else:
