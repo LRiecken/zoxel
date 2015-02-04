@@ -20,10 +20,10 @@ from plugin_api import register_plugin
 class ShaderTool(Tool):
 
     def __init__(self, api):
-        super(PaintingTool, self).__init__(api)
+        super(ShaderTool, self).__init__(api)
         # Create our action / icon
         self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/darken.png"),
+            QtGui.QPixmap(":/images/gfx/icons/Shade.png"),
             "Lighten/Darken", None)
         self.action.setStatusTip("Adjust voxel darkness a little.")
         self.action.setCheckable(True)
@@ -51,4 +51,4 @@ class ShaderTool(Tool):
     def on_drag(self, data):
         self.on_mouse_click(data)
 
-register_plugin(PaintingTool, "Painting Tool", "1.0")
+register_plugin(ShaderTool, "Shadeing Tool", "1.0")

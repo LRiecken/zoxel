@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="images">
+    <file>gfx/icons/Shade.png</file>
     <file>gfx/icons/Stop.png</file>
     <file>gfx/icons/Rewind.png</file>
     <file>gfx/icons/Previousrecord.png</file>

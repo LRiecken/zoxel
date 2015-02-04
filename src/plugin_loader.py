@@ -5,6 +5,7 @@ import plugins.tool_draw
 import plugins.tool_paint
 import plugins.tool_erase
 import plugins.tool_drag
+import plugins.tool_shade
 import plugins.io_zoxel
 import plugins.io_sproxel
 import plugins.tool_fill
