@@ -1,4 +1,7 @@
-# Simple tool for flood fill.
+# tool_floodfill.py
+# Tool for flood fill with noise.
+# (left click = brightness noise and right click = rgb noise)
+# Copyright (c) 2013, Graham R King
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,14 +18,15 @@
 from PySide import QtGui
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
+from random import random
 
-class FillTool(Tool):
+class FillNoiseTool(Tool):
 
     def __init__(self, api):
-        super(FillTool, self).__init__(api)
+        super(FillNoiseTool, self).__init__(api)
         # Create our action / icon
         self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/paint-can.png"),
+            QtGui.QPixmap(":/images/gfx/icons/color.png"),
             "Fill", None)
         self.action.setStatusTip("Flood fill with colour")
         self.action.setCheckable(True)
@@ -40,11 +44,12 @@ class FillTool(Tool):
         # Don't allow invalid fills
         c = self.colour.getRgb()
         fill_colour = c[0]<<24 | c[1]<<16 | c[2]<<8 | 0xff
-        if search_colour == fill_colour:
-            return
         # Initialise our search list
         search = []
         search.append((target.world_x, target.world_y, target.world_z))
+        searched = []
+        color = self.colour
+        i = QtGui.QInputDialog.getDouble(self.api.mainwindow, "Intensity", "Intensity:", 0.3, 0.0, 1.0, 3.0)[0]
         # Keep iterating over the search list until no more to do
         while len(search):
             x,y,z = search.pop()
@@ -52,19 +57,27 @@ class FillTool(Tool):
             if not voxel or voxel != search_colour:
                 continue
             # Add all likely neighbours into our search list
-            if target.voxels.get(x-1,y,z) == search_colour:
+            if target.voxels.get(x-1,y,z) == search_colour and not (x-1,y,z) in searched:
                 search.append((x-1,y,z))
-            if target.voxels.get(x+1,y,z) == search_colour:
+            if target.voxels.get(x+1,y,z) == search_colour and not (x+1,y,z) in searched:
                 search.append((x+1,y,z))
-            if target.voxels.get(x,y+1,z) == search_colour:
+            if target.voxels.get(x,y+1,z) == search_colour and not (x,y+1,z) in searched:
                 search.append((x,y+1,z))
-            if target.voxels.get(x,y-1,z) == search_colour:
+            if target.voxels.get(x,y-1,z) == search_colour and not (x,y-1,z) in searched:
                 search.append((x,y-1,z))
-            if target.voxels.get(x,y,z+1) == search_colour:
+            if target.voxels.get(x,y,z+1) == search_colour and not (x,y,z+1) in searched:
                 search.append((x,y,z+1))
-            if target.voxels.get(x,y,z-1) == search_colour:
+            if target.voxels.get(x,y,z-1) == search_colour and not (x,y,z-1) in searched:
                 search.append((x,y,z-1))
             # Set the colour of the current voxel
-            target.voxels.set(x, y, z, self.colour)
+            if target.mouse_button == MouseButtons.LEFT:
+                nc = color.lighter(random()*200*i + 100 - 100*i)
+            elif target.mouse_button == MouseButtons.RIGHT:
+                nc = QtGui.QColor(color)
+                nc.setHsvF((nc.hueF()+(random()*0.2*i-0.1*i))%1,
+                    max(0,min(1,nc.saturationF()+(random()*2*i-i))),
+                    max(0,min(1,nc.valueF()+(random()*2*i-i))))
+            target.voxels.set(x, y, z, nc)
+            searched.append((x,y,z))
 
-register_plugin(FillTool, "Fill Tool", "1.0")
+register_plugin(FillNoiseTool, "Noisy Fill Tool", "1.0")
