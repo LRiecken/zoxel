@@ -34,7 +34,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     X_AXIS = 1
     Y_AXIS = 2
     Z_AXIS = 3
-    
+
     # Drag types
     DRAG_START = 1
     DRAG_END = 2
@@ -308,10 +308,10 @@ class GLWidget(QtOpenGL.QGLWidget):
         self.grids.update_grid_plane(self.voxels)
 
     def mousePressEvent(self, event):
-        
+
         self._key_modifiers = event.modifiers()
         self._mousedown_time = time.time()
-        
+
         self._mouse = QtCore.QPoint(event.pos())
         self._mouse_absolute = QtCore.QPoint(event.pos())
         self.mouse_position = (self._mouse.x(),self._mouse.y())
@@ -350,18 +350,20 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         self.mouse_position = (self._mouse.x(),self._mouse.y())
 
-        ctrl = (self._key_modifiers 
+        ctrl = (self._key_modifiers
                 & QtCore.Qt.KeyboardModifier.ControlModifier) != 0
-        shift = (self._key_modifiers 
+        shift = (self._key_modifiers
                  & QtCore.Qt.KeyboardModifier.ShiftModifier) != 0
+        alt = (self._key_modifiers
+                 & QtCore.Qt.KeyboardModifier.AltModifier) != 0
 
         # Screen units delta
         dx = event.x() - self._mouse.x()
         dy = event.y() - self._mouse.y()
-        
+
         # Remember the mouse deltas
         self.mouse_delta_relative = (dx, dy)
-        self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(), 
+        self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(),
             event.y() - self._mouse_absolute.y())
 
         # Maybe we are dragging
@@ -376,9 +378,9 @@ class GLWidget(QtOpenGL.QGLWidget):
             x, y, z, face = self.window_to_voxel(event.x(), event.y())
             self.send_drag(self.DRAG, x, y, z, event.x(), event.y(), face)
             self.refresh()
-                        
-        # Right mouse button held down with CTRL key - rotate
-        # Or middle mouse button held 
+
+        # Right mouse button held down with CTRL/cmd key - rotate
+        # Or middle mouse button held
         if ((event.buttons() & QtCore.Qt.RightButton and ctrl)
             or ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
             self._rotate_x = self._rotate_x + dy
@@ -386,8 +388,10 @@ class GLWidget(QtOpenGL.QGLWidget):
             self.updateGL()
 
         # Middle mouse button held down with CTRL - translate
-        if event.buttons() & QtCore.Qt.MiddleButton and ctrl:
-            
+        # or right mouse button with alt
+        if ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
+            or (event.buttons() & QtCore.Qt.RightButton and alt)):
+
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
             self._translate_y = self._translate_y + ((-dy) * self._vtranslate)
@@ -409,9 +413,9 @@ class GLWidget(QtOpenGL.QGLWidget):
     def zoom_in(self):
         self._translate_z *= 1 - self._zoom_speed
         self.updateGL()
-        
+
     def zoom_out(self):
-        self._translate_z *= 1 + self._zoom_speed        
+        self._translate_z *= 1 + self._zoom_speed
         self.updateGL()
 
     def wheelEvent(self, event):
