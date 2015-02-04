@@ -45,8 +45,8 @@ class FillNoiseTool(Tool):
         c = self.colour.getRgb()
         fill_colour = c[0]<<24 | c[1]<<16 | c[2]<<8 | 0xff
         # Initialise our search list
-        search = []
-        search.append((target.world_x, target.world_y, target.world_z))
+        search = set()
+        search.add((target.world_x, target.world_y, target.world_z))
         searched = []
         color = self.colour
         i = QtGui.QInputDialog.getDouble(self.api.mainwindow, "Intensity", "Intensity:", 0.3, 0.0, 1.0, 3.0)[0]
@@ -58,17 +58,17 @@ class FillNoiseTool(Tool):
                 continue
             # Add all likely neighbours into our search list
             if target.voxels.get(x-1,y,z) == search_colour and not (x-1,y,z) in searched:
-                search.append((x-1,y,z))
+                search.add((x-1,y,z))
             if target.voxels.get(x+1,y,z) == search_colour and not (x+1,y,z) in searched:
-                search.append((x+1,y,z))
+                search.add((x+1,y,z))
             if target.voxels.get(x,y+1,z) == search_colour and not (x,y+1,z) in searched:
-                search.append((x,y+1,z))
+                search.add((x,y+1,z))
             if target.voxels.get(x,y-1,z) == search_colour and not (x,y-1,z) in searched:
-                search.append((x,y-1,z))
+                search.add((x,y-1,z))
             if target.voxels.get(x,y,z+1) == search_colour and not (x,y,z+1) in searched:
-                search.append((x,y,z+1))
+                search.add((x,y,z+1))
             if target.voxels.get(x,y,z-1) == search_colour and not (x,y,z-1) in searched:
-                search.append((x,y,z-1))
+                search.add((x,y,z-1))
             # Set the colour of the current voxel
             if target.mouse_button == MouseButtons.LEFT:
                 nc = color.lighter(random()*200*i + 100 - 100*i)

@@ -43,8 +43,8 @@ class FillTool(Tool):
         if search_colour == fill_colour:
             return
         # Initialise our search list
-        search = []
-        search.append((target.world_x, target.world_y, target.world_z))
+        search = set()
+        search.add((target.world_x, target.world_y, target.world_z))
         # Keep iterating over the search list until no more to do
         while len(search):
             x,y,z = search.pop()
@@ -53,17 +53,17 @@ class FillTool(Tool):
                 continue
             # Add all likely neighbours into our search list
             if target.voxels.get(x-1,y,z) == search_colour:
-                search.append((x-1,y,z))
+                search.add((x-1,y,z))
             if target.voxels.get(x+1,y,z) == search_colour:
-                search.append((x+1,y,z))
+                search.add((x+1,y,z))
             if target.voxels.get(x,y+1,z) == search_colour:
-                search.append((x,y+1,z))
+                search.add((x,y+1,z))
             if target.voxels.get(x,y-1,z) == search_colour:
-                search.append((x,y-1,z))
+                search.add((x,y-1,z))
             if target.voxels.get(x,y,z+1) == search_colour:
-                search.append((x,y,z+1))
+                search.add((x,y,z+1))
             if target.voxels.get(x,y,z-1) == search_colour:
-                search.append((x,y,z-1))
+                search.add((x,y,z-1))
             # Set the colour of the current voxel
             target.voxels.set(x, y, z, self.colour)
 
