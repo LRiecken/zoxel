@@ -13,3 +13,4 @@ import plugins.tool_fill_noise
 import plugins.tool_colourpick
 import plugins.io_obj
 import plugins.io_qubicle
+import plugins.io_magica
