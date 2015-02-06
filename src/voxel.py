@@ -753,6 +753,42 @@ class VoxelData(object):
         self._cache_rebuild()
         self.changed = True
 
+    # Mirror voxels in a axis
+    def mirror_in_axis(self, axis):
+        # Reset undo buffer
+        self._undo.clear()
+
+        for i, frame in enumerate(self._frames):
+
+            # Create new temporary data structure
+            data = [[[0 for _ in xrange(self.depth)]
+                for _ in xrange(self.height)]
+                    for _ in xrange(self.width)]
+
+            # Copy data over at new location
+            for tx in xrange(0, self.width):
+                for ty in xrange(0, self.height):
+                    for tz in xrange(0, self.depth):
+                        if axis == self.Y_AXIS:
+                            dx = tx
+                            dy = (-ty)-1
+                            dz = tz
+                        elif axis == self.X_AXIS:
+                            dx = (-tx)-1
+                            dy = ty
+                            dz = tz
+                        elif axis == self.Z_AXIS:
+                            dx = tx
+                            dy = ty
+                            dz = (-tz)-1
+                        data[dx][dy][dz] = frame[tx][ty][tz]
+            self._frames[i] = data
+
+        self._data = self._frames[self._current_frame]
+        # Rebuild our cache
+        self._cache_rebuild()
+        self.changed = True
+
     # Translate the voxel data.
     def translate(self, x, y, z, undo = True):
         # Sanity

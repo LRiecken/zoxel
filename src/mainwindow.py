@@ -275,6 +275,21 @@ class MainWindow(QtGui.QMainWindow):
         self.display.refresh()
 
     @QtCore.Slot()
+    def on_action_mirror_x_triggered(self):
+        self.display.voxels.mirror_in_axis(self.display.voxels.X_AXIS)
+        self.display.refresh()
+
+    @QtCore.Slot()
+    def on_action_mirror_y_triggered(self):
+        self.display.voxels.mirror_in_axis(self.display.voxels.Y_AXIS)
+        self.display.refresh()
+
+    @QtCore.Slot()
+    def on_action_mirror_z_triggered(self):
+        self.display.voxels.mirror_in_axis(self.display.voxels.Z_AXIS)
+        self.display.refresh()
+
+    @QtCore.Slot()
     def on_action_voxel_colour_triggered(self):
         # Choose a voxel colour
         colour = QtGui.QColorDialog.getColor()

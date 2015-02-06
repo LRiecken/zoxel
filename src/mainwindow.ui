@@ -77,6 +77,10 @@
     <addaction name="action_rotate_y"/>
     <addaction name="action_rotate_z"/>
     <addaction name="separator"/>
+    <addaction name="action_mirror_x"/>
+    <addaction name="action_mirror_y"/>
+    <addaction name="action_mirror_z"/>
+    <addaction name="separator"/>
     <addaction name="action_resize"/>
    </widget>
    <widget class="QMenu" name="menuAnimation">
@@ -524,6 +528,30 @@
    </property>
    <property name="toolTip">
     <string>Export image of current model view</string>
+   </property>
+  </action>
+  <action name="action_mirror_x">
+   <property name="text">
+    <string>Mirror Model X-Axis</string>
+   </property>
+   <property name="toolTip">
+    <string>Mirror voxels in X axis</string>
+   </property>
+  </action>
+  <action name="action_mirror_y">
+   <property name="text">
+    <string>Mirror Model Y-Axis</string>
+   </property>
+   <property name="toolTip">
+    <string>Mirror voxels in Y axis</string>
+   </property>
+  </action>
+  <action name="action_mirror_z">
+   <property name="text">
+    <string>Mirror Model Z-Axis</string>
+   </property>
+   <property name="toolTip">
+    <string>Mirror voxels in Z axis</string>
    </property>
   </action>
  </widget>
