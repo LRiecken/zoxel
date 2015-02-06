@@ -24,6 +24,9 @@ from voxel_widget import GLWidget
 import json
 from palette_widget import PaletteWidget
 import os
+import webbrowser
+import urllib
+import sys
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -105,6 +108,19 @@ class MainWindow(QtGui.QMainWindow):
         # Setup window
         self.update_caption()
         self.refresh_actions()
+        # Update Check
+        try:
+            latest_tag = urllib.urlopen("https://github.com/chrmoritz/zoxel/releases/latest").geturl()
+            if not latest_tag.endswith("0.5.1"):
+                responce = QtGui.QMessageBox.question(self, "Outdated Zoxel version",
+                    "A new version of Zoxel is available! Do you want to update now?",
+                    buttons = (QtGui.QMessageBox.Yes | QtGui.QMessageBox.No),
+                    defaultButton = QtGui.QMessageBox.Yes)
+                if responce == QtGui.QMessageBox.Yes:
+                    webbrowser.open(latest_tag, 2)
+                    sys.exit(0)
+        except IOError:
+            pass
 
     def on_animation_tick(self):
         self.on_action_anim_next_triggered()
