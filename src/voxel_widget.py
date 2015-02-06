@@ -361,24 +361,6 @@ class GLWidget(QtOpenGL.QGLWidget):
         dx = event.x() - self._mouse.x()
         dy = event.y() - self._mouse.y()
 
-        # Remember the mouse deltas
-        self.mouse_delta_relative = (dx, dy)
-        self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(),
-            event.y() - self._mouse_absolute.y())
-
-        # Maybe we are dragging
-        if time.time() - self._mousedown_time > 0.3 and not self._dragging:
-            self._dragging = True
-            # Announce the start of a drag
-            x, y, z, face = self.window_to_voxel(event.x(), event.y())
-            self.send_drag(self.DRAG_START, x, y, z, event.x(), event.y(), face)
-            self.refresh()
-        elif time.time() - self._mousedown_time > 0.3 and self._dragging:
-            # Already dragging - send a drag event
-            x, y, z, face = self.window_to_voxel(event.x(), event.y())
-            self.send_drag(self.DRAG, x, y, z, event.x(), event.y(), face)
-            self.refresh()
-
         # Right mouse button held down with CTRL/cmd key - rotate
         # Or middle mouse button held
         if ((event.buttons() & QtCore.Qt.RightButton and ctrl)
@@ -389,13 +371,32 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         # Middle mouse button held down with CTRL - translate
         # or right mouse button with alt
-        if ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
+        elif ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
             or (event.buttons() & QtCore.Qt.RightButton and alt)):
 
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
             self._translate_y = self._translate_y + ((-dy) * self._vtranslate)
             self.refresh()
+
+        else:
+            # Remember the mouse deltas
+            self.mouse_delta_relative = (dx, dy)
+            self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(),
+                event.y() - self._mouse_absolute.y())
+
+            # Maybe we are dragging
+            if time.time() - self._mousedown_time > 0.3 and not self._dragging:
+                self._dragging = True
+                # Announce the start of a drag
+                x, y, z, face = self.window_to_voxel(event.x(), event.y())
+                self.send_drag(self.DRAG_START, x, y, z, event.x(), event.y(), face)
+                self.refresh()
+            elif time.time() - self._mousedown_time > 0.3 and self._dragging:
+                # Already dragging - send a drag event
+                x, y, z, face = self.window_to_voxel(event.x(), event.y())
+                self.send_drag(self.DRAG, x, y, z, event.x(), event.y(), face)
+                self.refresh()
 
         self._mouse = QtCore.QPoint(event.pos())
 
