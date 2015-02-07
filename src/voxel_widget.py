@@ -132,6 +132,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self._mousedown_time = 0
         self.button_down = None
         self._dragging = False
+        self._rotating = False
         self._key_modifiers = 0
 
     # Reset the control and clear all data
@@ -365,6 +366,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Or middle mouse button held
         if ((event.buttons() & QtCore.Qt.RightButton and ctrl)
             or ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
+            self._rotating = True
             self._rotate_x = self._rotate_x + dy
             self._rotate_y = self._rotate_y + dx
             self.updateGL()
@@ -373,7 +375,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         # or right mouse button with alt
         elif ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
             or (event.buttons() & QtCore.Qt.RightButton and alt)):
-
+            self._rotating = True
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
             self._translate_y = self._translate_y + ((-dy) * self._vtranslate)
@@ -407,6 +409,8 @@ class GLWidget(QtOpenGL.QGLWidget):
         if self._dragging:
             self._dragging = False
             self.send_drag(self.DRAG_END, x, y, z, event.x(), event.y(), face)
+        elif self._rotating:
+            self._rotating = False
         else:
             self.send_mouse_click(x, y, z, event.x(), event.y(), face)
         self.refresh()
