@@ -27,6 +27,7 @@ import os
 import webbrowser
 import urllib
 import sys
+from constants import ZOXEL_TAG
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -111,7 +112,7 @@ class MainWindow(QtGui.QMainWindow):
         # Update Check
         try:
             latest_tag = urllib.urlopen("https://github.com/chrmoritz/zoxel/releases/latest").geturl()
-            if not latest_tag.endswith("0.5.3"):
+            if not latest_tag.endswith(ZOXEL_TAG):
                 responce = QtGui.QMessageBox.question(self, "Outdated Zoxel version",
                     "A new version of Zoxel is available! Do you want to update now?",
                     buttons = (QtGui.QMessageBox.Yes | QtGui.QMessageBox.No),
