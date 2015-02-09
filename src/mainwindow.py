@@ -71,7 +71,7 @@ class MainWindow(QtGui.QMainWindow):
             # Resize is detected as a change, discard changes
             self.display.voxels.saved()
         # Create our palette widget
-        voxels = PaletteWidget(self.ui.palette)
+        voxels = PaletteWidget(self.ui.palette, RGBvalue=self.ui.paletteRGBvalue)
         self.ui.palette.layout().addWidget(voxels)
         self.colour_palette = voxels
         # More UI state

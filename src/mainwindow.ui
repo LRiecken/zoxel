@@ -157,7 +157,18 @@
       <height>0</height>
      </size>
     </property>
-    <layout class="QGridLayout" name="gridLayout_3"/>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="paletteRGBvalue">
+       <property name="text">
+        <string>#ff0000</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QToolBar" name="toolbar_animation">

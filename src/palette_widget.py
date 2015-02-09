@@ -34,8 +34,9 @@ class PaletteWidget(QtGui.QWidget):
             b = (value & 0xff00) >> 8
             value = QtGui.QColor.fromRgb(r,g,b)
         self._set_colour(value)
+        self.RGBvalue.setText(value.name())
 
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, RGBvalue = None):
         super(PaletteWidget, self).__init__(parent)
         self._hue = 1.0
         self._saturation = 1.0
@@ -45,6 +46,7 @@ class PaletteWidget(QtGui.QWidget):
         self._colour = QtGui.QColor.fromHslF(self._hue, 1.0, 1.0)
         self._calculate_bounds()
         self._draw_palette()
+        self.RGBvalue = RGBvalue
 
     # Calculate the sizes of various bits of our UI
     def _calculate_bounds(self):
