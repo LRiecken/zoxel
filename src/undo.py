@@ -39,6 +39,7 @@ class Undo(object):
     # Types of operation
     SET_VOXEL = 1
     TRANSLATE = 2
+    FILL = 3
 
     @property
     def enabled(self):

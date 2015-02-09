@@ -77,7 +77,7 @@ class FillNoiseTool(Tool):
                 nc.setHsvF((nc.hueF()+(random()*0.2*i-0.1*i))%1,
                     max(0,min(1,nc.saturationF()+(random()*2*i-i))),
                     max(0,min(1,nc.valueF()+(random()*2*i-i))))
-            target.voxels.set(x, y, z, nc)
+            target.voxels.set(x, y, z, nc, True, len(search) == 0 and 2 or 1)
             searched.append((x,y,z))
 
 register_plugin(FillNoiseTool, "Noisy Fill Tool", "1.0")

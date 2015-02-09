@@ -93,6 +93,8 @@ class VoxelData(object):
         self.notify_changed = None
         # Ambient occlusion type effect
         self._occlusion = True
+        self._undoFillNew = []
+        self._undoFillOld = []
 
     # Initialise our data
     def _initialise_data(self):
@@ -190,7 +192,7 @@ class VoxelData(object):
         return self._current_frame
 
     # Set a voxel to the given state
-    def set(self, x, y, z, state, undo = True):
+    def set(self, x, y, z, state, undo = True, fill = 0):
         # If this looks like a QT Color instance, convert it
         if hasattr(state, "getRgb"):
             c = state.getRgb()
@@ -203,8 +205,16 @@ class VoxelData(object):
         if ( self.is_valid_bounds(x, y, z ) ):
             # Add to undo
             if undo:
-                self._undo.add(UndoItem(Undo.SET_VOXEL,
-                (x, y, z, self._data[x][y][z]), (x, y, z, state)))
+                if fill > 0:
+                    self._undoFillOld.append((x, y, z, self._data[x][y][z]))
+                    self._undoFillNew.append((x, y, z, state))
+                    if fill == 2:
+                        self._undo.add(UndoItem(Undo.FILL, self._undoFillOld, self._undoFillNew))
+                        self._undoFillOld = []
+                        self._undoFillNew = []
+                else:
+                    self._undo.add(UndoItem(Undo.SET_VOXEL,
+                        (x, y, z, self._data[x][y][z]), (x, y, z, state)))
             self._data[x][y][z] = state
             if state != EMPTY:
                 if (x,y,z) not in self._cache:
@@ -825,6 +835,10 @@ class VoxelData(object):
         if op and op.operation == Undo.SET_VOXEL:
             data = op.olddata
             self.set(data[0], data[1], data[2], data[3], False)
+        elif op and op.operation == Undo.FILL:
+            d = op.olddata
+            for data in d:
+                self.set(data[0], data[1], data[2], data[3], False)
         # Translation
         elif op and op.operation == Undo.TRANSLATE:
             data = op.olddata
@@ -837,6 +851,10 @@ class VoxelData(object):
         if op and op.operation == Undo.SET_VOXEL:
             data = op.newdata
             self.set(data[0], data[1], data[2], data[3], False)
+        elif op and op.operation == Undo.FILL:
+            d = op.newdata
+            for data in d:
+                self.set(data[0], data[1], data[2], data[3], False)
         # Translation
         elif op and op.operation == Undo.TRANSLATE:
             data = op.newdata
