@@ -518,7 +518,7 @@ class MainWindow(QtGui.QMainWindow):
         handlers = [x for x in self._file_handlers if hasattr(x, 'load')]
 
         # Build list of types we can load
-        choices = []
+        choices = ["All Files (*)"]
         for importer in handlers:
             choices.append( "%s (%s)" % (importer.description, importer.filetype))
         choices = ";;".join(choices)
@@ -531,8 +531,16 @@ class MainWindow(QtGui.QMainWindow):
                 caption="Open file",
                 filter=choices,
                 dir = directory,
-                selectedFilter="Zoxel Files (*.zox)")
+                selectedFilter="All Files (*)")
         if not filename:
+            return
+        if filetype == "All Files (*)":
+            filetype = None
+            for importer in handlers:
+                if filename.endswith(importer.filetype[1:]):
+                    filetype = "%s (%s)" % (importer.description, importer.filetype)
+                    break
+        if filetype == None:
             return
 
         # Remember the location
