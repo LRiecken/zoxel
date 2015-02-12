@@ -28,6 +28,7 @@ class DrawingTool(Tool):
             "Draw", None)
         self.action.setStatusTip("Draw Voxels")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+1"))
         # Register the tool
         self.api.register_tool(self, True)
 

@@ -216,6 +216,9 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="action_axis_grids">
    <property name="checkable">
@@ -234,6 +237,9 @@
    <property name="toolTip">
     <string>Toggle Axis Grids</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+1</string>
+   </property>
   </action>
   <action name="action_wireframe">
    <property name="checkable">
@@ -246,6 +252,9 @@
    <property name="text">
     <string>Wireframe</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+2</string>
+   </property>
   </action>
   <action name="action_new">
    <property name="icon">
@@ -254,6 +263,9 @@
    </property>
    <property name="text">
     <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="action_saveas">
@@ -264,6 +276,9 @@
    <property name="text">
     <string>Save As...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="action_open">
    <property name="icon">
@@ -272,6 +287,9 @@
    </property>
    <property name="text">
     <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="action_background">
@@ -285,6 +303,9 @@
    <property name="toolTip">
     <string>Choose background colour</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+6</string>
+   </property>
   </action>
   <action name="action_resize">
    <property name="icon">
@@ -296,6 +317,9 @@
    </property>
    <property name="toolTip">
     <string>Set dimensions</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="action_occlusion">
@@ -312,6 +336,9 @@
    <property name="toolTip">
     <string>Render with ambient occlusion</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+4</string>
+   </property>
   </action>
   <action name="action_reset_camera">
    <property name="icon">
@@ -323,6 +350,9 @@
    </property>
    <property name="toolTip">
     <string>Reset camera position</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="action_voxel_edges">
@@ -339,6 +369,9 @@
    <property name="toolTip">
     <string>Toggle view voxel edges</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+3</string>
+   </property>
   </action>
   <action name="action_voxel_colour">
    <property name="icon">
@@ -350,6 +383,9 @@
    </property>
    <property name="toolTip">
     <string>Pick Voxel Colour</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+5</string>
    </property>
   </action>
   <action name="action_undo">
@@ -423,6 +459,9 @@
    <property name="toolTip">
     <string>Add new animation frame</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="action_anim_play">
    <property name="icon">
@@ -435,6 +474,9 @@
    <property name="toolTip">
     <string>Play animation</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
   </action>
   <action name="action_anim_stop">
    <property name="icon">
@@ -446,6 +488,9 @@
    </property>
    <property name="toolTip">
     <string>Stop animation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
    </property>
   </action>
   <action name="action_anim_next">
@@ -512,6 +557,9 @@
    <property name="toolTip">
     <string>Rotate voxels around X axis</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
   </action>
   <action name="action_rotate_y">
    <property name="text">
@@ -520,6 +568,9 @@
    <property name="toolTip">
     <string>Rotate voxels around Y axis</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
   </action>
   <action name="action_rotate_z">
    <property name="text">
@@ -527,6 +578,9 @@
    </property>
    <property name="toolTip">
     <string>Rotate voxels around Z axis</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="action_export_image">
@@ -540,6 +594,9 @@
    <property name="toolTip">
     <string>Export image of current model view</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
   <action name="action_mirror_x">
    <property name="text">
@@ -547,6 +604,9 @@
    </property>
    <property name="toolTip">
     <string>Mirror voxels in X axis</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+J</string>
    </property>
   </action>
   <action name="action_mirror_y">
@@ -556,6 +616,9 @@
    <property name="toolTip">
     <string>Mirror voxels in Y axis</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
   </action>
   <action name="action_mirror_z">
    <property name="text">
@@ -563,6 +626,9 @@
    </property>
    <property name="toolTip">
     <string>Mirror voxels in Z axis</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
  </widget>

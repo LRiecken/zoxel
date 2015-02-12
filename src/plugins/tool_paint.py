@@ -28,6 +28,7 @@ class PaintingTool(Tool):
             "Paint", None)
         self.action.setStatusTip("Colour Voxels")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+2"))
         # Register the tool
         self.api.register_tool(self)
 

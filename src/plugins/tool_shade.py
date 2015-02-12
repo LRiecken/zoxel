@@ -27,6 +27,7 @@ class ShaderTool(Tool):
             "Lighten/Darken", None)
         self.action.setStatusTip("Adjust voxel darkness a little.")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+8"))
         # Register the tool
         self.api.register_tool(self)
 

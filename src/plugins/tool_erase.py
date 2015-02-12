@@ -28,6 +28,7 @@ class EraseTool(Tool):
             "Erase", None)
         self.action.setStatusTip("Erase voxels")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+3"))
         # Register the tool
         self.api.register_tool(self)
 

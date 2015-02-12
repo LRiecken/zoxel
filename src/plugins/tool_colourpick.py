@@ -28,6 +28,7 @@ class ColourPickTool(Tool):
             "Colour Pick", None)
         self.action.setStatusTip("Choose a colour from an existing voxel.")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+5"))
         # Register the tool
         self.api.register_tool(self)
 

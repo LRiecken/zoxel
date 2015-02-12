@@ -28,6 +28,7 @@ class DragTool(Tool):
             "Move Model", None)
         self.action.setStatusTip("Move Model")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+4"))
         # Register the tool
         self.api.register_tool(self)
 

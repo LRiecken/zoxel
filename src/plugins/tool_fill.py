@@ -26,6 +26,7 @@ class FillTool(Tool):
             "Fill", None)
         self.action.setStatusTip("Flood fill with colour")
         self.action.setCheckable(True)
+        self.action.setShortcut(QtGui.QKeySequence("Ctrl+6"))
         # Register the tool
         self.api.register_tool(self)
 

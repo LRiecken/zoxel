@@ -3,14 +3,14 @@
 # this way to support cx-freeze on Windows.
 import plugins.tool_draw
 import plugins.tool_paint
-import plugins.tool_shade
 import plugins.tool_erase
 import plugins.tool_drag
-import plugins.io_zoxel
-import plugins.io_sproxel
+import plugins.tool_colourpick
 import plugins.tool_fill
 import plugins.tool_fill_noise
-import plugins.tool_colourpick
-import plugins.io_obj
+import plugins.tool_shade
 import plugins.io_qubicle
 import plugins.io_magica
+import plugins.io_zoxel
+import plugins.io_obj
+import plugins.io_sproxel
