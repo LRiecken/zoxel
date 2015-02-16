@@ -2,7 +2,7 @@ from setuptools import setup
 
 APP = ['zoxel.py']
 DATA_FILES = []
-OPTIONS = {'argv_emulation': True}
+OPTIONS = {'argv_emulation': True, 'iconfile': 'gfx/icons/icon.icns'}
 
 setup(
     app=APP,

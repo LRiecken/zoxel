@@ -15,5 +15,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ZOXEL_VERSION = "0.5.5 (10th February 2015)"
-ZOXEL_TAG = "0.5.5"
+ZOXEL_VERSION = "0.5.6 (16th February 2015)"
+ZOXEL_TAG = "0.5.6"
