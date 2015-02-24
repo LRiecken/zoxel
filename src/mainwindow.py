@@ -314,6 +314,16 @@ class MainWindow(QtGui.QMainWindow):
             self.colour_palette.colour = colour
 
     @QtCore.Slot()
+    def on_paletteRGBvalue_editingFinished(self):
+        text = self.ui.paletteRGBvalue.text()
+        color = QtGui.QColor(0, 0, 0)
+        print color
+        color.setNamedColor(text)
+        print color.name()
+        if color.isValid():
+            self.colour_palette.colour = color
+
+    @QtCore.Slot()
     def on_action_export_image_triggered(self):
         png = QtGui.QPixmap.grabWidget(self.display)
         choices = "PNG Image (*.png);;JPEG Image (*.jpg)"
