@@ -188,7 +188,10 @@ class QubicleFile(object):
                                     x = index % width
                                     y = index / width
                                     index += 1
-                                    voxels.set((width - x - 1), y, coords and (depth - z - 1) or z, vox)
+                                    iz = z
+                                    if coords == 1:
+                                        iz = depth - z - 1
+                                    voxels.set((width - x - 1), y, iz, vox)
                             else:
                                 index += count
                         else:
@@ -196,14 +199,20 @@ class QubicleFile(object):
                             y = index / width
                             index += 1
                             if (data & 0xff000000) >> 24:
-                               voxels.set((width - x - 1), y, coords and (depth - z - 1) or z, self.formatVox(data, format))
+                                iz = z
+                                if coords == 1:
+                                    iz = depth - z - 1
+                                voxels.set((width - x - 1), y, iz, self.formatVox(data, format))
             else:
                 for z in xrange(depth):
                     for y in xrange(height):
                         for x in xrange(width):
                             vox = self.uint32(f)
                             if (vox & 0xff000000) >> 24:
-                                voxels.set((width - x - 1), y, coords and (depth - z - 1) or z, self.formatVox(vox, format))
+                                iz = z
+                                if coords == 1:
+                                    iz = depth - z - 1
+                                voxels.set((width - x - 1), y, iz, self.formatVox(vox, format))
 
         f.close()
 
