@@ -21,6 +21,9 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QWidget" name="glparent" native="true">
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
       <layout class="QGridLayout" name="gridLayout_2"/>
      </widget>
     </item>
@@ -36,6 +39,9 @@
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
@@ -50,12 +56,18 @@
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menu_help">
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menuView">
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="title">
      <string>View</string>
     </property>
@@ -67,6 +79,9 @@
     <addaction name="action_zoom_out"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="title">
      <string>Edit</string>
     </property>
@@ -84,6 +99,9 @@
     <addaction name="action_resize"/>
    </widget>
    <widget class="QMenu" name="menuAnimation">
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="title">
      <string>Animation</string>
     </property>
@@ -104,6 +122,9 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -157,9 +178,15 @@
       <height>0</height>
      </size>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <widget class="QLineEdit" name="paletteRGBvalue">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
        <property name="text">
         <string>#ff0000</string>
        </property>
@@ -172,6 +199,9 @@
    </widget>
   </widget>
   <widget class="QToolBar" name="toolbar_animation">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
