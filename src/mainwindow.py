@@ -342,6 +342,12 @@ class MainWindow(QtGui.QMainWindow):
         # Save the PNG
         png.save(filename,filetype.split()[0])
 
+    @QtCore.Slot()
+    def on_action_export_troxel_triggered(self):
+        from plugins.io_troxel import TroxelLink
+        tl = TroxelLink()
+        webbrowser.open(tl.export(), 2)
+
     def on_tool_mouse_click(self):
         tool = self.get_active_tool()
         if not tool:

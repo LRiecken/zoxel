@@ -51,6 +51,7 @@
     <addaction name="action_save"/>
     <addaction name="action_saveas"/>
     <addaction name="separator"/>
+    <addaction name="action_export_troxel"/>
     <addaction name="action_export_image"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -659,6 +660,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="action_export_troxel">
+   <property name="text">
+    <string>Export Troxel-link...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
