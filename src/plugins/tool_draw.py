@@ -65,7 +65,10 @@ class DrawingTool(Tool):
                 for y in xrange(target.world_y, self.first_voxel[1] + dy, dy):
                     dz = target.world_z < self.first_voxel[2] and 1 or -1
                     for z in xrange(target.world_z, self.first_voxel[2] + dz, dz):
-                        target.voxels.set(x, y, z, color)
+                        if self.first_voxel == (x, y, z):
+                            target.voxels.set(x, y, z, color, True, 2)
+                        else:
+                            target.voxels.set(x, y, z, color, True, 1)
             self.first_voxel = None
         return None
 
