@@ -25,17 +25,17 @@ build_script:
   - cd src
   - python C:\Python27\Scripts\cxfreeze zoxel.py --target-dir ..\dist --base-name Win32GUI --include-modules atexit,PySide.QtNetwork,PySide.QtWebKit,OpenGL,OpenGL.platform.win32,OpenGL.arrays.nones,OpenGL.arrays.lists,OpenGL.arrays.strings,OpenGL.arrays.numbers,OpenGL.arrays.ctypesarrays,OpenGL.arrays.ctypesparameters,OpenGL.arrays.ctypespointers --include-path .
   - cd ..\dist
-  - ps: "& 7z a -r zoxel-0.5.10-win32.zip ."
+  - ps: "& 7z a -r zoxel-0.5.11-win32.zip ."
 
 test: off
 
 artifacts:
-  - path: dist/zoxel-0.5.10-win32.zip
+  - path: dist/zoxel-0.5.11-win32.zip
 
 deploy:
   provider: GitHub
   auth_token:
     secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
-  artifact: dist/zoxel-0.5.10-win32.zip
+  artifact: dist/zoxel-0.5.11-win32.zip
   on:
     appveyor_repo_tag: true
