@@ -112,7 +112,11 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Default camera
         self.reset_camera(False)
         # zoom
-        self._zoom_speed = 0.1
+        import platform as p
+        if p.system() == "Darwin":
+            self._zoom_speed = 0.1
+        else:
+            self._zoom_speed = -0.1
         # Render axis grids?
         self._display_axis_grids = True
         # Our voxel scene
