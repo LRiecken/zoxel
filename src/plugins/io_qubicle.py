@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from plugin_api import register_plugin
+from PySide.QtGui import QMessageBox
+from struct import unpack
 
 # http://www.minddesk.com/wiki/index.php?title=Qubicle_Constructor_1:Data_Exchange_With_Qubicle_Binary
 class QubicleFile(object):
@@ -46,6 +48,9 @@ class QubicleFile(object):
             if len(x) == 4:
                 return x[0] | x[1]<<8 | x[2]<<16 | x[3]<<24
             return 0
+
+    def int32(self, f):
+        return unpack('i', f.read(4))[0]
 
     # Called when we need to save. Should raise an exception if there is a
     # problem saving.
@@ -166,10 +171,10 @@ class QubicleFile(object):
 
             voxels.resize(max_width, max_height, max_depth)
 
-            # Matrix position - FIXME not yet supported (positions are Int32 )
-            dx = self.uint32(f)
-            dy = self.uint32(f)
-            dz = self.uint32(f)
+            # Matrix position - FIXME not yet supported
+            dx = self.int32(f)
+            dy = self.int32(f)
+            dz = self.int32(f)
 
             # Data
             if compression:
@@ -213,6 +218,11 @@ class QubicleFile(object):
                                 if coords == 1:
                                     iz = depth - z - 1
                                 voxels.set((width - x - 1), y, iz, self.formatVox(vox, format))
+            if matrix_count == 1 and dx <= 0 and dy <= 0 and dz <= 0 and (dx < 0 or dy < 0 or dz < 0): # restore attachment point
+                t = "It looks like your are opening a voxel model exported by Trove. Should we try to restore the attachment point out of the .qb's metadata for you?"
+                r = QMessageBox.question(None, "Restore attachment point?", t, QMessageBox.No, QMessageBox.Yes)
+                if r == QMessageBox.Yes:
+                    voxels.set((max_width + dx - 1), -dy, -dz, 0xff00ffff)
 
         f.close()
 
