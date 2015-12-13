@@ -1,7 +1,11 @@
-Zoxel
+# Zoxel
 A cross-platform editor for small voxel models.
-Copyright (c) 2013-2014, Graham R King.
-http://zoxel.blogspot.com
+Copyright (c) 2013-2015, Graham R King, Christian Moritz, Eddie Pantridge, Bruno Canella, Lennart Riecken.
+https://github.com/chrmoritz/zoxel
+
+This is a fork of the original project hosted at https://github.com/grking/zoxel or http://zoxel.blogspot.co.uk/.
+
+### License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

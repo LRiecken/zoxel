@@ -133,7 +133,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;a href=&quot;http://zoxel.blogspot.com&quot;&gt;http://zoxel.blogspot.com&lt;/a&gt;</string>
+    <string>&lt;a href=&quot;https://github.com/chrmoritz/zoxel&quot;&gt;https://github.com/chrmoritz/zoxel&lt;/a&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
