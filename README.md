@@ -1,4 +1,5 @@
-# Zoxel
+# Zoxel [![Build Status](https://travis-ci.org/chrmoritz/zoxel.svg?branch=develop)](https://travis-ci.org/chrmoritz/zoxel) [![Build status](https://ci.appveyor.com/api/projects/status/twi20wjoblu78uec/branch/develop?svg=true)](https://ci.appveyor.com/project/chrmoritz/zoxel/branch/develop)
+
 A cross-platform editor for small voxel models.
 Copyright (c) 2013-2015, Graham R King, Christian Moritz, Eddie Pantridge, Bruno Canella, Lennart Riecken.
 https://github.com/chrmoritz/zoxel

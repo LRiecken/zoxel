@@ -1,7 +1,5 @@
-version: '{branch}'
-branches:
-  only:
-    - /v?\d+(\.\d+)*/
+os: Visual Studio 2015
+version: '{branch}-b{build}'
 
 init:
   - ps: "ls -Name \"C:/\""
@@ -13,11 +11,11 @@ install:
   - python --version
   - python -c "import struct; print(struct.calcsize('P') * 8)"
   - pip --version
-  - pip install PySide
+  - pip install -U PySide
   - python -c "import PySide"
-  - pip install cx_freeze
-  - pip install PyOpenGL
-  - pip install PyOpenGL_accelerate
+  - pip install -U cx_freeze
+  - pip install -U PyOpenGL
+  - pip install -U PyOpenGL_accelerate
 
 build_script:
   - cd /D %APPVEYOR_BUILD_FOLDER%
@@ -25,17 +23,18 @@ build_script:
   - cd src
   - python C:\Python27\Scripts\cxfreeze zoxel.py --target-dir ..\dist --base-name Win32GUI --include-modules atexit,PySide.QtNetwork,PySide.QtWebKit,OpenGL,OpenGL.platform.win32,OpenGL.arrays.nones,OpenGL.arrays.lists,OpenGL.arrays.strings,OpenGL.arrays.numbers,OpenGL.arrays.ctypesarrays,OpenGL.arrays.ctypesparameters,OpenGL.arrays.ctypespointers --include-path .
   - cd ..\dist
-  - ps: "& 7z a -r zoxel-0.5.13-win32.zip ."
+  - ps: "& 7z a -r zoxel-$env:APPVEYOR_REPO_TAG_NAME-win32.zip ."
 
 test: off
 
 artifacts:
-  - path: dist/zoxel-0.5.13-win32.zip
+  - path: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-win32.zip
 
 deploy:
   provider: GitHub
   auth_token:
     secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
-  artifact: dist/zoxel-0.5.13-win32.zip
+  artifact: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-win32.zip
+  prerelease: true
   on:
     appveyor_repo_tag: true
