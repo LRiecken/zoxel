@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>456</width>
-    <height>417</height>
+    <height>482</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>461</width>
-     <height>421</height>
+     <height>491</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -34,6 +34,9 @@
    <property name="pixmap">
     <pixmap resource="resources.qrc">:/images/gfx/about_dialog_image.png</pixmap>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+   </property>
    <property name="textInteractionFlags">
     <set>Qt::NoTextInteraction</set>
    </property>
@@ -42,7 +45,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>300</y>
+     <y>310</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -62,20 +65,27 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>350</y>
+     <y>370</y>
      <width>301</width>
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+     <kerning>true</kerning>
+    </font>
+   </property>
    <property name="text">
-    <string>Copyright (c) 2013-2014, Graham R King</string>
+    <string>Copyright (c) 2013-2015 Graham R King,</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>330</y>
+     <y>350</y>
      <width>131</width>
      <height>16</height>
     </rect>
@@ -88,7 +98,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>390</y>
+     <y>450</y>
      <width>211</width>
      <height>16</height>
     </rect>
@@ -101,7 +111,7 @@
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>380</y>
+     <y>440</y>
      <width>87</width>
      <height>27</height>
     </rect>
@@ -117,13 +127,39 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>370</y>
+     <y>430</y>
      <width>231</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>&lt;a href=&quot;http://zoxel.blogspot.com&quot;&gt;http://zoxel.blogspot.com&lt;/a&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>390</y>
+     <width>421</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Christian Moritz, Eddie Pantridge</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>410</y>
+     <width>421</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Bruno Canella, Lennart Riecken</string>
    </property>
   </widget>
  </widget>

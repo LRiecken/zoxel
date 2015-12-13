@@ -14,3 +14,4 @@ import plugins.io_magica
 import plugins.io_zoxel
 import plugins.io_obj
 import plugins.io_sproxel
+import plugins.io_png
