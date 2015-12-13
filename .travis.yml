@@ -1,14 +1,12 @@
 language: objective-c
 
 before_install:
-- sudo chown -R `whoami` /Library/Python
+- brew update
 
 install:
-- python --version
-- pip --version
-- wget https://download.qt.io/archive/qt/4.8/4.8.6/qt-opensource-mac-4.8.6-1.dmg
-- hdiutil mount qt-opensource-mac-4.8.6-1.dmg
-- sudo installer -verbose -pkg /Volumes/Qt\ 4.8.6/Qt.mpkg -target /
+- brew install python
+- which python
+- brew install qt
 - pip install -U PySide
 - python -c "import PySide"
 - pip install -U PyOpenGL
