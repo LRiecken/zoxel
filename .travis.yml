@@ -5,10 +5,9 @@ before_install:
 
 install:
 - brew install python
-- which python
 - brew install qt
-- pip install -U PySide
-- python -c "import PySide"
+- brew install pyside
+- brew install pyside-tools
 - pip install -U PyOpenGL
 - pip install -U PyOpenGL_accelerate
 - pip install -U py2app

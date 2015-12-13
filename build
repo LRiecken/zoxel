@@ -1,5 +1,5 @@
 #!/bin/bash
-/Library/Python/2.7/site-packages/PySide/pyside-rcc -o src/resources_rc.py src/resources.qrc
+pyside-rcc -o src/resources_rc.py src/resources.qrc
 src=.
 for file in $( find $src -name "*.ui")
 do
