@@ -46,6 +46,8 @@ class PngFile(object):
 
         width = png.width()
         height = png.height()
+        if width > 127 or height > 127:
+            raise Exception("The image file is too large. Maximum width and height are 127 pixels.")
         depth = 1
         img = png.toImage()
 
