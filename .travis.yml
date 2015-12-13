@@ -22,6 +22,7 @@ script:
 - python setup.py py2app
 - cd dist
 - tar czf zoxel-$TRAVIS_TAG-osx.tar.gz zoxel.app
+- cd ../../
 
 deploy:
   provider: releases
