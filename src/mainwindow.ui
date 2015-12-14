@@ -112,6 +112,7 @@
     <addaction name="action_anim_previous"/>
     <addaction name="separator"/>
     <addaction name="action_anim_add"/>
+    <addaction name="action_anim_copy"/>
     <addaction name="separator"/>
     <addaction name="action_anim_delete"/>
    </widget>
@@ -213,6 +214,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_anim_add"/>
+   <addaction name="action_anim_copy"/>
    <addaction name="action_anim_stop"/>
    <addaction name="action_anim_play"/>
    <addaction name="action_anim_previous"/>
@@ -494,6 +496,21 @@
     <string>Ctrl+A</string>
    </property>
   </action>
+   <action name="action_anim_copy">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gfx/icons/redo.png</normaloff>:/images/gfx/icons/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Frame</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy animation frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
   <action name="action_anim_play">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -579,6 +596,9 @@
    </property>
    <property name="toolTip">
     <string>Delete current frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
   <action name="action_rotate_x">

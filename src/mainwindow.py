@@ -240,15 +240,27 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_triggered(self):
-        self.display.voxels.add_frame()
-        self.display.refresh()
-        self.refresh_actions()
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_count(), 1, self.display.voxels.get_frame_count())
+        if res:
+            self.display.voxels.add_frame(value)
+            self.display.refresh()
+            self.refresh_actions()
+
+    @QtCore.Slot()
+    def on_action_anim_copy_triggered(self):
+        value, res = QtGui.QInputDialog.getInt(self, "Copy frame", "Replace current frame with:", 1, 1, self.display.voxels.get_frame_count())
+        if res:
+            self.display.voxels.copy_to_current(value)
+            self.display.refresh()
+            self.refresh_actions()
 
     @QtCore.Slot()
     def on_action_anim_delete_triggered(self):
-        self.display.voxels.delete_frame()
-        self.display.refresh()
-        self.refresh_actions()
+        ret = QtGui.QMessageBox.question(self, "Zoxel", "Do you really want to delete this frame?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        if (ret == QtGui.QMessageBox.Yes):
+            self.display.voxels.delete_frame()
+            self.display.refresh()
+            self.refresh_actions()
 
     @QtCore.Slot()
     def on_action_anim_play_triggered(self):
