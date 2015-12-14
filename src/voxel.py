@@ -209,29 +209,31 @@ class VoxelData(object):
         # Check bounds
         if ( not self.is_valid_bounds(x, y, z ) ):
             return False
-        # Set the voxel
-        if ( self.is_valid_bounds(x, y, z ) ):
-            # Add to undo
-            if undo:
-                if fill > 0:
-                    self._undoFillOld.append((x, y, z, self._data[x][y][z]))
-                    self._undoFillNew.append((x, y, z, state))
-                    if fill == 2:
-                        self._undo.add(UndoItem(Undo.FILL, self._undoFillOld, self._undoFillNew))
-                        self._undoFillOld = []
-                        self._undoFillNew = []
-                else:
-                    self._undo.add(UndoItem(Undo.SET_VOXEL,
-                        (x, y, z, self._data[x][y][z]), (x, y, z, state)))
-            self._data[x][y][z] = state
-            if state != EMPTY:
-                if (x,y,z) not in self._cache:
-                    self._cache.append((x,y,z))
+        # Add to undo
+        if undo:
+            if fill > 0:
+                self._undoFillOld.append((x, y, z, self._data[x][y][z]))
+                self._undoFillNew.append((x, y, z, state))
+                if fill == 2:
+                    self.completeUndoFill()
             else:
-                if (x,y,z) in self._cache:
-                    self._cache.remove((x,y,z))
+                self._undo.add(UndoItem(Undo.SET_VOXEL,
+                    (x, y, z, self._data[x][y][z]), (x, y, z, state)))
+        # Set the voxel
+        self._data[x][y][z] = state
+        if state != EMPTY:
+            if (x,y,z) not in self._cache:
+                self._cache.append((x,y,z))
+        else:
+            if (x,y,z) in self._cache:
+                self._cache.remove((x,y,z))
         self.changed = True
         return True
+
+    def completeUndoFill(self):
+        self._undo.add(UndoItem(Undo.FILL, self._undoFillOld, self._undoFillNew))
+        self._undoFillOld = []
+        self._undoFillNew = []
 
     # Get the state of the given voxel
     def get(self, x, y, z):

@@ -66,7 +66,8 @@ class ExtrudeTool(Tool):
                         src = target.voxels.get(xpos, ypos+(yidx*ydelt), zpos+(zidx*zdelt))
                         tgt = target.voxels.get(xpos+(xidx*xdelt)+xdelt, ypos+(yidx*ydelt), zpos+(zidx*zdelt))
                         if tgt == 0:
-                            target.voxels.set(xpos+(xidx*xdelt)+xdelt, ypos+(yidx*ydelt),  zpos+(zidx*zdelt), src, True, 1)
+                            target.voxels.set(xpos+(xidx*xdelt)+xdelt, ypos+(yidx*ydelt), zpos+(zidx*zdelt), src, True, 1)
+            target.voxels.completeUndoFill()
             return True
         if region == 1:
             if self.regionstart[0] > self.regionend[0]:
@@ -82,6 +83,7 @@ class ExtrudeTool(Tool):
                         tgt = target.voxels.get(xpos+(xidx*xdelt), ypos+(yidx*ydelt)+ydelt, zpos+(zidx*zdelt))
                         if tgt == 0:
                             target.voxels.set(xpos+(xidx*xdelt), ypos+(yidx*ydelt)+ydelt, zpos+(zidx*zdelt), src, True, 1)
+            target.voxels.completeUndoFill()
             return True
         if region == 2:
             if self.regionstart[0] > self.regionend[0]:
@@ -97,6 +99,7 @@ class ExtrudeTool(Tool):
                         tgt = target.voxels.get(xpos+(xidx*xdelt), ypos+(yidx*ydelt), zpos+(zidx*zdelt)+zdelt)
                         if tgt == 0:
                             target.voxels.set(xpos+(xidx*xdelt), ypos+(yidx*ydelt), zpos+(zidx*zdelt)+zdelt, src, True, 1)
+            target.voxels.completeUndoFill()
             return True
         return False
 
