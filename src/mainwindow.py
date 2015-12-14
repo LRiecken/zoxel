@@ -240,9 +240,17 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_count(), 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number()+1, 1, self.display.voxels.get_frame_count())
         if res:
-            self.display.voxels.add_frame(value)
+            self.display.voxels.add_frame(value, True)
+            self.display.refresh()
+            self.refresh_actions()
+
+    @QtCore.Slot()
+    def on_action_anim_add_empty_triggered(self):
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number()+1, 1, self.display.voxels.get_frame_count())
+        if res:
+            self.display.voxels.add_frame(value, False)
             self.display.refresh()
             self.refresh_actions()
 

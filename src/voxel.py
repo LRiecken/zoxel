@@ -143,7 +143,7 @@ class VoxelData(object):
         self.changed = True
 
     # Add a new frame by copying the current one
-    def add_frame(self, index, copy_current = False):
+    def add_frame(self, index, copy_current = True):
         if copy_current:
             data = self.get_data()
         else:
@@ -156,11 +156,11 @@ class VoxelData(object):
         self._undo.add_frame(index)
         self._frame_count += 1
         self.select_frame(index)
-    
+
     def copy_to_current(self,  index):
         data = self._frames[index-1]
         self.set_data(data)
-    
+
     # Delete the current frame
     def delete_frame(self):
         # Sanity - we can't have no frames at all

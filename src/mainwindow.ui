@@ -112,6 +112,7 @@
     <addaction name="action_anim_previous"/>
     <addaction name="separator"/>
     <addaction name="action_anim_add"/>
+    <addaction name="action_anim_add_empty"/>
     <addaction name="action_anim_copy"/>
     <addaction name="separator"/>
     <addaction name="action_anim_delete"/>
@@ -214,6 +215,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_anim_add"/>
+   <addaction name="action_anim_add_empty"/>
    <addaction name="action_anim_copy"/>
    <addaction name="action_anim_stop"/>
    <addaction name="action_anim_play"/>
@@ -490,13 +492,28 @@
     <string>Add Frame</string>
    </property>
    <property name="toolTip">
-    <string>Add new animation frame</string>
+    <string>Add a new animation frame (keep voxels)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
   </action>
-   <action name="action_anim_copy">
+  <action name="action_anim_add_empty">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gfx/icons/Create.png</normaloff>:/images/gfx/icons/Create.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add empty Frame</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a new animation frame (empty model)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+A</string>
+   </property>
+  </action>
+  <action name="action_anim_copy">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/gfx/icons/redo.png</normaloff>:/images/gfx/icons/redo.png</iconset>
