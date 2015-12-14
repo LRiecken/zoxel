@@ -38,12 +38,15 @@ class ExtrudeTool(Tool):
     def regionvalid(self):
         if self.regionstart == None or self.regionend == None:
             return 0, False
+        r = []
         if self.regionstart[0] == self.regionend[0]:
-            return 0, True # Plane is on yz
+            r.append(0) # Plane is on yz
         if self.regionstart[1] == self.regionend[1]:
-            return 1, True # Plane is on xz
+            r.append(1) # Plane is on xz
         if self.regionstart[2] == self.regionend[2]:
-            return 2, True # Plane is on xy
+            r.append(2) # Plane is on xy
+        if len(r) == 1: # If plane and not line or point
+            return r.pop(), True
         return 0, False
 
     def do_extrude(self, target, value, region):
@@ -113,13 +116,19 @@ class ExtrudeTool(Tool):
             if valid:
                 if region == 0:
                     directionHint = "\nPositive values mean to the right, negative mean to the left."
+                    min = -1 * data.world_x
+                    max = data.voxels.width - data.world_x - 1
                 if region == 1:
                     directionHint = "\nPositive values mean up, negative mean down."
+                    min = -1 * data.world_y
+                    max = data.voxels.height - data.world_y - 1
                 if region == 2:
                     directionHint = "\nPositive values mean to the back, negative mean to the front."
-                value, ret = QtGui.QInputDialog.getInt(QtGui.QApplication.instance().mainwindow, "Extrude", "Extrude region: "+str(self.regionstart)+" - "+str(self.regionend)+ directionHint, 0, -100, 100)
+                    min = -1 * data.world_z
+                    max = data.voxels.depth - data.world_z - 1
+                value, ret = QtGui.QInputDialog.getInt(QtGui.QApplication.instance().mainwindow, "Extrude", "Extrude region: "+str(self.regionstart)+" - "+str(self.regionend)+ directionHint, 0, min, max)
                 if ret:
-                    self.do_extrude(data, value,  region)
+                    self.do_extrude(data, value, region)
             else:
                 QtGui.QMessageBox.warning(QtGui.QApplication.instance().mainwindow, "Extrude", "The region you selected is invalid. Try again.\nMake sure that they are on a plane in any direction.\nExtrusion can only be done in straigt directions. Top, bottom, left, right, back and front.", QtGui.QMessageBox.Ok)
             self.regionstart = None
