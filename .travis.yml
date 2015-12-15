@@ -24,6 +24,10 @@ script:
 - tar czf zoxel-$TRAVIS_TAG-osx.tar.gz zoxel.app
 - cd ../../
 
+cache:
+  directories:
+    - /usr/local/lib/python2.7/site-packages
+
 deploy:
   provider: releases
   skip_cleanup: true

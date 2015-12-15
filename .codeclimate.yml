@@ -1,0 +1,21 @@
+engines:
+  pep8:
+    enabled: true
+  radon:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
+  fixme:
+    enabled: true
+ratings:
+   paths:
+   - "**.py"
+exclude_paths:
+- src/gfx/**/*
+- "**.ui"
+- "**.qrc"
+- "**.yml"
+- "**.bat"
