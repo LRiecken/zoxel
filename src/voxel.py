@@ -105,6 +105,8 @@ class VoxelData(object):
     def _initialise_data(self):
         # Our scene data
         self._data = self.blank_data()
+        # Create empty selection
+        self._selection = []
         # Our cache of non-empty voxels (coordinate groups)
         self._cache = []
         # Flag indicating if our data has changed
@@ -146,6 +148,7 @@ class VoxelData(object):
         self._undo.frame = self._current_frame
         self._cache_rebuild()
         self.changed = True
+        self.clear_selection()
 
     # Add a new frame by copying the current one
     def add_frame(self, index, copy_current=True):
@@ -240,6 +243,20 @@ class VoxelData(object):
         self._undoFillOld = []
         self._undoFillNew = []
 
+    def select(self, x, y, z):
+        if not (x, y, z) in self._selection:
+            self._selection.append((x, y, z))
+
+    def deselect(self, x, y, z):
+        if (x, y, z) in self._selection:
+            self._selection.remove((x, y, z))
+    
+    def is_selected(self, x, y, z):
+        return (x, y, z) in self._selection
+        
+    def clear_selection(self):
+        self._selection = []
+        
     # Get the state of the given voxel
     def get(self, x, y, z):
         if not self.is_valid_bounds(x, y, z):
@@ -270,6 +287,13 @@ class VoxelData(object):
         for x, y, z in self._cache:
             v, c, n, cid, uv = self._get_voxel_vertices(x, y, z)
             vertices += v
+            if (x, y, z) in self._selection:
+                clen = len(c)/3
+                c = []
+                for i in range(clen):
+                    c.append(255)
+                    c.append(0)
+                    c.append(255)
             colors += c
             normals += n
             color_ids += cid

@@ -34,6 +34,7 @@ class ShaderTool(Tool):
 
     # Color the targeted voxel
     def on_mouse_click(self, data):
+        data.voxels.clear_selection()
         # If we have a voxel at the target, get its color.
         voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
         if voxel:
@@ -51,6 +52,7 @@ class ShaderTool(Tool):
 
     # Color when dragging also
     def on_drag(self, data):
+        data.voxels.clear_selection()
         self.on_mouse_click(data)
 
 register_plugin(ShaderTool, "Shadeing Tool", "1.0")

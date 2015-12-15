@@ -35,6 +35,7 @@ class DragTool(Tool):
 
     # Color the targeted voxel
     def on_drag_start(self, target):
+        target.voxels.clear_selection()
         self._mouse = (target.mouse_x, target.mouse_y)
 
     # Drag the model in voxel space

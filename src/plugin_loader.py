@@ -9,6 +9,7 @@ import plugins.tool_colorpick
 import plugins.tool_fill
 import plugins.tool_fill_noise
 import plugins.tool_shade
+import plugins.tool_select
 import plugins.tool_extrude
 import plugins.io_qubicle
 import plugins.io_magica

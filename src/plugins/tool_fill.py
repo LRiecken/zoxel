@@ -33,6 +33,7 @@ class FillTool(Tool):
 
     # Fill all connected voxels of the same color with a new color
     def on_mouse_click(self, target):
+        target.voxels.clear_selection()
         # We need to have a selected voxel
         voxel = target.voxels.get(target.world_x, target.world_y, target.world_z)
         if not voxel:

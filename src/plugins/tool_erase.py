@@ -35,6 +35,12 @@ class EraseTool(Tool):
 
     # Clear the targeted voxel
     def on_mouse_click(self, target):
-        target.voxels.set(target.world_x, target.world_y, target.world_z, 0)
+        if len(target.voxels._selection) > 0:
+            for x, y, z in target.voxels._selection:
+                target.voxels.set(x, y, z, 0, True, 1)
+            target.voxels.completeUndoFill()
+            target.voxels.clear_selection()
+        else:
+            target.voxels.set(target.world_x, target.world_y, target.world_z, 0)
 
 register_plugin(EraseTool, "Erasing Tool", "1.0")

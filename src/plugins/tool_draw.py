@@ -85,11 +85,13 @@ class DrawingTool(Tool):
 
     # Draw a new voxel next to the targeted face
     def on_mouse_click(self, data):
+        data.voxels.clear_selection()
         shift_down = not not data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier
         self._first_target = self._draw_voxel(data, shift_down, data.mouse_button == MouseButtons.RIGHT)
 
     # Start a drag
     def on_drag_start(self, data):
+        data.voxels.clear_selection()
         self._first_target = data
 
     # When dragging, Draw a new voxel next to the targeted face
