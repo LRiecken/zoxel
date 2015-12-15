@@ -18,7 +18,9 @@ from PySide import QtGui
 from ui_dialog_about import Ui_AboutDialog
 from constants import ZOXEL_VERSION
 
+
 class AboutDialog(QtGui.QDialog):
+
     def __init__(self, parent=None):
         # Initialise the UI
         super(AboutDialog, self).__init__(parent)

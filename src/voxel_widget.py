@@ -28,6 +28,7 @@ from voxel_grid import GridPlanes
 from voxel_grid import VoxelGrid
 import time
 
+
 class GLWidget(QtOpenGL.QGLWidget):
 
     # Constants for referring to axis
@@ -43,6 +44,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     @property
     def axis_grids(self):
         return self._display_axis_grids
+
     @axis_grids.setter
     def axis_grids(self, value):
         self._display_axis_grids = value
@@ -51,6 +53,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     @property
     def wireframe(self):
         return self._display_wireframe
+
     @wireframe.setter
     def wireframe(self, value):
         self._display_wireframe = value
@@ -59,6 +62,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     @property
     def voxel_colour(self):
         return self._voxel_colour
+
     @voxel_colour.setter
     def voxel_colour(self, value):
         self._voxel_colour = value
@@ -66,6 +70,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     @property
     def background(self):
         return self._background_colour
+
     @background.setter
     def background(self, value):
         self._background_colour = value
@@ -74,6 +79,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     @property
     def voxel_edges(self):
         return self._voxeledges
+
     @voxel_edges.setter
     def voxel_edges(self, value):
         self._voxeledges = value
@@ -89,7 +95,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     drag_event = QtCore.Signal()
     end_drag_event = QtCore.Signal()
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         glformat = QtOpenGL.QGLFormat()
         glformat.setVersion(1, 1)
         glformat.setProfile(QtOpenGL.QGLFormat.CoreProfile)
@@ -106,9 +112,9 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Mouse position
         self._mouse = QtCore.QPoint()
         self._mouse_absolute = QtCore.QPoint()
-        self.mouse_delta_relative = (0,0)
-        self.mouse_delta_absolute = (0,0)
-        self.mouse_position = (0,0)
+        self.mouse_delta_relative = (0, 0)
+        self.mouse_delta_absolute = (0, 0)
+        self.mouse_position = (0, 0)
         # Default camera
         self.reset_camera(False)
         # zoom
@@ -124,12 +130,12 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Grid manager
         self._grids = VoxelGrid(self.voxels)
         # create the default _grids
-        self.grids.add_grid_plane(GridPlanes.X, offset = 0, visible = True,
-            color = QtGui.QColor(0x6c, 0x7d, 0x67))
-        self.grids.add_grid_plane(GridPlanes.Y, offset = 0, visible = True,
-            color = QtGui.QColor(0x65, 0x65, 0x7b))
-        self.grids.add_grid_plane(GridPlanes.Z, offset = self.voxels.depth,
-            visible = True, color = QtGui.QColor(0x7b, 0x65, 0x68))
+        self.grids.add_grid_plane(GridPlanes.X, offset=0, visible=True,
+                                  color=QtGui.QColor(0x6c, 0x7d, 0x67))
+        self.grids.add_grid_plane(GridPlanes.Y, offset=0, visible=True,
+                                  color=QtGui.QColor(0x65, 0x65, 0x7b))
+        self.grids.add_grid_plane(GridPlanes.Z, offset=self.voxels.depth,
+                                  visible=True, color=QtGui.QColor(0x7b, 0x65, 0x68))
         # Used to track the z component of various mouse activity
         self._depth_focus = 1
         # Keep track how long mouse buttons are down for
@@ -151,7 +157,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self.updateGL()
 
     # Reset camera position to defaults
-    def reset_camera(self, update = True):
+    def reset_camera(self, update=True):
         self._translate_x = 0
         self._translate_y = 0
         self._translate_z = -30
@@ -319,7 +325,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         self._mouse = QtCore.QPoint(event.pos())
         self._mouse_absolute = QtCore.QPoint(event.pos())
-        self.mouse_position = (self._mouse.x(),self._mouse.y())
+        self.mouse_position = (self._mouse.x(), self._mouse.y())
 
         self._button_down = None
         if event.buttons() & QtCore.Qt.LeftButton:
@@ -353,14 +359,14 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     def mouseMoveEvent(self, event):
 
-        self.mouse_position = (self._mouse.x(),self._mouse.y())
+        self.mouse_position = (self._mouse.x(), self._mouse.y())
 
         ctrl = (self._key_modifiers
                 & QtCore.Qt.KeyboardModifier.ControlModifier) != 0
         shift = (self._key_modifiers
                  & QtCore.Qt.KeyboardModifier.ShiftModifier) != 0
         alt = (self._key_modifiers
-                 & QtCore.Qt.KeyboardModifier.AltModifier) != 0
+               & QtCore.Qt.KeyboardModifier.AltModifier) != 0
 
         # Screen units delta
         dx = event.x() - self._mouse.x()
@@ -369,7 +375,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Right mouse button held down with CTRL/cmd key - rotate
         # Or middle mouse button held
         if ((event.buttons() & QtCore.Qt.RightButton and ctrl)
-            or ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
+                or ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
             self._rotating = True
             self._rotate_x = self._rotate_x + dy
             self._rotate_y = self._rotate_y + dx
@@ -378,7 +384,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Middle mouse button held down with CTRL - translate
         # or right mouse button with alt
         elif ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
-            or (event.buttons() & QtCore.Qt.RightButton and alt)):
+              or (event.buttons() & QtCore.Qt.RightButton and alt)):
             self._rotating = True
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
@@ -389,7 +395,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             # Remember the mouse deltas
             self.mouse_delta_relative = (dx, dy)
             self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(),
-                event.y() - self._mouse_absolute.y())
+                                         event.y() - self._mouse_absolute.y())
 
             # Maybe we are dragging
             if time.time() - self._mousedown_time > 0.3 and not self._dragging:
@@ -483,7 +489,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         planes = (
             Plane(Vector3(1, 0, 0), origin[0]),
             Plane(Vector3(0, 1, 0), origin[1]),
-            Plane(Vector3(0, 0, 1), origin[2]+0.001))
+            Plane(Vector3(0, 0, 1), origin[2] + 0.001))
         intersection = None, None, None
         distance = sys.maxint
         for plane in planes:
@@ -492,7 +498,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             if intersect:
                 # Adjust to voxel space coordinates
                 x, y, z = self.voxels.world_to_voxel(intersect.x,
-                    intersect.y, intersect.z)
+                                                     intersect.y, intersect.z)
                 x = int(x)
                 y = int(y)
                 z = int(z)
@@ -522,7 +528,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     # Convert window x,y coordinates into x,y,z world coordinates, also return
     # the depth
-    def window_to_world(self, x, y, z = None):
+    def window_to_world(self, x, y, z=None):
         # Find depth
         y = self._height - y
         if z is None:

@@ -17,6 +17,7 @@ from PySide import QtGui
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
+
 class ShaderTool(Tool):
 
     def __init__(self, api):
@@ -38,14 +39,14 @@ class ShaderTool(Tool):
         if voxel:
             self.api.set_palette_colour(voxel)
             if data.mouse_button == MouseButtons.LEFT:
-                #Darken the colour.
+                # Darken the colour.
                 newColour = self.api.get_palette_colour().darker(110)
-                #set the voxel's new color.
+                # set the voxel's new color.
                 data.voxels.set(data.world_x, data.world_y, data.world_z, newColour)
             elif data.mouse_button == MouseButtons.RIGHT:
-                #Lighten the colour.
+                # Lighten the colour.
                 newColour = self.api.get_palette_colour().lighter(110)
-                #set the voxel's new color.
+                # set the voxel's new color.
                 data.voxels.set(data.world_x, data.world_y, data.world_z, newColour)
 
     # Colour when dragging also

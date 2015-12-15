@@ -2,6 +2,7 @@ from base64 import b64encode
 from struct import pack
 from plugin_api import PluginAPI
 
+
 class TroxelLink:
 
     def __init__(self):
@@ -44,7 +45,7 @@ class TroxelLink:
             if r > 1:
                 data.append(126 + r)
             if vox[i]:
-                index = rcolors[ vox[i][2] + 256 * vox[i][1] + 65536 * vox[i][0] ]
+                index = rcolors[vox[i][2] + 256 * vox[i][1] + 65536 * vox[i][0]]
                 if short:
                     data.append(index)
                 else:

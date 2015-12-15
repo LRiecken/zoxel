@@ -18,6 +18,7 @@ from PySide import QtGui
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
+
 class DragTool(Tool):
 
     def __init__(self, api):

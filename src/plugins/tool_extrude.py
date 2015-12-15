@@ -18,6 +18,7 @@ from PySide import QtGui, QtCore
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
+
 class ExtrudeTool(Tool):
 
     def __init__(self, api):
@@ -36,16 +37,16 @@ class ExtrudeTool(Tool):
         self.regionend = None
 
     def regionvalid(self):
-        if self.regionstart == None or self.regionend == None:
+        if self.regionstart is None or self.regionend is None:
             return 0, False
         r = []
         if self.regionstart[0] == self.regionend[0]:
-            r.append(0) # Plane is on yz
+            r.append(0)  # Plane is on yz
         if self.regionstart[1] == self.regionend[1]:
-            r.append(1) # Plane is on xz
+            r.append(1)  # Plane is on xz
         if self.regionstart[2] == self.regionend[2]:
-            r.append(2) # Plane is on xy
-        if len(r) == 1: # If plane and not line or point
+            r.append(2)  # Plane is on xy
+        if len(r) == 1:  # If plane and not line or point
             return r.pop(), True
         return 0, False
 
@@ -64,12 +65,14 @@ class ExtrudeTool(Tool):
             if self.regionstart[2] > self.regionend[2]:
                 zdelt = -1
             for xidx in range(abs(value)):
-                for yidx in range(abs(self.regionstart[1] - self.regionend[1])+1):
-                    for zidx in range(abs(self.regionstart[2] - self.regionend[2])+1):
-                        src = target.voxels.get(xpos, ypos+(yidx*ydelt), zpos+(zidx*zdelt))
-                        tgt = target.voxels.get(xpos+(xidx*xdelt)+xdelt, ypos+(yidx*ydelt), zpos+(zidx*zdelt))
+                for yidx in range(abs(self.regionstart[1] - self.regionend[1]) + 1):
+                    for zidx in range(abs(self.regionstart[2] - self.regionend[2]) + 1):
+                        src = target.voxels.get(xpos, ypos + (yidx * ydelt), zpos + (zidx * zdelt))
+                        tgt = target.voxels.get(xpos + (xidx * xdelt) + xdelt, ypos +
+                                                (yidx * ydelt), zpos + (zidx * zdelt))
                         if tgt == 0:
-                            target.voxels.set(xpos+(xidx*xdelt)+xdelt, ypos+(yidx*ydelt), zpos+(zidx*zdelt), src, True, 1)
+                            target.voxels.set(xpos + (xidx * xdelt) + xdelt, ypos +
+                                              (yidx * ydelt), zpos + (zidx * zdelt), src, True, 1)
             target.voxels.completeUndoFill()
             return True
         if region == 1:
@@ -80,12 +83,14 @@ class ExtrudeTool(Tool):
             if self.regionstart[2] > self.regionend[2]:
                 zdelt = -1
             for yidx in range(abs(value)):
-                for xidx in range(abs(self.regionstart[0] - self.regionend[0])+1):
-                    for zidx in range(abs(self.regionstart[2] - self.regionend[2])+1):
-                        src = target.voxels.get(xpos+(xidx*xdelt), ypos, zpos+(zidx*zdelt))
-                        tgt = target.voxels.get(xpos+(xidx*xdelt), ypos+(yidx*ydelt)+ydelt, zpos+(zidx*zdelt))
+                for xidx in range(abs(self.regionstart[0] - self.regionend[0]) + 1):
+                    for zidx in range(abs(self.regionstart[2] - self.regionend[2]) + 1):
+                        src = target.voxels.get(xpos + (xidx * xdelt), ypos, zpos + (zidx * zdelt))
+                        tgt = target.voxels.get(xpos + (xidx * xdelt), ypos +
+                                                (yidx * ydelt) + ydelt, zpos + (zidx * zdelt))
                         if tgt == 0:
-                            target.voxels.set(xpos+(xidx*xdelt), ypos+(yidx*ydelt)+ydelt, zpos+(zidx*zdelt), src, True, 1)
+                            target.voxels.set(xpos + (xidx * xdelt), ypos + (yidx * ydelt) +
+                                              ydelt, zpos + (zidx * zdelt), src, True, 1)
             target.voxels.completeUndoFill()
             return True
         if region == 2:
@@ -96,21 +101,23 @@ class ExtrudeTool(Tool):
             if value < 0:
                 zdelt = -1
             for zidx in range(abs(value)):
-                for xidx in range(abs(self.regionstart[0] - self.regionend[0])+1):
-                    for yidx in range(abs(self.regionstart[1] - self.regionend[1])+1):
-                        src = target.voxels.get(xpos+(xidx*xdelt), ypos+(yidx*ydelt), zpos)
-                        tgt = target.voxels.get(xpos+(xidx*xdelt), ypos+(yidx*ydelt), zpos+(zidx*zdelt)+zdelt)
+                for xidx in range(abs(self.regionstart[0] - self.regionend[0]) + 1):
+                    for yidx in range(abs(self.regionstart[1] - self.regionend[1]) + 1):
+                        src = target.voxels.get(xpos + (xidx * xdelt), ypos + (yidx * ydelt), zpos)
+                        tgt = target.voxels.get(xpos + (xidx * xdelt), ypos + (yidx * ydelt),
+                                                zpos + (zidx * zdelt) + zdelt)
                         if tgt == 0:
-                            target.voxels.set(xpos+(xidx*xdelt), ypos+(yidx*ydelt), zpos+(zidx*zdelt)+zdelt, src, True, 1)
+                            target.voxels.set(xpos + (xidx * xdelt), ypos + (yidx * ydelt),
+                                              zpos + (zidx * zdelt) + zdelt, src, True, 1)
             target.voxels.completeUndoFill()
             return True
         return False
 
     def on_mouse_click(self, data):
         shift_down = not not (data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
-        if shift_down and self.regionstart == None:
+        if shift_down and self.regionstart is None:
             self.regionstart = [data.world_x, data.world_y, data.world_z]
-        elif self.regionstart != None:
+        elif self.regionstart is not None:
             self.regionend = [data.world_x, data.world_y, data.world_z]
             region, valid = self.regionvalid()
             if valid:
@@ -126,15 +133,24 @@ class ExtrudeTool(Tool):
                     directionHint = "\nPositive values mean to the back, negative mean to the front."
                     min = -1 * data.world_z
                     max = data.voxels.depth - data.world_z - 1
-                value, ret = QtGui.QInputDialog.getInt(QtGui.QApplication.instance().mainwindow, "Extrude", "Extrude region: "+str(self.regionstart)+" - "+str(self.regionend)+ directionHint, 0, min, max)
+                value, ret = QtGui.QInputDialog.getInt(QtGui.QApplication.instance().mainwindow, "Extrude",
+                                                       "Extrude region: " + str(self.regionstart) + " - " +
+                                                       str(self.regionend) + directionHint, 0, min, max)
                 if ret:
                     self.do_extrude(data, value, region)
             else:
-                QtGui.QMessageBox.warning(QtGui.QApplication.instance().mainwindow, "Extrude", "The region you selected is invalid. Try again.\nMake sure that they are on a plane in any direction.\nExtrusion can only be done in straigt directions. Top, bottom, left, right, back and front.", QtGui.QMessageBox.Ok)
+                QtGui.QMessageBox.warning(QtGui.QApplication.instance().mainwindow, "Extrude",
+                                          ("The region you selected is invalid. Try again.\n"
+                                           "Make sure that they are on a plane in any direction.\n"
+                                           "Extrusion can only be done in straigt directions. "
+                                           "Top, bottom, left, right, back and front."), QtGui.QMessageBox.Ok)
             self.regionstart = None
             self.regionend = None
         else:
-            QtGui.QMessageBox.warning(QtGui.QApplication.instance().mainwindow, "Extrude", "You have not selected a region yet. Hold shift and click on two voxels that are on a flat plane in any direction.",  QtGui.QMessageBox.Ok)
+            QtGui.QMessageBox.warning(QtGui.QApplication.instance().mainwindow, "Extrude",
+                                      ("You have not selected a region yet. "
+                                       "Hold shift and click on two voxels that are on a flat plane in any direction."),
+                                      QtGui.QMessageBox.Ok)
 
 
 register_plugin(ExtrudeTool, "Extrude Tool", "1.0")

@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 class UndoItem(object):
 
     @property
@@ -34,6 +35,7 @@ class UndoItem(object):
         self._olddata = olddata
         self._newdata = newdata
 
+
 class Undo(object):
 
     # Types of operation
@@ -44,6 +46,7 @@ class Undo(object):
     @property
     def enabled(self):
         return self._enabled
+
     @enabled.setter
     def enabled(self, value):
         self._enabled = value
@@ -51,6 +54,7 @@ class Undo(object):
     @property
     def frame(self):
         return self._frame
+
     @frame.setter
     def frame(self, value):
         self._frame = value
@@ -71,10 +75,10 @@ class Undo(object):
         if not self._enabled:
             return
         # Clear future if we're somewhere in the middle of the undo history
-        if self._ptr[self._frame] < len(self._buffer[self._frame])-1:
-            self._buffer[self._frame] = self._buffer[self._frame][:self._ptr[self._frame]+1]
+        if self._ptr[self._frame] < len(self._buffer[self._frame]) - 1:
+            self._buffer[self._frame] = self._buffer[self._frame][:self._ptr[self._frame] + 1]
         self._buffer[self._frame].append(item)
-        self._ptr[self._frame] = len(self._buffer[self._frame])-1
+        self._ptr[self._frame] = len(self._buffer[self._frame]) - 1
 
     def _valid_buffer(self):
         return len(self._buffer[self._frame]) > 0
@@ -93,8 +97,8 @@ class Undo(object):
             return
         self._ptr[self._frame] += 1
         item = None
-        if self._ptr[self._frame] > len(self._buffer[self._frame])-1:
-            self._ptr[self._frame] = len(self._buffer[self._frame])-1
+        if self._ptr[self._frame] > len(self._buffer[self._frame]) - 1:
+            self._ptr[self._frame] = len(self._buffer[self._frame]) - 1
         else:
             item = self._buffer[self._frame][self._ptr[self._frame]]
         return item

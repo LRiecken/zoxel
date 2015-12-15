@@ -18,6 +18,7 @@ from PySide import QtGui
 from tool import Tool
 from plugin_api import register_plugin
 
+
 class ColourPickTool(Tool):
 
     def __init__(self, api):

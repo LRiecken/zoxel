@@ -19,6 +19,8 @@ from PySide.QtGui import QMessageBox
 from struct import unpack
 
 # http://www.minddesk.com/wiki/index.php?title=Qubicle_Constructor_1:Data_Exchange_With_Qubicle_Binary
+
+
 class QubicleFile(object):
 
     # Description of file type
@@ -33,20 +35,20 @@ class QubicleFile(object):
         self.api.register_file_handler(self)
 
     # Helper function to read/write uint32
-    def uint32(self, f, value = None):
+    def uint32(self, f, value=None):
         if value is not None:
             # Write
             data = bytearray()
-            data.append((value & 0xff));
-            data.append((value & 0xff00)>>8);
-            data.append((value & 0xff0000)>>16);
-            data.append((value & 0xff000000)>>24);
+            data.append((value & 0xff))
+            data.append((value & 0xff00) >> 8)
+            data.append((value & 0xff0000) >> 16)
+            data.append((value & 0xff000000) >> 24)
             f.write(data)
         else:
             # Read
             x = bytearray(f.read(4))
             if len(x) == 4:
-                return x[0] | x[1]<<8 | x[2]<<16 | x[3]<<24
+                return x[0] | x[1] << 8 | x[2] << 16 | x[3] << 24
             return 0
 
     def int32(self, f):
@@ -59,7 +61,7 @@ class QubicleFile(object):
         voxels = self.api.get_voxel_data()
 
         # Open our file
-        f = open(filename,"wb")
+        f = open(filename, "wb")
 
         # Version
         self.uint32(f, 0x00000101)
@@ -98,10 +100,10 @@ class QubicleFile(object):
                     alpha = 0xff
                     if not vox:
                         alpha = 0x00
-                    r = (vox & 0xff000000)>>24
-                    g = (vox & 0xff0000)>>16
-                    b = (vox & 0xff00)>>8
-                    vox = r | g<<8 | b<<16 | alpha<<24
+                    r = (vox & 0xff000000) >> 24
+                    g = (vox & 0xff0000) >> 16
+                    b = (vox & 0xff00) >> 8
+                    vox = r | g << 8 | b << 16 | alpha << 24
                     self.uint32(f, vox)
 
         # Tidy up
@@ -109,12 +111,12 @@ class QubicleFile(object):
 
     # sets alpha to ff and converts brga to rgba if format
     def formatVox(self, vox, format):
-        r = (vox & 0x000000ff)>>0
-        g = (vox & 0x0000ff00)>>8
-        b = (vox & 0x00ff0000)>>16
+        r = (vox & 0x000000ff) >> 0
+        g = (vox & 0x0000ff00) >> 8
+        b = (vox & 0x00ff0000) >> 16
         if format:
-            return (b<<24) | (g<<16) | (r<<8) | 0xff
-        return (r<<24) | (g<<16) | (b<<8) | 0xff
+            return (b << 24) | (g << 16) | (r << 8) | 0xff
+        return (r << 24) | (g << 16) | (b << 8) | 0xff
 
     # Load a Qubicle Constructor binary file
     def load(self, filename):
@@ -122,7 +124,7 @@ class QubicleFile(object):
         voxels = self.api.get_voxel_data()
 
         # Open our file
-        f = open(filename,"rb")
+        f = open(filename, "rb")
 
         # Version
         version = self.uint32(f)
@@ -183,7 +185,7 @@ class QubicleFile(object):
                     while True:
                         data = self.uint32(f)
                         if (data == 6):
-                            break;
+                            break
                         elif (data == 2):
                             count = self.uint32(f)
                             vox = self.uint32(f)
@@ -218,8 +220,10 @@ class QubicleFile(object):
                                 if coords == 1:
                                     iz = depth - z - 1
                                 voxels.set((width - x - 1), y, iz, self.formatVox(vox, format))
-            if matrix_count == 1 and dx <= 0 and dy <= 0 and dz <= 0 and (dx < 0 or dy < 0 or dz < 0): # restore attachment point
-                t = "It looks like your are opening a voxel model exported by Trove. Should we try to restore the attachment point out of the .qb's metadata for you?"
+            # restore attachment point
+            if matrix_count == 1 and dx <= 0 and dy <= 0 and dz <= 0 and (dx < 0 or dy < 0 or dz < 0):
+                t = "It looks like your are opening a voxel model exported by Trove.\
+                     Should we try to restore the attachment point out of the .qb's metadata for you?"
                 r = QMessageBox.question(None, "Restore attachment point?", t, QMessageBox.No, QMessageBox.Yes)
                 if r == QMessageBox.Yes:
                     voxels.set((max_width + dx - 1), -dy, -dz, 0xff00ffff)

@@ -17,6 +17,7 @@
 import os
 from plugin_api import register_plugin
 
+
 class ObjFile(object):
 
     # Description of file type
@@ -37,21 +38,21 @@ class ObjFile(object):
         vertices, colours, _ = self.api.get_voxel_mesh()
 
         # Open our file
-        f = open(filename,"wt")
+        f = open(filename, "wt")
 
         # Use materials
         mat_pathname, mat_filename = os.path.split(filename)
         name, ext = os.path.splitext(mat_filename)
         if not ext:
-            filename = filename+'.obj'
-        mat_filename = os.path.join(mat_pathname, name)+".mtl"
+            filename = filename + '.obj'
+        mat_filename = os.path.join(mat_pathname, name) + ".mtl"
         f.write("mtllib %s\r\n" % mat_filename)
 
         # Export vertices
         i = 0
         while i < len(vertices):
             f.write("v %f %f %f\r\n" %
-                (vertices[i], vertices[i+1], vertices[i+2]))
+                    (vertices[i], vertices[i + 1], vertices[i + 2]))
             i += 3
 
         # Build a list of unique colours we use so we can assign materials
@@ -59,30 +60,30 @@ class ObjFile(object):
         i = 0
         while i < len(colours):
             r = colours[i]
-            g = colours[i+1]
-            b = colours[i+2]
-            colour = r<<24 | g<<16 | b<<8
+            g = colours[i + 1]
+            b = colours[i + 2]
+            colour = r << 24 | g << 16 | b << 8
             if colour not in mats:
                 mats[colour] = "material_%i" % len(mats)
             i += 3
 
         # Export faces
-        faces = (len(vertices)//(3*3))//2
+        faces = (len(vertices) // (3 * 3)) // 2
         for i in xrange(faces):
-            n = 1+(i * 6)
-            r = colours[(i*18)]
-            g = colours[(i*18)+1]
-            b = colours[(i*18)+2]
-            colour = r<<24 | g<<16 | b<<8
+            n = 1 + (i * 6)
+            r = colours[(i * 18)]
+            g = colours[(i * 18) + 1]
+            b = colours[(i * 18) + 2]
+            colour = r << 24 | g << 16 | b << 8
             f.write("usemtl %s\r\n" % mats[colour])
-            f.write("f %i %i %i\r\n" % (n, n+2, n+1))
-            f.write("f %i %i %i\r\n" % (n+5, n+4, n+3))
+            f.write("f %i %i %i\r\n" % (n, n + 2, n + 1))
+            f.write("f %i %i %i\r\n" % (n + 5, n + 4, n + 3))
 
         # Tidy up
         f.close()
 
         # Create our material file
-        f = open(mat_filename,"wt")
+        f = open(mat_filename, "wt")
         for colour, material in mats.items():
             f.write("newmtl %s\r\n" % material)
             r = (colour & 0xff000000) >> 24

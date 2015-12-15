@@ -29,6 +29,7 @@ import urllib
 import sys
 from constants import ZOXEL_TAG
 
+
 class MainWindow(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
@@ -50,7 +51,7 @@ class MainWindow(QtGui.QMainWindow):
         # Our animation timer
         self._timer = QtCore.QTimer(self)
         self.connect(self._timer, QtCore.SIGNAL("timeout()"),
-            self.on_animation_tick)
+                     self.on_animation_tick)
         self._anim_speed = 200
         # Load our state if possible
         self.load_state()
@@ -61,7 +62,7 @@ class MainWindow(QtGui.QMainWindow):
             self.display = voxels
         except Exception as E:
             QtGui.QMessageBox.warning(self, "Initialisation Failed",
-                str(E))
+                                      str(E))
             exit(1)
         # Load default model dimensions
         width = self.get_setting("default_model_width")
@@ -114,9 +115,9 @@ class MainWindow(QtGui.QMainWindow):
             latest_tag = urllib.urlopen("https://github.com/chrmoritz/zoxel/releases/latest").geturl()
             if not latest_tag.endswith(ZOXEL_TAG):
                 responce = QtGui.QMessageBox.question(self, "Outdated Zoxel version",
-                    "A new version of Zoxel is available! Do you want to update now?",
-                    buttons = (QtGui.QMessageBox.Yes | QtGui.QMessageBox.No),
-                    defaultButton = QtGui.QMessageBox.Yes)
+                                                      "A new version of Zoxel is available! Do you want to update now?",
+                                                      buttons=(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No),
+                                                      defaultButton=QtGui.QMessageBox.Yes)
                 if responce == QtGui.QMessageBox.Yes:
                     webbrowser.open(latest_tag, 2)
                     sys.exit(0)
@@ -212,7 +213,7 @@ class MainWindow(QtGui.QMainWindow):
         new_height_scale = float(height) / self.display.voxels.height
         new_depth_scale = float(depth) / self.display.voxels.depth
         self.display.voxels.resize(width, height, depth)
-        self.display.grids.scale_offsets( new_width_scale, new_height_scale, new_depth_scale )
+        self.display.grids.scale_offsets(new_width_scale, new_height_scale, new_depth_scale)
         self.display.refresh()
         # Remember these dimensions
         self.set_setting("default_model_width", width)
@@ -240,7 +241,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number()+1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number(
+        ) + 1, 1, self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.add_frame(value, True)
             self.display.refresh()
@@ -248,7 +250,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_empty_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number()+1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number(
+        ) + 1, 1, self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.add_frame(value, False)
             self.display.refresh()
@@ -256,7 +259,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_copy_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Copy frame", "Replace current frame with:", 1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(
+            self, "Copy frame", "Replace current frame with:", 1, 1, self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.copy_to_current(value)
             self.display.refresh()
@@ -264,7 +268,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_delete_triggered(self):
-        ret = QtGui.QMessageBox.question(self, "Zoxel", "Do you really want to delete this frame?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        ret = QtGui.QMessageBox.question(
+            self, "Zoxel", "Do you really want to delete this frame?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
         if (ret == QtGui.QMessageBox.Yes):
             self.display.voxels.delete_frame()
             self.display.refresh()
@@ -349,9 +354,9 @@ class MainWindow(QtGui.QMainWindow):
         directory = self.get_setting("default_directory")
         # grab a filename
         filename, filetype = QtGui.QFileDialog.getSaveFileName(self,
-            caption = "Export Image As",
-            filter = choices,
-            dir = directory)
+                                                               caption="Export Image As",
+                                                               filter=choices,
+                                                               dir=directory)
         if not filename:
             return
 
@@ -360,7 +365,7 @@ class MainWindow(QtGui.QMainWindow):
         self.set_setting("default_directory", directory)
 
         # Save the PNG
-        png.save(filename,filetype.split()[0])
+        png.save(filename, filetype.split()[0])
 
     @QtCore.Slot()
     def on_action_export_troxel_triggered(self):
@@ -399,10 +404,10 @@ class MainWindow(QtGui.QMainWindow):
     # Confirm if user wants to save before doing something drastic.
     # returns True if we should continue
     def confirm_save(self):
-        responce = QtGui.QMessageBox.question(self,"Save changes?",
-            "Save changes before discarding?",
-            buttons = (QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel
-            | QtGui.QMessageBox.No))
+        responce = QtGui.QMessageBox.question(self, "Save changes?",
+                                              "Save changes before discarding?",
+                                              buttons=(QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel
+                                                       | QtGui.QMessageBox.No))
         if responce == QtGui.QMessageBox.StandardButton.Save:
             if not self.save():
                 return False
@@ -469,7 +474,7 @@ class MainWindow(QtGui.QMainWindow):
         if self.display and self.display.voxels.changed:
             caption += " *"
         numframes = self.display.voxels.get_frame_count()
-        frame = self.display.voxels.get_frame_number()+1
+        frame = self.display.voxels.get_frame_number() + 1
         if numframes > 1:
             caption += " - Frame {0} of {1}".format(frame, numframes)
         if caption != self._caption:
@@ -477,7 +482,7 @@ class MainWindow(QtGui.QMainWindow):
         self._caption = caption
 
     # Save the current data
-    def save(self, newfile = False):
+    def save(self, newfile=False):
 
         # Find the handlers that support saving
         handlers = [x for x in self._file_handlers if hasattr(x, 'save')]
@@ -491,7 +496,7 @@ class MainWindow(QtGui.QMainWindow):
         # Build list of available types
         choices = []
         for exporter in handlers:
-            choices.append( "%s (%s)" % (exporter.description, exporter.filetype))
+            choices.append("%s (%s)" % (exporter.description, exporter.filetype))
         choices = ";;".join(choices)
 
         # Grab our default location
@@ -500,10 +505,10 @@ class MainWindow(QtGui.QMainWindow):
         # Get a filename if we need one
         if newfile or not filename:
             filename, filetype = QtGui.QFileDialog.getSaveFileName(self,
-                caption = "Save As",
-                filter = choices,
-                dir = directory,
-                selectedFilter="Zoxel Files (*.zox)")
+                                                                   caption="Save As",
+                                                                   filter=choices,
+                                                                   dir=directory,
+                                                                   selectedFilter="Zoxel Files (*.zox)")
             if not filename:
                 return
             handler = None
@@ -517,7 +522,7 @@ class MainWindow(QtGui.QMainWindow):
             for exporter in handlers:
                 ourtype = "%s (%s)" % (exporter.description, exporter.filetype)
                 if filetype == ourtype:
-                    handler =  exporter
+                    handler = exporter
 
         # Call the save handler
         try:
@@ -525,7 +530,7 @@ class MainWindow(QtGui.QMainWindow):
             saved = True
         except Exception as Ex:
             QtGui.QMessageBox.warning(self, "Save Failed",
-            str(Ex))
+                                      str(Ex))
 
         # If we saved, clear edited state
         if saved:
@@ -554,7 +559,7 @@ class MainWindow(QtGui.QMainWindow):
         # Build list of types we can load
         choices = ["All Files (*)"]
         for importer in handlers:
-            choices.append( "%s (%s)" % (importer.description, importer.filetype))
+            choices.append("%s (%s)" % (importer.description, importer.filetype))
         choices = ";;".join(choices)
 
         # Grab our default location
@@ -562,10 +567,10 @@ class MainWindow(QtGui.QMainWindow):
 
         # Get a filename
         filename, filetype = QtGui.QFileDialog.getOpenFileName(self,
-                caption="Open file",
-                filter=choices,
-                dir = directory,
-                selectedFilter="All Files (*)")
+                                                               caption="Open file",
+                                                               filter=choices,
+                                                               dir=directory,
+                                                               selectedFilter="All Files (*)")
         if not filename:
             return
         if filetype == "All Files (*)":
@@ -574,7 +579,7 @@ class MainWindow(QtGui.QMainWindow):
                 if filename.endswith(importer.filetype[1:]):
                     filetype = "%s (%s)" % (importer.description, importer.filetype)
                     break
-        if filetype == None:
+        if filetype is None:
             return
 
         # Remember the location
@@ -585,7 +590,7 @@ class MainWindow(QtGui.QMainWindow):
         for importer in handlers:
             ourtype = "%s (%s)" % (importer.description, importer.filetype)
             if filetype == ourtype:
-                handler =  importer
+                handler = importer
                 self._last_file_handler = handler
 
         # Load the file
@@ -598,10 +603,10 @@ class MainWindow(QtGui.QMainWindow):
         except Exception as Ex:
             self.display.voxels.enable_undo()
             QtGui.QMessageBox.warning(self, "Could not load file",
-            str(Ex))
+                                      str(Ex))
 
         self.display.build_grids()
-        #self.display.voxels.resize()
+        # self.display.voxels.resize()
         self.display.voxels.saved()
         self.display.reset_camera()
         self.update_caption()
@@ -610,7 +615,7 @@ class MainWindow(QtGui.QMainWindow):
         self.display.refresh()
 
     # Registers a tool in the drawing toolbar
-    def register_tool(self, tool, activate = False):
+    def register_tool(self, tool, activate=False):
         self._tools.append(tool)
         self._tool_group.addAction(tool.get_action())
         self.ui.toolbar_drawing.addAction(tool.get_action())
@@ -639,6 +644,6 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.action_anim_previous.setEnabled(num_frames > 1)
         self.ui.action_anim_next.setEnabled(num_frames > 1)
         self.ui.action_anim_play.setEnabled(num_frames > 1
-            and not self._timer.isActive())
+                                            and not self._timer.isActive())
         self.ui.action_anim_stop.setEnabled(self._timer.isActive())
         self.update_caption()

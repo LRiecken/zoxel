@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from plugin_api import register_plugin
 
+
 class SproxelFile(object):
 
     # Description of file type
@@ -36,14 +37,14 @@ class SproxelFile(object):
         voxels = self.api.get_voxel_data()
 
         # Open our file
-        f = open(filename,"wt")
+        f = open(filename, "wt")
 
         # First Sproxel line is model dimenstions
         f.write("%i,%i,%i\n" % (voxels.width, voxels.height, voxels.depth))
 
         # Then we save from the top of the model
-        for y in xrange(voxels.height-1, -1, -1):
-            for z in xrange(voxels.depth-1, -1, -1):
+        for y in xrange(voxels.height - 1, -1, -1):
+            for z in xrange(voxels.depth - 1, -1, -1):
                 line = []
                 for x in xrange(voxels.width):
                     voxel = voxels.get(x, y, z)
@@ -52,8 +53,8 @@ class SproxelFile(object):
                     else:
                         voxel = (voxel & 0xffffff00) | 0xff
                         voxel = "%x" % voxel
-                        line.append("#"+voxel.upper().rjust(8,"0"))
-                f.write(",".join(line)+"\n")
+                        line.append("#" + voxel.upper().rjust(8, "0"))
+                f.write(",".join(line) + "\n")
             f.write("\n")
 
         # Tidy up
@@ -65,16 +66,16 @@ class SproxelFile(object):
         voxels = self.api.get_voxel_data()
 
         # Open our file
-        f = open(filename,"rt")
+        f = open(filename, "rt")
         size = f.readline().strip()
-        x,y,z = size.split(",")
+        x, y, z = size.split(",")
         x = int(x)
         y = int(y)
         z = int(z)
         voxels.resize(x, y, z)
         # Parse the file
-        for fy in xrange(y-1,-1,-1):
-            for fz in xrange(z-1,-1,-1):
+        for fy in xrange(y - 1, -1, -1):
+            for fz in xrange(z - 1, -1, -1):
                 line = f.readline().strip().split(",")
                 for fx in xrange(0, x):
                     if line[fx] == "#00000000":
@@ -87,10 +88,10 @@ class SproxelFile(object):
                     g = int(g, 16)
                     b = int(b, 16)
                     a = 0xff
-                    v = r<<24 | g<<16 | b<<8 | a
+                    v = r << 24 | g << 16 | b << 8 | a
                     voxels.set(fx, fy, fz, v)
 
-            f.readline() # discard empty line
+            f.readline()  # discard empty line
         f.close()
 
 register_plugin(SproxelFile, "Sproxel file format IO", "1.0")

@@ -22,6 +22,8 @@ from OpenGL.GL import *
 
 ##
 # Constants for the planes, to be used with a dictionary.
+
+
 class GridPlanes(object):
     X = "x"
     Y = "y"
@@ -29,13 +31,16 @@ class GridPlanes(object):
 
 ##
 # Represents a plane to be used in the grid
+
+
 class GridPlane(object):
     ##
     # @param voxels Reference to the VoxelData
     # @param plane The plane where this grid belongs
     # @param offset The offset of the plane, relative to their negative end ( X = Left, Y = Bottom, Z = Front )
     # @param visible Indicates if the plane is visible or not
-    def __init__( self, voxels, plane, offset, visible, color = QtGui.QColor("white")  ):
+
+    def __init__(self, voxels, plane, offset, visible, color=QtGui.QColor("white")):
         self._voxels = voxels
         self._plane = plane
         self._offset = 0
@@ -57,6 +62,7 @@ class GridPlane(object):
     @property
     def voxels(self):
         return self._voxels
+
     @voxels.setter
     def voxels(self, voxels):
         self._voxels = voxels
@@ -64,29 +70,32 @@ class GridPlane(object):
     @property
     def plane(self):
         return self._plane
+
     @plane.setter
     def plane(self, value):
-        assert value in ( GridPlanes.X, GridPlanes.Y, GridPlanes.Z )
-        if( value != self._plane ):
+        assert value in (GridPlanes.X, GridPlanes.Y, GridPlanes.Z)
+        if(value != self._plane):
             self._plane = value
             self.update_vertices()
 
     @property
     def offset(self):
         return self._offset
+
     @offset.setter
     def offset(self, value):
         assert isinstance(value, int)
         offset_limit = self._offset_plane_limit[self.plane]()
-        if( value > offset_limit ):
+        if(value > offset_limit):
             value = offset_limit
-        if( value != self._offset ):
+        if(value != self._offset):
             self._offset = value
             self.update_vertices()
 
     @property
     def visible(self):
         return self._visible
+
     @visible.setter
     def visible(self, value):
         assert isinstance(value, bool)
@@ -95,9 +104,10 @@ class GridPlane(object):
     @property
     def color(self):
         return self._color
+
     @color.setter
     def color(self, value):
-        assert isinstance( value, QtGui.QColor )
+        assert isinstance(value, QtGui.QColor)
         self._color = value
 
     @property
@@ -107,67 +117,68 @@ class GridPlane(object):
     def update_vertices(self):
         self._vertices = self._methods_get_plane_vertices[self._plane]()
         self._vertices_array = array.array("f", self._vertices).tostring()
-        self._num_vertices = len(self._vertices)//3
+        self._num_vertices = len(self._vertices) // 3
 
     def _get_grid_vertices_x_plane(self):
         vertices = []
         height = self._voxels.height
         depth = self._voxels.depth
-        for y in xrange(height+1):
-            vertices += self._voxels.voxel_to_world( self.offset,      y,     0 )
-            vertices += self._voxels.voxel_to_world( self.offset,      y, depth )
-        for z in xrange(depth+1):
-            vertices += self._voxels.voxel_to_world( self.offset,      0,     z )
-            vertices += self._voxels.voxel_to_world( self.offset, height,     z )
+        for y in xrange(height + 1):
+            vertices += self._voxels.voxel_to_world(self.offset, y, 0)
+            vertices += self._voxels.voxel_to_world(self.offset, y, depth)
+        for z in xrange(depth + 1):
+            vertices += self._voxels.voxel_to_world(self.offset, 0, z)
+            vertices += self._voxels.voxel_to_world(self.offset, height, z)
         return vertices
 
     def _get_grid_vertices_y_plane(self):
         vertices = []
         width = self._voxels.width
         depth = self._voxels.depth
-        for z in xrange(depth+1):
-            vertices += self._voxels.voxel_to_world(     0, self.offset, z )
-            vertices += self._voxels.voxel_to_world( width, self.offset, z )
-        for x in xrange(width+1):
-            vertices += self._voxels.voxel_to_world( x, self.offset, 0     )
-            vertices += self._voxels.voxel_to_world( x, self.offset, depth )
+        for z in xrange(depth + 1):
+            vertices += self._voxels.voxel_to_world(0, self.offset, z)
+            vertices += self._voxels.voxel_to_world(width, self.offset, z)
+        for x in xrange(width + 1):
+            vertices += self._voxels.voxel_to_world(x, self.offset, 0)
+            vertices += self._voxels.voxel_to_world(x, self.offset, depth)
         return vertices
 
     def _get_grid_vertices_z_plane(self):
         vertices = []
         width = self._voxels.width
         height = self._voxels.height
-        for x in xrange(width+1):
-            vertices += self._voxels.voxel_to_world( x,      0, self.offset )
-            vertices += self._voxels.voxel_to_world( x, height, self.offset )
-        for y in xrange(height+1):
-            vertices += self._voxels.voxel_to_world(     0, y, self.offset )
-            vertices += self._voxels.voxel_to_world( width, y, self.offset )
+        for x in xrange(width + 1):
+            vertices += self._voxels.voxel_to_world(x, 0, self.offset)
+            vertices += self._voxels.voxel_to_world(x, height, self.offset)
+        for y in xrange(height + 1):
+            vertices += self._voxels.voxel_to_world(0, y, self.offset)
+            vertices += self._voxels.voxel_to_world(width, y, self.offset)
         return vertices
+
 
 class VoxelGrid(object):
 
-    def __init__(self, widget ):
+    def __init__(self, widget):
         self._voxels = widget
         self._planes = {}
 
-    def add_grid_plane(self, plane, offset, visible, color = QtGui.QColor("white") ):
+    def add_grid_plane(self, plane, offset, visible, color=QtGui.QColor("white")):
         key = (plane, offset)
-        if( key in self._planes.keys() ):
+        if(key in self._planes.keys()):
             self._planes[key].visible = visible
         else:
-            grid_plane = GridPlane( self._voxels, plane, offset, visible, color )
+            grid_plane = GridPlane(self._voxels, plane, offset, visible, color)
             self._planes[key] = grid_plane
 
     def remove_grid_plane(self, plane, offset):
         key = (plane, offset)
-        if( key in self._planes.keys() ):
+        if(key in self._planes.keys()):
             del self._planes[key]
 
     # Return vertices for a floor grid
     def get_grid_plane(self, plane, offset):
-        key = ( plane, offset )
-        if( key in self._planes.keys() ):
+        key = (plane, offset)
+        if(key in self._planes.keys()):
             return self._planes[key]
         else:
             return None
@@ -186,14 +197,14 @@ class VoxelGrid(object):
         glDisable(GL_TEXTURE_2D)
 
         for grid in self._planes.itervalues():
-            if( not grid.visible ):
+            if(not grid.visible):
                 continue
 
             red = grid.color.redF()
             green = grid.color.greenF()
             blue = grid.color.blueF()
             # Grid colour
-            glColor3f(red,green,blue)
+            glColor3f(red, green, blue)
 
             # Enable vertex buffers
             glEnableClientState(GL_VERTEX_ARRAY)
@@ -211,11 +222,11 @@ class VoxelGrid(object):
         glEnable(GL_LIGHTING)
         glEnable(GL_TEXTURE_2D)
 
-    def scale_offsets(self, width_scale = None, height_scale = None, depth_scale = None ):
+    def scale_offsets(self, width_scale=None, height_scale=None, depth_scale=None):
         for grid in self._planes.itervalues():
-            if( grid.plane == GridPlanes.X and width_scale ):
+            if(grid.plane == GridPlanes.X and width_scale):
                 grid.offset = int(round(grid.offset * width_scale))
-            elif( grid.plane == GridPlanes.Y and height_scale ):
+            elif(grid.plane == GridPlanes.Y and height_scale):
                 grid.offset = int(round(grid.offset * height_scale))
-            elif( grid.plane == GridPlanes.Z and depth_scale ):
+            elif(grid.plane == GridPlanes.Z and depth_scale):
                 grid.offset = int(round(grid.offset * depth_scale))

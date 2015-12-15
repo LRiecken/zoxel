@@ -18,6 +18,7 @@ import json
 from plugin_api import register_plugin
 from constants import ZOXEL_VERSION
 
+
 class ZoxelFile(object):
 
     # Description of file type
@@ -44,7 +45,7 @@ class ZoxelFile(object):
 
         # Build data structure
         data = {'version': version, 'frames': voxels.get_frame_count(),
-                "creator": "Zoxel Version "+ZOXEL_VERSION}
+                "creator": "Zoxel Version " + ZOXEL_VERSION}
 
         for f in xrange(voxels.get_frame_count()):
             frame = []
@@ -54,16 +55,16 @@ class ZoxelFile(object):
                     for x in range(voxels.width):
                         v = voxels.get(x, y, z)
                         if v:
-                            frame.append((x,y,z,v))
+                            frame.append((x, y, z, v))
 
-            data['frame{0}'.format(f+1)] = frame
+            data['frame{0}'.format(f + 1)] = frame
 
         data['width'] = voxels.width
         data['height'] = voxels.height
         data['depth'] = voxels.depth
 
         # Open our file
-        f = open(filename,"wt")
+        f = open(filename, "wt")
 
         f.write(json.dumps(data))
 
@@ -111,15 +112,15 @@ class ZoxelFile(object):
                 if z > maxZ:
                     maxZ = z
             # Resize
-            voxels.resize(maxX+1, maxY+1, maxZ+1)
+            voxels.resize(maxX + 1, maxY + 1, maxZ + 1)
 
         # Read the voxel data
         for f in xrange(frames):
-            frame = data['frame{0}'.format(f+1)]
+            frame = data['frame{0}'.format(f + 1)]
             for x, y, z, v in frame:
                 voxels.set(x, y, z, v)
             # Add another frame if required
-            if f < frames-1:
+            if f < frames - 1:
                 voxels.add_frame(False)
 
         # Select the first frame by default

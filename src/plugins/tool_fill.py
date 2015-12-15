@@ -16,6 +16,7 @@ from PySide import QtGui
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
+
 class FillTool(Tool):
 
     def __init__(self, api):
@@ -40,7 +41,7 @@ class FillTool(Tool):
         search_colour = voxel
         # Don't allow invalid fills
         c = self.colour.getRgb()
-        fill_colour = c[0]<<24 | c[1]<<16 | c[2]<<8 | 0xff
+        fill_colour = c[0] << 24 | c[1] << 16 | c[2] << 8 | 0xff
         if search_colour == fill_colour:
             return
         # Initialise our search list
@@ -48,23 +49,23 @@ class FillTool(Tool):
         search.add((target.world_x, target.world_y, target.world_z))
         # Keep iterating over the search list until no more to do
         while len(search):
-            x,y,z = search.pop()
+            x, y, z = search.pop()
             voxel = target.voxels.get(x, y, z)
             if not voxel or voxel != search_colour:
                 continue
             # Add all likely neighbours into our search list
-            if target.voxels.get(x-1,y,z) == search_colour:
-                search.add((x-1,y,z))
-            if target.voxels.get(x+1,y,z) == search_colour:
-                search.add((x+1,y,z))
-            if target.voxels.get(x,y+1,z) == search_colour:
-                search.add((x,y+1,z))
-            if target.voxels.get(x,y-1,z) == search_colour:
-                search.add((x,y-1,z))
-            if target.voxels.get(x,y,z+1) == search_colour:
-                search.add((x,y,z+1))
-            if target.voxels.get(x,y,z-1) == search_colour:
-                search.add((x,y,z-1))
+            if target.voxels.get(x - 1, y, z) == search_colour:
+                search.add((x - 1, y, z))
+            if target.voxels.get(x + 1, y, z) == search_colour:
+                search.add((x + 1, y, z))
+            if target.voxels.get(x, y + 1, z) == search_colour:
+                search.add((x, y + 1, z))
+            if target.voxels.get(x, y - 1, z) == search_colour:
+                search.add((x, y - 1, z))
+            if target.voxels.get(x, y, z + 1) == search_colour:
+                search.add((x, y, z + 1))
+            if target.voxels.get(x, y, z - 1) == search_colour:
+                search.add((x, y, z - 1))
             # Set the colour of the current voxel
             target.voxels.set(x, y, z, self.colour, True, len(search) == 0 and 2 or 1)
 

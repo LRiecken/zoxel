@@ -16,8 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from PySide import QtGui
 
+
 class PluginManager(object):
     plugins = []
+
 
 class PluginAPI(object):
 
@@ -28,7 +30,7 @@ class PluginAPI(object):
         self.mainwindow = self.application.mainwindow
 
     # Register a drawing tool with the system
-    def register_tool(self, tool, activate = False):
+    def register_tool(self, tool, activate=False):
         # Create an instance
         self.mainwindow.register_tool(tool, activate)
 
@@ -59,6 +61,7 @@ class PluginAPI(object):
     # name should be a hashable type, like a simple string.
     def set_config(self, name, value):
         self.api.mainwindow.set_setting(name, value)
+
     def get_config(self, name):
         return self.api.mainwindow.get_setting(name)
 
@@ -70,6 +73,8 @@ class PluginAPI(object):
 # Plugins call this function to register with the system.  A plugin
 # should pass the class which will be instaniated by the application,
 # this constructor is passed an instance of the system plugin API.
+
+
 def register_plugin(plugin_class, name, version):
     # Create an instance of the API to send to the plugin
     # Plugins access the main app via this API instance

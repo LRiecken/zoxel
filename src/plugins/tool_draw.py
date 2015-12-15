@@ -18,6 +18,7 @@ from PySide import QtGui, QtCore
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
+
 class DrawingTool(Tool):
 
     def __init__(self, api):
@@ -39,8 +40,8 @@ class DrawingTool(Tool):
     # returns A Target object indicating the actual place where the voxel were
     # inserted. Returns None when no insertion was made.
     def _draw_voxel(self, target, shift_down, erase):
-        # Works out where exactly the new voxel goes. It can collide with an existing voxel or with the bottom of the 'y' plane,
-        #in which case, pos will be different than None.
+        # Works out where exactly the new voxel goes. It can collide with an existing voxel
+        # or with the bottom of the 'y' plane, in which case, pos will be different than None.
         color = self.colour
         if erase:
             color = 0
@@ -51,9 +52,9 @@ class DrawingTool(Tool):
                 target.world_y = pos[1]
                 target.world_z = pos[2]
 
-        if shift_down and self.first_voxel == None:
+        if shift_down and self.first_voxel is None:
             self.first_voxel = (target.world_x, target.world_y, target.world_z)
-        elif self.first_voxel == None:
+        elif self.first_voxel is None:
             if target.voxels.set(target.world_x, target.world_y, target.world_z, color):
                 return target
             else:
@@ -73,11 +74,11 @@ class DrawingTool(Tool):
         return None
 
     def _get_valid_sequence_faces(self, face):
-        if( face in Face.COLLIDABLE_FACES_PLANE_X ):
+        if(face in Face.COLLIDABLE_FACES_PLANE_X):
             return Face.COLLIDABLE_FACES_PLANE_Y + Face.COLLIDABLE_FACES_PLANE_Z
-        elif( face in Face.COLLIDABLE_FACES_PLANE_Y ):
+        elif(face in Face.COLLIDABLE_FACES_PLANE_Y):
             return Face.COLLIDABLE_FACES_PLANE_X + Face.COLLIDABLE_FACES_PLANE_Z
-        elif( face in Face.COLLIDABLE_FACES_PLANE_Z ):
+        elif(face in Face.COLLIDABLE_FACES_PLANE_Z):
             return Face.COLLIDABLE_FACES_PLANE_X + Face.COLLIDABLE_FACES_PLANE_Y
         else:
             return None
@@ -94,10 +95,10 @@ class DrawingTool(Tool):
     # When dragging, Draw a new voxel next to the targeted face
     def on_drag(self, data):
         # In case the first click has missed a valid target.
-        if( self._first_target is None ):
+        if(self._first_target is None):
             return
         valid_faces = self._get_valid_sequence_faces(self._first_target.face)
-        if( ( not valid_faces ) or ( data.face not in valid_faces ) ):
+        if((not valid_faces) or (data.face not in valid_faces)):
             return
         self._draw_voxel(data, False, False)
 

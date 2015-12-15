@@ -19,6 +19,7 @@ import sys
 from PySide import QtGui
 from mainwindow import MainWindow
 
+
 def main():
     # create application
     app = QtGui.QApplication(sys.argv)

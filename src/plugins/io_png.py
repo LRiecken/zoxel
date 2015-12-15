@@ -17,6 +17,7 @@
 from plugin_api import register_plugin
 from PySide import QtGui
 
+
 class PngFile(object):
 
     # Description of file type
@@ -31,7 +32,6 @@ class PngFile(object):
         self.api.register_file_handler(self)
         # File version format we support
         self._file_version = 1
-
 
     # Called when we need to load a file. Should raise an exception if there
     # is a problem.
@@ -57,10 +57,9 @@ class PngFile(object):
 
         for x in range(width):
             for y in range(height):
-                color = img.pixel(x,y)
+                color = img.pixel(x, y)
                 color = color << 8
-                voxels.set(x,height-y-1,0, color)
-
+                voxels.set(x, height - y - 1, 0, color)
 
 
 register_plugin(PngFile, "Png file format Importer", "1.0")
