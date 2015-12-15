@@ -172,13 +172,13 @@ class VoxelGrid(object):
 
     def remove_grid_plane(self, plane, offset):
         key = (plane, offset)
-        if(key in self._planes.keys()):
+        if key in self._planes.keys():
             del self._planes[key]
 
     # Return vertices for a floor grid
     def get_grid_plane(self, plane, offset):
         key = (plane, offset)
-        if(key in self._planes.keys()):
+        if key in self._planes.keys():
             return self._planes[key]
         else:
             return None

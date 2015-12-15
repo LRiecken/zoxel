@@ -14,8 +14,14 @@ ratings:
    paths:
    - "**.py"
 exclude_paths:
-- src/gfx/**/*
+- "src/gfx/**/*"
 - "**.ui"
 - "**.qrc"
 - "**.yml"
 - "**.bat"
+- "**.md"
+- "setup.cfg"
+- "run"
+- "build"
+- "LICENSE"
+- ".codeclimate.yml"

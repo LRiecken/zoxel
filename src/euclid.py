@@ -1444,7 +1444,7 @@ class Quaternion:
     new_identity = classmethod(new_identity)
 
     def new_rotate_axis(cls, angle, axis):
-        assert(isinstance(axis, Vector3))
+        assert isinstance(axis, Vector3)
         axis = axis.normalized()
         s = math.sin(angle / 2)
         Q = cls()

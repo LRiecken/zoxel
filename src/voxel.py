@@ -242,7 +242,7 @@ class VoxelData(object):
 
     # Get the state of the given voxel
     def get(self, x, y, z):
-        if (not self.is_valid_bounds(x, y, z)):
+        if not self.is_valid_bounds(x, y, z):
             return EMPTY
         return self._data[x][y][z]
 
