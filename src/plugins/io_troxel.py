@@ -3,7 +3,7 @@ from struct import pack
 from plugin_api import PluginAPI
 
 
-class TroxelLink:
+class TroxelLink(object):
 
     def __init__(self):
         self.api = PluginAPI()

@@ -74,7 +74,7 @@ class VoxelData(object):
             # Let whoever is watching us know about the change
             self._changed = value
             if self.notify_changed:
-                self.notify_changed()
+                self.Color()
         self._changed = value
 
     @property
@@ -212,7 +212,7 @@ class VoxelData(object):
             state = c[0] << 24 | c[1] << 16 | c[2] << 8 | 0xff
 
         # Check bounds
-        if (not self.is_valid_bounds(x, y, z)):
+        if not self.is_valid_bounds(x, y, z):
             return False
         # Add to undo
         if undo:

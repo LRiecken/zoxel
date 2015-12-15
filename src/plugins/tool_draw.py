@@ -74,18 +74,18 @@ class DrawingTool(Tool):
         return None
 
     def _get_valid_sequence_faces(self, face):
-        if(face in Face.COLLIDABLE_FACES_PLANE_X):
+        if face in Face.COLLIDABLE_FACES_PLANE_X:
             return Face.COLLIDABLE_FACES_PLANE_Y + Face.COLLIDABLE_FACES_PLANE_Z
-        elif(face in Face.COLLIDABLE_FACES_PLANE_Y):
+        elif face in Face.COLLIDABLE_FACES_PLANE_Y:
             return Face.COLLIDABLE_FACES_PLANE_X + Face.COLLIDABLE_FACES_PLANE_Z
-        elif(face in Face.COLLIDABLE_FACES_PLANE_Z):
+        elif face in Face.COLLIDABLE_FACES_PLANE_Z:
             return Face.COLLIDABLE_FACES_PLANE_X + Face.COLLIDABLE_FACES_PLANE_Y
         else:
             return None
 
     # Draw a new voxel next to the targeted face
     def on_mouse_click(self, data):
-        shift_down = not not (data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
+        shift_down = not not data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier
         self._first_target = self._draw_voxel(data, shift_down, data.mouse_button == MouseButtons.RIGHT)
 
     # Start a drag
@@ -95,10 +95,10 @@ class DrawingTool(Tool):
     # When dragging, Draw a new voxel next to the targeted face
     def on_drag(self, data):
         # In case the first click has missed a valid target.
-        if(self._first_target is None):
+        if self._first_target is None:
             return
         valid_faces = self._get_valid_sequence_faces(self._first_target.face)
-        if((not valid_faces) or (data.face not in valid_faces)):
+        if (not valid_faces) or (data.face not in valid_faces):
             return
         self._draw_voxel(data, False, False)
 

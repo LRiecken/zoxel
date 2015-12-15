@@ -16,6 +16,19 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+import bpy
+import collections
+import os
+import json
+
+from bpy.props import (
+    BoolProperty,
+    FloatProperty,
+    StringProperty,
+    EnumProperty,
+    CollectionProperty
+)
+
 bl_info = {
     "name": "Zoxel importer",
     "author": "Lennart Riecken",
@@ -26,34 +39,18 @@ bl_info = {
     "category": "Import-Export"}
 
 
-import bpy
-import collections
-import os
-import json
-
-
-from bpy.props import (
-        BoolProperty,
-        FloatProperty,
-        StringProperty,
-        EnumProperty,
-        CollectionProperty
-        )
-
-
-
 class ImportZOXEL(bpy.types.Operator):
     """Load a zoxel file"""
     bl_idname = "import_scene.zoxel"
     bl_label = "Import Zoxel"
-    #bl_options = {'PRESET', 'UNDO'}
+    # bl_options = {'PRESET', 'UNDO'}
 
     filename_ext = ".zox"
 
     filter_glob = StringProperty(
         default="*.zox",
         options={'HIDDEN'}
-        )
+    )
 
     x_off = 0.1
     y_off = 0.1
@@ -77,18 +74,17 @@ class ImportZOXEL(bpy.types.Operator):
 
     def doImport(self, directory, filename):
         file = os.path.join(directory, filename)
-        print("Loading: "+file)
+        print("Loading: " + file)
 
         json_string_data = open(file).read()
         data = json.loads(json_string_data)
-        i = 1;
-        while "frame"+str(i) in data.keys():
-            framedata = data["frame"+str(i)]
+        i = 1
+        while "frame" + str(i) in data.keys():
+            framedata = data["frame" + str(i)]
             self.importFrame(framedata, filename)
-            i = i+1
+            i = i + 1
 
-
-    def hasVoxel(self, frame, x,y,z):
+    def hasVoxel(self, frame, x, y, z):
         for data in frame:
             if data[0] == x and data[1] == y and data[2] == z:
                 return True
@@ -103,50 +99,51 @@ class ImportZOXEL(bpy.types.Operator):
             z = data[1]
             y = data[2]
             color = data[3]
-            blender_color = (((color>>8) // 256 // 256 % 256) / 255, ((color>>8) // 256 % 256) / 255 , ((color>>8) % 256) / 255 )
+            blender_color = (((color >> 8) // 256 // 256 % 256) / 255,
+                             ((color >> 8) // 256 % 256) / 255, ((color >> 8) % 256) / 255)
             numVertAdded = 0
 
             vertOff = len(verts)
 
-            verts.append( (x*self.x_off, y*self.y_off, z*self.z_off) )
-            verts.append( (x*self.x_off+self.x_off, y*self.y_off, z*self.z_off) )
-            verts.append( (x*self.x_off+self.x_off, y*self.y_off+self.y_off, z*self.z_off) )
-            verts.append( (x*self.x_off, y*self.y_off+self.y_off, z*self.z_off) )
+            verts.append((x * self.x_off, y * self.y_off, z * self.z_off))
+            verts.append((x * self.x_off + self.x_off, y * self.y_off, z * self.z_off))
+            verts.append((x * self.x_off + self.x_off, y * self.y_off + self.y_off, z * self.z_off))
+            verts.append((x * self.x_off, y * self.y_off + self.y_off, z * self.z_off))
 
-            verts.append( (x*self.x_off, y*self.y_off, z*self.z_off+self.z_off) )
-            verts.append( (x*self.x_off+self.x_off, y*self.y_off, z*self.z_off+self.z_off) )
-            verts.append( (x*self.x_off+self.x_off, y*self.y_off+self.y_off, z*self.z_off+self.z_off) )
-            verts.append( (x*self.x_off, y*self.y_off+self.y_off, z*self.z_off+self.z_off) )
+            verts.append((x * self.x_off, y * self.y_off, z * self.z_off + self.z_off))
+            verts.append((x * self.x_off + self.x_off, y * self.y_off, z * self.z_off + self.z_off))
+            verts.append((x * self.x_off + self.x_off, y * self.y_off + self.y_off, z * self.z_off + self.z_off))
+            verts.append((x * self.x_off, y * self.y_off + self.y_off, z * self.z_off + self.z_off))
 
-            #Bottom
-            if not self.hasVoxel(frame, x, z-1, y):
-                faces.append( (0+vertOff, 3+vertOff, 2+vertOff, 1+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Bottom
+            if not self.hasVoxel(frame, x, z - 1, y):
+                faces.append((0 + vertOff, 3 + vertOff, 2 + vertOff, 1 + vertOff))
+                numVertAdded = numVertAdded + 4
 
-            #Top
-            if not self.hasVoxel(frame, x, z+1, y):
-                faces.append( (4+vertOff, 5+vertOff, 6+vertOff, 7+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Top
+            if not self.hasVoxel(frame, x, z + 1, y):
+                faces.append((4 + vertOff, 5 + vertOff, 6 + vertOff, 7 + vertOff))
+                numVertAdded = numVertAdded + 4
 
-            #Left
-            if not self.hasVoxel(frame, x-1, z, y):
-                faces.append( (0+vertOff, 4+vertOff, 7+vertOff, 3+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Left
+            if not self.hasVoxel(frame, x - 1, z, y):
+                faces.append((0 + vertOff, 4 + vertOff, 7 + vertOff, 3 + vertOff))
+                numVertAdded = numVertAdded + 4
 
-            #Right
-            if not self.hasVoxel(frame, x+1, z, y):
-                faces.append( (1+vertOff, 2+vertOff, 6+vertOff, 5+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Right
+            if not self.hasVoxel(frame, x + 1, z, y):
+                faces.append((1 + vertOff, 2 + vertOff, 6 + vertOff, 5 + vertOff))
+                numVertAdded = numVertAdded + 4
 
-            #Back
-            if not self.hasVoxel(frame, x, z, y+1):
-                faces.append( (3+vertOff, 7+vertOff, 6+vertOff, 2+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Back
+            if not self.hasVoxel(frame, x, z, y + 1):
+                faces.append((3 + vertOff, 7 + vertOff, 6 + vertOff, 2 + vertOff))
+                numVertAdded = numVertAdded + 4
 
-            #Front
-            if not self.hasVoxel(frame, x, z, y-1):
-                faces.append( (0+vertOff, 1+vertOff, 5+vertOff, 4+vertOff) )
-                numVertAdded = numVertAdded+4
+            # Front
+            if not self.hasVoxel(frame, x, z, y - 1):
+                faces.append((0 + vertOff, 1 + vertOff, 5 + vertOff, 4 + vertOff))
+                numVertAdded = numVertAdded + 4
 
             for i in range(numVertAdded):
                 colors.append(blender_color)
@@ -177,6 +174,7 @@ class ImportZOXEL(bpy.types.Operator):
 
 def menu_func_import(self, context):
     self.layout.operator(ImportZOXEL.bl_idname, text="Zoxel (.zox)")
+
 
 def register():
     bpy.utils.register_module(__name__)

@@ -25,13 +25,13 @@ Documentation and tests are included in the file "euclid.txt", or online
 at http://code.google.com/p/pyeuclid
 '''
 
-__docformat__ = 'restructuredtext'
-__version__ = '$Id: euclid.py 37 2011-08-21 22:24:05Z elfnor@gmail.com $'
-__revision__ = '$Revision: 37 $'
-
 import math
 import operator
 import types
+
+__docformat__ = 'restructuredtext'
+__version__ = '$Id: euclid.py 37 2011-08-21 22:24:05Z elfnor@gmail.com $'
+__revision__ = '$Revision: 37 $'
 
 # Some magic here.  If _use_slots is True, the classes will derive from
 # object and will define a __slots__ class variable.  If _use_slots is
@@ -756,12 +756,8 @@ class Matrix3:
     new_rotate = classmethod(new_rotate)
 
     def determinant(self):
-        return (self.a * self.f * self.k
-                + self.b * self.g * self.i
-                + self.c * self.e * self.j
-                - self.a * self.g * self.j
-                - self.b * self.e * self.k
-                - self.c * self.f * self.i)
+        return (self.a * self.f * self.k + self.b * self.g * self.i + self.c * self.e * self.j -
+                self.a * self.g * self.j - self.b * self.e * self.k - self.c * self.f * self.i)
 
     def inverse(self):
         tmp = Matrix3()
@@ -1096,7 +1092,7 @@ class Matrix4:
     new_rotatez = classmethod(new_rotatez)
 
     def new_rotate_axis(cls, angle, axis):
-        assert(isinstance(axis, Vector3))
+        assert isinstance(axis, Vector3)
         vector = axis.normalized()
         x = vector.x
         y = vector.y
@@ -1177,18 +1173,12 @@ class Matrix4:
     new_perspective = classmethod(new_perspective)
 
     def determinant(self):
-        return ((self.a * self.f - self.e * self.b)
-                * (self.k * self.p - self.o * self.l)
-                - (self.a * self.j - self.i * self.b)
-                * (self.g * self.p - self.o * self.h)
-                + (self.a * self.n - self.m * self.b)
-                * (self.g * self.l - self.k * self.h)
-                + (self.e * self.j - self.i * self.f)
-                * (self.c * self.p - self.o * self.d)
-                - (self.e * self.n - self.m * self.f)
-                * (self.c * self.l - self.k * self.d)
-                + (self.i * self.n - self.m * self.j)
-                * (self.c * self.h - self.g * self.d))
+        return ((self.a * self.f - self.e * self.b) * (self.k * self.p - self.o * self.l) -
+                (self.a * self.j - self.i * self.b) * (self.g * self.p - self.o * self.h) +
+                (self.a * self.n - self.m * self.b) * (self.g * self.l - self.k * self.h) +
+                (self.e * self.j - self.i * self.f) * (self.c * self.p - self.o * self.d) -
+                (self.e * self.n - self.m * self.f) * (self.c * self.l - self.k * self.d) +
+                (self.i * self.n - self.m * self.j) * (self.c * self.h - self.g * self.d))
 
     def inverse(self):
         tmp = Matrix4()
@@ -1200,41 +1190,41 @@ class Matrix4:
         else:
             d = 1.0 / d
 
-            tmp.a = d * (self.f * (self.k * self.p - self.o * self.l) + self.j * (self.o *
-                                                                                  self.h - self.g * self.p) + self.n * (self.g * self.l - self.k * self.h))
-            tmp.e = d * (self.g * (self.i * self.p - self.m * self.l) + self.k * (self.m *
-                                                                                  self.h - self.e * self.p) + self.o * (self.e * self.l - self.i * self.h))
-            tmp.i = d * (self.h * (self.i * self.n - self.m * self.j) + self.l * (self.m *
-                                                                                  self.f - self.e * self.n) + self.p * (self.e * self.j - self.i * self.f))
-            tmp.m = d * (self.e * (self.n * self.k - self.j * self.o) + self.i * (self.f *
-                                                                                  self.o - self.n * self.g) + self.m * (self.j * self.g - self.f * self.k))
+            tmp.a = d * (self.f * (self.k * self.p - self.o * self.l) + self.j * (self.o * self.h - self.g * self.p) +
+                         self.n * (self.g * self.l - self.k * self.h))
+            tmp.e = d * (self.g * (self.i * self.p - self.m * self.l) + self.k * (self.m * self.h - self.e * self.p) +
+                         self.o * (self.e * self.l - self.i * self.h))
+            tmp.i = d * (self.h * (self.i * self.n - self.m * self.j) + self.l * (self.m * self.f - self.e * self.n) +
+                         self.p * (self.e * self.j - self.i * self.f))
+            tmp.m = d * (self.e * (self.n * self.k - self.j * self.o) + self.i * (self.f * self.o - self.n * self.g) +
+                         self.m * (self.j * self.g - self.f * self.k))
 
-            tmp.b = d * (self.j * (self.c * self.p - self.o * self.d) + self.n * (self.k *
-                                                                                  self.d - self.c * self.l) + self.b * (self.o * self.l - self.k * self.p))
-            tmp.f = d * (self.k * (self.a * self.p - self.m * self.d) + self.o * (self.i *
-                                                                                  self.d - self.a * self.l) + self.c * (self.m * self.l - self.i * self.p))
-            tmp.j = d * (self.l * (self.a * self.n - self.m * self.b) + self.p * (self.i *
-                                                                                  self.b - self.a * self.j) + self.d * (self.m * self.j - self.i * self.n))
-            tmp.n = d * (self.i * (self.n * self.c - self.b * self.o) + self.m * (self.b *
-                                                                                  self.k - self.j * self.c) + self.a * (self.j * self.o - self.n * self.k))
+            tmp.b = d * (self.j * (self.c * self.p - self.o * self.d) + self.n * (self.k * self.d - self.c * self.l) +
+                         self.b * (self.o * self.l - self.k * self.p))
+            tmp.f = d * (self.k * (self.a * self.p - self.m * self.d) + self.o * (self.i * self.d - self.a * self.l) +
+                         self.c * (self.m * self.l - self.i * self.p))
+            tmp.j = d * (self.l * (self.a * self.n - self.m * self.b) + self.p * (self.i * self.b - self.a * self.j) +
+                         self.d * (self.m * self.j - self.i * self.n))
+            tmp.n = d * (self.i * (self.n * self.c - self.b * self.o) + self.m * (self.b * self.k - self.j * self.c) +
+                         self.a * (self.j * self.o - self.n * self.k))
 
-            tmp.c = d * (self.n * (self.c * self.h - self.g * self.d) + self.b * (self.g *
-                                                                                  self.p - self.o * self.h) + self.f * (self.o * self.d - self.c * self.p))
-            tmp.g = d * (self.o * (self.a * self.h - self.e * self.d) + self.c * (self.e *
-                                                                                  self.p - self.m * self.h) + self.g * (self.m * self.d - self.a * self.p))
-            tmp.k = d * (self.p * (self.a * self.f - self.e * self.b) + self.d * (self.e *
-                                                                                  self.n - self.m * self.f) + self.h * (self.m * self.b - self.a * self.n))
-            tmp.o = d * (self.m * (self.f * self.c - self.b * self.g) + self.a * (self.n *
-                                                                                  self.g - self.f * self.o) + self.e * (self.b * self.o - self.n * self.c))
+            tmp.c = d * (self.n * (self.c * self.h - self.g * self.d) + self.b * (self.g * self.p - self.o * self.h) +
+                         self.f * (self.o * self.d - self.c * self.p))
+            tmp.g = d * (self.o * (self.a * self.h - self.e * self.d) + self.c * (self.e * self.p - self.m * self.h) +
+                         self.g * (self.m * self.d - self.a * self.p))
+            tmp.k = d * (self.p * (self.a * self.f - self.e * self.b) + self.d * (self.e * self.n - self.m * self.f) +
+                         self.h * (self.m * self.b - self.a * self.n))
+            tmp.o = d * (self.m * (self.f * self.c - self.b * self.g) + self.a * (self.n * self.g - self.f * self.o) +
+                         self.e * (self.b * self.o - self.n * self.c))
 
-            tmp.d = d * (self.b * (self.k * self.h - self.g * self.l) + self.f * (self.c *
-                                                                                  self.l - self.k * self.d) + self.j * (self.g * self.d - self.c * self.h))
-            tmp.h = d * (self.c * (self.i * self.h - self.e * self.l) + self.g * (self.a *
-                                                                                  self.l - self.i * self.d) + self.k * (self.e * self.d - self.a * self.h))
-            tmp.l = d * (self.d * (self.i * self.f - self.e * self.j) + self.h * (self.a *
-                                                                                  self.j - self.i * self.b) + self.l * (self.e * self.b - self.a * self.f))
-            tmp.p = d * (self.a * (self.f * self.k - self.j * self.g) + self.e * (self.j *
-                                                                                  self.c - self.b * self.k) + self.i * (self.b * self.g - self.f * self.c))
+            tmp.d = d * (self.b * (self.k * self.h - self.g * self.l) + self.f * (self.c * self.l - self.k * self.d) +
+                         self.j * (self.g * self.d - self.c * self.h))
+            tmp.h = d * (self.c * (self.i * self.h - self.e * self.l) + self.g * (self.a * self.l - self.i * self.d) +
+                         self.k * (self.e * self.d - self.a * self.h))
+            tmp.l = d * (self.d * (self.i * self.f - self.e * self.j) + self.h * (self.a * self.j - self.i * self.b) +
+                         self.l * (self.e * self.b - self.a * self.f))
+            tmp.p = d * (self.a * (self.f * self.k - self.j * self.g) + self.e * (self.j * self.c - self.b * self.k) +
+                         self.i * (self.b * self.g - self.f * self.c))
 
         return tmp
 

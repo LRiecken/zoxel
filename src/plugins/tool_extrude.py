@@ -114,7 +114,7 @@ class ExtrudeTool(Tool):
         return False
 
     def on_mouse_click(self, data):
-        shift_down = not not (data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
+        shift_down = not not data.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier
         if shift_down and self.regionstart is None:
             self.regionstart = [data.world_x, data.world_y, data.world_z]
         elif self.regionstart is not None:

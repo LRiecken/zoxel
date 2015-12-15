@@ -241,8 +241,9 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number(
-        ) + 1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:",
+                                               self.display.voxels.get_frame_number() + 1, 1,
+                                               self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.add_frame(value, True)
             self.display.refresh()
@@ -250,8 +251,9 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_add_empty_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:", self.display.voxels.get_frame_number(
-        ) + 1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Add frame", "Add new frame after:",
+                                               self.display.voxels.get_frame_number() + 1, 1,
+                                               self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.add_frame(value, False)
             self.display.refresh()
@@ -270,7 +272,7 @@ class MainWindow(QtGui.QMainWindow):
     def on_action_anim_delete_triggered(self):
         ret = QtGui.QMessageBox.question(
             self, "Zoxel", "Do you really want to delete this frame?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-        if (ret == QtGui.QMessageBox.Yes):
+        if ret == QtGui.QMessageBox.Yes:
             self.display.voxels.delete_frame()
             self.display.refresh()
             self.refresh_actions()
@@ -406,8 +408,8 @@ class MainWindow(QtGui.QMainWindow):
     def confirm_save(self):
         responce = QtGui.QMessageBox.question(self, "Save changes?",
                                               "Save changes before discarding?",
-                                              buttons=(QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel
-                                                       | QtGui.QMessageBox.No))
+                                              buttons=(QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel |
+                                                       QtGui.QMessageBox.No))
         if responce == QtGui.QMessageBox.StandardButton.Save:
             if not self.save():
                 return False
@@ -452,7 +454,6 @@ class MainWindow(QtGui.QMainWindow):
             # XXX Fail. Never displays because we're on our way out
             error = QtGui.QErrorMessage(self)
             error.showMessage(str(E))
-            print str(E)
 
     # Load our state
     def load_state(self):
@@ -643,7 +644,6 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.action_anim_delete.setEnabled(num_frames > 1)
         self.ui.action_anim_previous.setEnabled(num_frames > 1)
         self.ui.action_anim_next.setEnabled(num_frames > 1)
-        self.ui.action_anim_play.setEnabled(num_frames > 1
-                                            and not self._timer.isActive())
+        self.ui.action_anim_play.setEnabled(num_frames > 1 and not self._timer.isActive())
         self.ui.action_anim_stop.setEnabled(self._timer.isActive())
         self.update_caption()

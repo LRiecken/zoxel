@@ -18,7 +18,7 @@
 import array
 from PySide import QtGui
 from OpenGL.GL import *
-#from OpenGL.GLU import gluUnProject, gluProject
+# from OpenGL.GLU import gluUnProject, gluProject
 
 ##
 # Constants for the planes, to be used with a dictionary.
@@ -74,7 +74,7 @@ class GridPlane(object):
     @plane.setter
     def plane(self, value):
         assert value in (GridPlanes.X, GridPlanes.Y, GridPlanes.Z)
-        if(value != self._plane):
+        if value != self._plane:
             self._plane = value
             self.update_vertices()
 
@@ -86,9 +86,9 @@ class GridPlane(object):
     def offset(self, value):
         assert isinstance(value, int)
         offset_limit = self._offset_plane_limit[self.plane]()
-        if(value > offset_limit):
+        if value > offset_limit:
             value = offset_limit
-        if(value != self._offset):
+        if value != self._offset:
             self._offset = value
             self.update_vertices()
 
@@ -164,7 +164,7 @@ class VoxelGrid(object):
 
     def add_grid_plane(self, plane, offset, visible, color=QtGui.QColor("white")):
         key = (plane, offset)
-        if(key in self._planes.keys()):
+        if key in self._planes.keys():
             self._planes[key].visible = visible
         else:
             grid_plane = GridPlane(self._voxels, plane, offset, visible, color)
@@ -197,7 +197,7 @@ class VoxelGrid(object):
         glDisable(GL_TEXTURE_2D)
 
         for grid in self._planes.itervalues():
-            if(not grid.visible):
+            if not grid.visible:
                 continue
 
             red = grid.color.redF()
@@ -224,9 +224,9 @@ class VoxelGrid(object):
 
     def scale_offsets(self, width_scale=None, height_scale=None, depth_scale=None):
         for grid in self._planes.itervalues():
-            if(grid.plane == GridPlanes.X and width_scale):
+            if grid.plane == GridPlanes.X and width_scale:
                 grid.offset = int(round(grid.offset * width_scale))
-            elif(grid.plane == GridPlanes.Y and height_scale):
+            elif grid.plane == GridPlanes.Y and height_scale:
                 grid.offset = int(round(grid.offset * height_scale))
-            elif(grid.plane == GridPlanes.Z and depth_scale):
+            elif grid.plane == GridPlanes.Z and depth_scale:
                 grid.offset = int(round(grid.offset * depth_scale))

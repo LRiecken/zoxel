@@ -184,9 +184,9 @@ class QubicleFile(object):
                     index = 0
                     while True:
                         data = self.uint32(f)
-                        if (data == 6):
+                        if data == 6:
                             break
-                        elif (data == 2):
+                        elif data == 2:
                             count = self.uint32(f)
                             vox = self.uint32(f)
                             if (vox & 0xff000000) >> 24:

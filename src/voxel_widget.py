@@ -361,12 +361,9 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         self.mouse_position = (self._mouse.x(), self._mouse.y())
 
-        ctrl = (self._key_modifiers
-                & QtCore.Qt.KeyboardModifier.ControlModifier) != 0
-        shift = (self._key_modifiers
-                 & QtCore.Qt.KeyboardModifier.ShiftModifier) != 0
-        alt = (self._key_modifiers
-               & QtCore.Qt.KeyboardModifier.AltModifier) != 0
+        ctrl = (self._key_modifiers & QtCore.Qt.KeyboardModifier.ControlModifier) != 0
+        shift = (self._key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier) != 0
+        alt = (self._key_modifiers & QtCore.Qt.KeyboardModifier.AltModifier) != 0
 
         # Screen units delta
         dx = event.x() - self._mouse.x()
@@ -374,8 +371,8 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         # Right mouse button held down with CTRL/cmd key - rotate
         # Or middle mouse button held
-        if ((event.buttons() & QtCore.Qt.RightButton and ctrl)
-                or ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
+        if ((event.buttons() & QtCore.Qt.RightButton and ctrl) or
+           ((event.buttons() & QtCore.Qt.MiddleButton) and not ctrl)):
             self._rotating = True
             self._rotate_x = self._rotate_x + dy
             self._rotate_y = self._rotate_y + dx
@@ -383,8 +380,8 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         # Middle mouse button held down with CTRL - translate
         # or right mouse button with alt
-        elif ((event.buttons() & QtCore.Qt.MiddleButton and ctrl)
-              or (event.buttons() & QtCore.Qt.RightButton and alt)):
+        elif ((event.buttons() & QtCore.Qt.MiddleButton and ctrl) or
+              (event.buttons() & QtCore.Qt.RightButton and alt)):
             self._rotating = True
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
