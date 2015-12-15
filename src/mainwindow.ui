@@ -148,7 +148,7 @@
    <addaction name="action_wireframe"/>
    <addaction name="action_occlusion"/>
    <addaction name="separator"/>
-   <addaction name="action_voxel_colour"/>
+   <addaction name="action_voxel_color"/>
    <addaction name="action_background"/>
    <addaction name="action_resize"/>
    <addaction name="separator"/>
@@ -336,7 +336,7 @@
     <string>Background</string>
    </property>
    <property name="toolTip">
-    <string>Choose background colour</string>
+    <string>Choose background color</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+6</string>
@@ -408,16 +408,16 @@
     <string>Ctrl+Alt+3</string>
    </property>
   </action>
-  <action name="action_voxel_colour">
+  <action name="action_voxel_color">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/gfx/icons/color.png</normaloff>:/images/gfx/icons/color.png</iconset>
    </property>
    <property name="text">
-    <string>Voxel Colour</string>
+    <string>Voxel Color</string>
    </property>
    <property name="toolTip">
-    <string>Pick Voxel Colour</string>
+    <string>Pick Voxel Color</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+5</string>

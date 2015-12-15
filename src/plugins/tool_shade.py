@@ -32,24 +32,24 @@ class ShaderTool(Tool):
         # Register the tool
         self.api.register_tool(self)
 
-    # Colour the targeted voxel
+    # Color the targeted voxel
     def on_mouse_click(self, data):
         # If we have a voxel at the target, get its color.
         voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
         if voxel:
-            self.api.set_palette_colour(voxel)
+            self.api.set_palette_color(voxel)
             if data.mouse_button == MouseButtons.LEFT:
-                # Darken the colour.
-                newColour = self.api.get_palette_colour().darker(110)
+                # Darken the color.
+                newColor = self.api.get_palette_color().darker(110)
                 # set the voxel's new color.
-                data.voxels.set(data.world_x, data.world_y, data.world_z, newColour)
+                data.voxels.set(data.world_x, data.world_y, data.world_z, newColor)
             elif data.mouse_button == MouseButtons.RIGHT:
-                # Lighten the colour.
-                newColour = self.api.get_palette_colour().lighter(110)
+                # Lighten the color.
+                newColor = self.api.get_palette_color().lighter(110)
                 # set the voxel's new color.
-                data.voxels.set(data.world_x, data.world_y, data.world_z, newColour)
+                data.voxels.set(data.world_x, data.world_y, data.world_z, newColor)
 
-    # Colour when dragging also
+    # Color when dragging also
     def on_drag(self, data):
         self.on_mouse_click(data)
 

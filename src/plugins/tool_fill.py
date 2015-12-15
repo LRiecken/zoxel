@@ -25,24 +25,24 @@ class FillTool(Tool):
         self.action = QtGui.QAction(
             QtGui.QPixmap(":/images/gfx/icons/paint-can.png"),
             "Fill", None)
-        self.action.setStatusTip("Flood fill with colour")
+        self.action.setStatusTip("Flood fill with color")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+6"))
         # Register the tool
         self.api.register_tool(self)
 
-    # Fill all connected voxels of the same colour with a new colour
+    # Fill all connected voxels of the same color with a new color
     def on_mouse_click(self, target):
         # We need to have a selected voxel
         voxel = target.voxels.get(target.world_x, target.world_y, target.world_z)
         if not voxel:
             return
-        # Grab the target colour
-        search_colour = voxel
+        # Grab the target color
+        search_color = voxel
         # Don't allow invalid fills
-        c = self.colour.getRgb()
-        fill_colour = c[0] << 24 | c[1] << 16 | c[2] << 8 | 0xff
-        if search_colour == fill_colour:
+        c = self.color.getRgb()
+        fill_color = c[0] << 24 | c[1] << 16 | c[2] << 8 | 0xff
+        if search_color == fill_color:
             return
         # Initialise our search list
         search = set()
@@ -51,22 +51,22 @@ class FillTool(Tool):
         while len(search):
             x, y, z = search.pop()
             voxel = target.voxels.get(x, y, z)
-            if not voxel or voxel != search_colour:
+            if not voxel or voxel != search_color:
                 continue
             # Add all likely neighbours into our search list
-            if target.voxels.get(x - 1, y, z) == search_colour:
+            if target.voxels.get(x - 1, y, z) == search_color:
                 search.add((x - 1, y, z))
-            if target.voxels.get(x + 1, y, z) == search_colour:
+            if target.voxels.get(x + 1, y, z) == search_color:
                 search.add((x + 1, y, z))
-            if target.voxels.get(x, y + 1, z) == search_colour:
+            if target.voxels.get(x, y + 1, z) == search_color:
                 search.add((x, y + 1, z))
-            if target.voxels.get(x, y - 1, z) == search_colour:
+            if target.voxels.get(x, y - 1, z) == search_color:
                 search.add((x, y - 1, z))
-            if target.voxels.get(x, y, z + 1) == search_colour:
+            if target.voxels.get(x, y, z + 1) == search_color:
                 search.add((x, y, z + 1))
-            if target.voxels.get(x, y, z - 1) == search_colour:
+            if target.voxels.get(x, y, z - 1) == search_color:
                 search.add((x, y, z - 1))
-            # Set the colour of the current voxel
-            target.voxels.set(x, y, z, self.colour, True, len(search) == 0 and 2 or 1)
+            # Set the color of the current voxel
+            target.voxels.set(x, y, z, self.color, True, len(search) == 0 and 2 or 1)
 
 register_plugin(FillTool, "Fill Tool", "1.0")

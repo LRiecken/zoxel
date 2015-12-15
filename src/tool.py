@@ -174,9 +174,9 @@ class EventData(object):
 class Tool(object):
 
     @property
-    # Returns the currently selected colour
-    def colour(self):
-        return self.api.get_palette_colour()
+    # Returns the currently selected color
+    def color(self):
+        return self.api.get_palette_color()
 
     def __init__(self, api):
         self.api = api

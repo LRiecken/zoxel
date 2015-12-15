@@ -27,20 +27,20 @@ class PaintingTool(Tool):
         self.action = QtGui.QAction(
             QtGui.QPixmap(":/images/gfx/icons/paint-brush.png"),
             "Paint", None)
-        self.action.setStatusTip("Colour Voxels")
+        self.action.setStatusTip("Color Voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+2"))
         # Register the tool
         self.api.register_tool(self)
 
-    # Colour the targeted voxel
+    # Color the targeted voxel
     def on_mouse_click(self, data):
-        # If we have a voxel at the target, colour it
+        # If we have a voxel at the target, color it
         voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
         if voxel:
-            data.voxels.set(data.world_x, data.world_y, data.world_z, self.colour)
+            data.voxels.set(data.world_x, data.world_y, data.world_z, self.color)
 
-    # Colour when dragging also
+    # Color when dragging also
     def on_drag(self, data):
         self.on_mouse_click(data)
 

@@ -65,7 +65,7 @@ class QubicleFile(object):
 
         # Version
         self.uint32(f, 0x00000101)
-        # Colour format RGBA
+        # Color format RGBA
         self.uint32(f, 0)
         # Left handed coords
         self.uint32(f, 0)
@@ -128,7 +128,7 @@ class QubicleFile(object):
 
         # Version
         version = self.uint32(f)
-        # Colour format 0 for RGBA and 1 for BRGA
+        # Color format 0 for RGBA and 1 for BRGA
         format = self.uint32(f)
         # Left handed coords
         coords = self.uint32(f)

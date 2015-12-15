@@ -35,7 +35,7 @@ class ObjFile(object):
     # problem saving.
     def save(self, filename):
         # grab the voxel data
-        vertices, colours, _ = self.api.get_voxel_mesh()
+        vertices, colors, _ = self.api.get_voxel_mesh()
 
         # Open our file
         f = open(filename, "wt")
@@ -55,27 +55,27 @@ class ObjFile(object):
                     (vertices[i], vertices[i + 1], vertices[i + 2]))
             i += 3
 
-        # Build a list of unique colours we use so we can assign materials
+        # Build a list of unique colors we use so we can assign materials
         mats = {}
         i = 0
-        while i < len(colours):
-            r = colours[i]
-            g = colours[i + 1]
-            b = colours[i + 2]
-            colour = r << 24 | g << 16 | b << 8
-            if colour not in mats:
-                mats[colour] = "material_%i" % len(mats)
+        while i < len(colors):
+            r = colors[i]
+            g = colors[i + 1]
+            b = colors[i + 2]
+            color = r << 24 | g << 16 | b << 8
+            if color not in mats:
+                mats[color] = "material_%i" % len(mats)
             i += 3
 
         # Export faces
         faces = (len(vertices) // (3 * 3)) // 2
         for i in xrange(faces):
             n = 1 + (i * 6)
-            r = colours[(i * 18)]
-            g = colours[(i * 18) + 1]
-            b = colours[(i * 18) + 2]
-            colour = r << 24 | g << 16 | b << 8
-            f.write("usemtl %s\r\n" % mats[colour])
+            r = colors[(i * 18)]
+            g = colors[(i * 18) + 1]
+            b = colors[(i * 18) + 2]
+            color = r << 24 | g << 16 | b << 8
+            f.write("usemtl %s\r\n" % mats[color])
             f.write("f %i %i %i\r\n" % (n, n + 2, n + 1))
             f.write("f %i %i %i\r\n" % (n + 5, n + 4, n + 3))
 
@@ -84,11 +84,11 @@ class ObjFile(object):
 
         # Create our material file
         f = open(mat_filename, "wt")
-        for colour, material in mats.items():
+        for color, material in mats.items():
             f.write("newmtl %s\r\n" % material)
-            r = (colour & 0xff000000) >> 24
-            g = (colour & 0xff0000) >> 16
-            b = (colour & 0xff00) >> 8
+            r = (color & 0xff000000) >> 24
+            g = (color & 0xff0000) >> 16
+            b = (color & 0xff00) >> 8
             r = r / 255.0
             g = g / 255.0
             b = b / 255.0

@@ -42,7 +42,7 @@ class DrawingTool(Tool):
     def _draw_voxel(self, target, shift_down, erase):
         # Works out where exactly the new voxel goes. It can collide with an existing voxel
         # or with the bottom of the 'y' plane, in which case, pos will be different than None.
-        color = self.colour
+        color = self.color
         if erase:
             color = 0
         else:

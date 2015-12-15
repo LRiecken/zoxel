@@ -33,7 +33,7 @@ class DragTool(Tool):
         # Register the tool
         self.api.register_tool(self)
 
-    # Colour the targeted voxel
+    # Color the targeted voxel
     def on_drag_start(self, target):
         self._mouse = (target.mouse_x, target.mouse_y)
 

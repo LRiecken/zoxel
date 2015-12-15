@@ -1,5 +1,5 @@
 # palette_widget.py
-# A colour picking widget.
+# A color picking widget.
 # Copyright (c) 2013, Graham R King
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,22 +20,22 @@ from PySide.QtCore import QRect, QPoint
 
 class PaletteWidget(QtGui.QWidget):
 
-    # Colour changed signal
+    # Color changed signal
     changed = QtCore.Signal()
 
     @property
-    def colour(self):
+    def color(self):
         return QtGui.QColor.fromHsvF(self._hue, self._saturation, self._value)
 
-    @colour.setter
-    def colour(self, value):
+    @color.setter
+    def color(self, value):
         # If this is an integer, assume is RGBA
         if not isinstance(value, QtGui.QColor):
             r = (value & 0xff000000) >> 24
             g = (value & 0xff0000) >> 16
             b = (value & 0xff00) >> 8
             value = QtGui.QColor.fromRgb(r, g, b)
-        self._set_colour(value)
+        self._set_color(value)
         self.RGBvalue.setText(value.name())
 
     def __init__(self, parent=None, RGBvalue=None):
@@ -45,7 +45,7 @@ class PaletteWidget(QtGui.QWidget):
         self._value = 1.0
         self._hue_width = 24
         self._gap = 8
-        self._colour = QtGui.QColor.fromHslF(self._hue, 1.0, 1.0)
+        self._color = QtGui.QColor.fromHslF(self._hue, 1.0, 1.0)
         self._calculate_bounds()
         self._draw_palette()
         self.RGBvalue = RGBvalue
@@ -111,7 +111,7 @@ class PaletteWidget(QtGui.QWidget):
             if steps > 0:
                 step_size = width / steps
 
-        # Render colour selection marker
+        # Render color selection marker
         qp.setBrush(QtGui.QColor.fromRgb(0xff, 0xff, 0xff))
         qp.drawRect(rect.x(), (1 - self._saturation) * rect.height(), rect.width(), 1)
         qp.drawRect(self._value * rect.width(), rect.y(), 1, rect.height())
@@ -133,8 +133,8 @@ class PaletteWidget(QtGui.QWidget):
                 y = mouse.y()
                 c = QtGui.QColor.fromHsvF(
                     float(y) / self.height(), self._saturation, self._value)
-                self.colour = c
-            # Click on colours?
+                self.color = c
+            # Click on colors?
             elif self._shades_rect.contains(mouse.x(), mouse.y()):
                 # calculate saturation and value
                 x = mouse.x()
@@ -142,7 +142,7 @@ class PaletteWidget(QtGui.QWidget):
                 c = QtGui.QColor.fromHsvF(
                     self._hue, 1 - float(y) / self._shades_rect.height(),
                     float(x) / self._shades_rect.width())
-                self.colour = c
+                self.color = c
 
     def mouseMoveEvent(self, event):
         if event.buttons() & QtCore.Qt.LeftButton:
@@ -152,8 +152,8 @@ class PaletteWidget(QtGui.QWidget):
         self._calculate_bounds()
         self._draw_palette()
 
-    # Set the current colour
-    def _set_colour(self, c):
+    # Set the current color
+    def _set_color(self, c):
         h, s, v, _ = c.getHsvF()
         self._hue = h
         self._saturation = s

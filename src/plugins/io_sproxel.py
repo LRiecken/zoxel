@@ -80,10 +80,10 @@ class SproxelFile(object):
                 for fx in xrange(0, x):
                     if line[fx] == "#00000000":
                         continue
-                    colour = line[fx][1:]
-                    r = colour[:2]
-                    g = colour[2:4]
-                    b = colour[4:6]
+                    color = line[fx][1:]
+                    r = color[:2]
+                    g = color[2:4]
+                    b = color[4:6]
                     r = int(r, 16)
                     g = int(g, 16)
                     b = int(b, 16)

@@ -5,7 +5,7 @@ import plugins.tool_draw
 import plugins.tool_paint
 import plugins.tool_erase
 import plugins.tool_drag
-import plugins.tool_colourpick
+import plugins.tool_colorpick
 import plugins.tool_fill
 import plugins.tool_fill_noise
 import plugins.tool_shade

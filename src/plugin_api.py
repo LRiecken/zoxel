@@ -38,21 +38,21 @@ class PluginAPI(object):
     def register_file_handler(self, handler):
         self.mainwindow.register_file_handler(handler)
 
-    # Get the currently selected colour from the palette
-    def get_palette_colour(self):
-        return self.mainwindow.display.voxel_colour
+    # Get the currently selected color from the palette
+    def get_palette_color(self):
+        return self.mainwindow.display.voxel_color
 
-    # Changee the GUI palette to the given colour.
+    # Changee the GUI palette to the given color.
     # Accepts QColors and 32bit integer RGBA
-    def set_palette_colour(self, colour):
-        self.mainwindow.colour_palette.colour = colour
+    def set_palette_color(self, color):
+        self.mainwindow.color_palette.color = color
 
     # Returns the current voxel data
     def get_voxel_data(self):
         return self.mainwindow.display.voxels
 
     # Returns the current voxel model mesh data
-    # vertices, colours, normals
+    # vertices, colors, normals
     def get_voxel_mesh(self):
         vert, col, norm, _, _ = self.mainwindow.display.voxels.get_vertices()
         return (vert, col, norm)

@@ -203,7 +203,7 @@ class VoxelGrid(object):
             red = grid.color.redF()
             green = grid.color.greenF()
             blue = grid.color.blueF()
-            # Grid colour
+            # Grid color
             glColor3f(red, green, blue)
 
             # Enable vertex buffers

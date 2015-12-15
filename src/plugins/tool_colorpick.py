@@ -1,5 +1,5 @@
-# tool_colourpick.py
-# Simple colour picking tool.
+# tool_colorpick.py
+# Simple color picking tool.
 # Copyright (c) 2013, Graham R King
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,25 +19,25 @@ from tool import Tool
 from plugin_api import register_plugin
 
 
-class ColourPickTool(Tool):
+class ColorPickTool(Tool):
 
     def __init__(self, api):
-        super(ColourPickTool, self).__init__(api)
+        super(ColorPickTool, self).__init__(api)
         # Create our action / icon
         self.action = QtGui.QAction(
             QtGui.QPixmap(":/images/gfx/icons/pipette.png"),
-            "Colour Pick", None)
-        self.action.setStatusTip("Choose a colour from an existing voxel.")
+            "Color Pick", None)
+        self.action.setStatusTip("Choose a color from an existing voxel.")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+5"))
         # Register the tool
         self.api.register_tool(self)
 
-    # Grab the colour of the selected voxel
+    # Grab the color of the selected voxel
     def on_mouse_click(self, target):
-        # If we have a voxel at the target, colour it
+        # If we have a voxel at the target, color it
         voxel = target.voxels.get(target.world_x, target.world_y, target.world_z)
         if voxel:
-            self.api.set_palette_colour(voxel)
+            self.api.set_palette_color(voxel)
 
-register_plugin(ColourPickTool, "Colour Picking Tool", "1.0")
+register_plugin(ColorPickTool, "Color Picking Tool", "1.0")

@@ -75,13 +75,13 @@ class MainWindow(QtGui.QMainWindow):
         # Create our palette widget
         voxels = PaletteWidget(self.ui.palette, RGBvalue=self.ui.paletteRGBvalue)
         self.ui.palette.layout().addWidget(voxels)
-        self.colour_palette = voxels
+        self.color_palette = voxels
         # More UI state
         value = self.get_setting("display_axis_grids")
         if value is not None:
             self.ui.action_axis_grids.setChecked(value)
             self.display.axis_grids = value
-        value = self.get_setting("background_colour")
+        value = self.get_setting("background_color")
         if value is not None:
             self.display.background = QtGui.QColor.fromRgb(*value)
         value = self.get_setting("voxel_edges")
@@ -102,8 +102,8 @@ class MainWindow(QtGui.QMainWindow):
             self.display.start_drag_event.connect(self.on_tool_drag_start)
             self.display.end_drag_event.connect(self.on_tool_drag_end)
             self.display.drag_event.connect(self.on_tool_drag)
-        if self.colour_palette:
-            self.colour_palette.changed.connect(self.on_colour_changed)
+        if self.color_palette:
+            self.color_palette.changed.connect(self.on_color_changed)
         # Initialise our tools
         self._tool_group = QtGui.QActionGroup(self.ui.toolbar_drawing)
         self._tools = []
@@ -232,12 +232,12 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_background_triggered(self):
-        # Choose a background colour
-        colour = QtGui.QColorDialog.getColor()
-        if colour.isValid():
-            self.display.background = colour
-            colour = (colour.red(), colour.green(), colour.blue())
-            self.set_setting("background_colour", colour)
+        # Choose a background color
+        color = QtGui.QColorDialog.getColor()
+        if color.isValid():
+            self.display.background = color
+            color = (color.red(), color.green(), color.blue())
+            self.set_setting("background_color", color)
 
     @QtCore.Slot()
     def on_action_anim_add_triggered(self):
@@ -332,18 +332,18 @@ class MainWindow(QtGui.QMainWindow):
         self.display.refresh()
 
     @QtCore.Slot()
-    def on_action_voxel_colour_triggered(self):
-        # Choose a voxel colour
-        colour = QtGui.QColorDialog.getColor()
-        if colour.isValid():
-            self.colour_palette.colour = colour
+    def on_action_voxel_color_triggered(self):
+        # Choose a voxel color
+        color = QtGui.QColorDialog.getColor()
+        if color.isValid():
+            self.color_palette.color = color
 
     @QtCore.Slot()
     def on_paletteRGBvalue_editingFinished(self):
         color = QtGui.QColor(0, 0, 0)
         color.setNamedColor(self.ui.paletteRGBvalue.text())
         if color.isValid():
-            self.colour_palette.colour = color
+            self.color_palette.color = color
 
     @QtCore.Slot()
     def on_action_export_image_triggered(self):
@@ -420,9 +420,9 @@ class MainWindow(QtGui.QMainWindow):
         self.update_caption()
         self.refresh_actions()
 
-    # Colour selection changed handler
-    def on_colour_changed(self):
-        self.display.voxel_colour = self.colour_palette.colour
+    # Color selection changed handler
+    def on_color_changed(self):
+        self.display.voxel_color = self.color_palette.color
 
     # Return a section of our internal config
     def get_setting(self, name):

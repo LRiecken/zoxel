@@ -60,20 +60,20 @@ class GLWidget(QtOpenGL.QGLWidget):
         self.updateGL()
 
     @property
-    def voxel_colour(self):
-        return self._voxel_colour
+    def voxel_color(self):
+        return self._voxel_color
 
-    @voxel_colour.setter
-    def voxel_colour(self, value):
-        self._voxel_colour = value
+    @voxel_color.setter
+    def voxel_color(self, value):
+        self._voxel_color = value
 
     @property
     def background(self):
-        return self._background_colour
+        return self._background_color
 
     @background.setter
     def background(self, value):
-        self._background_colour = value
+        self._background_color = value
         self.updateGL()
 
     @property
@@ -105,9 +105,9 @@ class GLWidget(QtOpenGL.QGLWidget):
         if not ver & QtOpenGL.QGLFormat.OpenGL_Version_1_1:
             raise Exception("Requires OpenGL Version 1.1 or above.")
         # Default values
-        self._background_colour = QtGui.QColor("silver")
+        self._background_color = QtGui.QColor("silver")
         self._display_wireframe = False
-        self._voxel_colour = QtGui.QColor.fromHsvF(0, 1.0, 1.0)
+        self._voxel_color = QtGui.QColor.fromHsvF(0, 1.0, 1.0)
         self._voxeledges = True
         # Mouse position
         self._mouse = QtCore.QPoint()
@@ -169,8 +169,8 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     # Initialise OpenGL
     def initializeGL(self):
-        # Set background colour
-        self.qglClearColor(self._background_colour)
+        # Set background color
+        self.qglClearColor(self._background_color)
         # Our polygon winding order is clockwise
         glFrontFace(GL_CW)
         # Enable depth testing
@@ -191,7 +191,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     # Render our scene
     def paintGL(self):
-        self.qglClearColor(self._background_colour)
+        self.qglClearColor(self._background_color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
         glTranslatef(self._translate_x, self._translate_y, self._translate_z)
@@ -218,7 +218,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             glTexCoordPointer(2, GL_FLOAT, 0, self._uvs)
         else:
             glDisable(GL_TEXTURE_2D)
-        glColorPointer(3, GL_UNSIGNED_BYTE, 0, self._colours)
+        glColorPointer(3, GL_UNSIGNED_BYTE, 0, self._colors)
         glNormalPointer(GL_FLOAT, 0, self._normals)
 
         # Render the buffers
@@ -249,7 +249,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self.perspective(45.0, float(width) / height, 0.1, 300)
         glMatrixMode(GL_MODELVIEW)
 
-    # Render scene as colour ID's
+    # Render scene as color ID's
     def paintID(self):
         # Disable lighting
         glDisable(GL_LIGHTING)
@@ -275,7 +275,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
         # Describe our buffers
         glVertexPointer(3, GL_FLOAT, 0, self._vertices)
-        glColorPointer(3, GL_UNSIGNED_BYTE, 0, self._colour_ids)
+        glColorPointer(3, GL_UNSIGNED_BYTE, 0, self._color_ids)
         glNormalPointer(GL_FLOAT, 0, self._normals)
 
         # Render the buffers
@@ -285,8 +285,8 @@ class GLWidget(QtOpenGL.QGLWidget):
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_NORMAL_ARRAY)
 
-        # Set background colour back to original
-        self.qglClearColor(self._background_colour)
+        # Set background color back to original
+        self.qglClearColor(self._background_color)
 
         # Re-enable lighting
         glEnable(GL_LIGHTING)
@@ -305,12 +305,12 @@ class GLWidget(QtOpenGL.QGLWidget):
     # Build a mesh from our current voxel data
     def build_mesh(self):
         # Grab the voxel vertices
-        (self._vertices, self._colours, self._normals,
-         self._colour_ids, self._uvs) = self.voxels.get_vertices()
+        (self._vertices, self._colors, self._normals,
+         self._color_ids, self._uvs) = self.voxels.get_vertices()
         self._num_vertices = len(self._vertices) // 3
         self._vertices = array.array("f", self._vertices).tostring()
-        self._colours = array.array("B", self._colours).tostring()
-        self._colour_ids = array.array("B", self._colour_ids).tostring()
+        self._colors = array.array("B", self._colors).tostring()
+        self._color_ids = array.array("B", self._color_ids).tostring()
         self._normals = array.array("f", self._normals).tostring()
         self._uvs = array.array("f", self._uvs).tostring()
 
@@ -447,13 +447,13 @@ class GLWidget(QtOpenGL.QGLWidget):
     def window_to_voxel(self, x, y):
         # We must invert y coordinates
         y = self._height - y
-        # Render our scene (to the back buffer) using colour IDs
+        # Render our scene (to the back buffer) using color IDs
         self.paintID()
-        # Grab the colour / ID at the coordinates
+        # Grab the color / ID at the coordinates
         c = glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE)
         if type(c) is str:
             # This is what MESA on Linux seems to return
-            # Grab the colour (ID) which was clicked on
+            # Grab the color (ID) which was clicked on
             voxelid = ord(c[0]) << 16 | ord(c[1]) << 8 | ord(c[2])
         else:
             # Windows seems to return an array
@@ -465,7 +465,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             if x is None:
                 return None, None, None, None
             return x, y, z, None
-        # Decode the colour ID into x,y,z,face
+        # Decode the color ID into x,y,z,face
         x = (voxelid & 0xfe0000) >> 17
         y = (voxelid & 0x1fc00) >> 10
         z = (voxelid & 0x3f8) >> 3
