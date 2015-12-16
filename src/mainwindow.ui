@@ -387,7 +387,7 @@
     <string>Reset camera position</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+0</string>
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="action_voxel_edges">

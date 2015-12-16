@@ -106,7 +106,7 @@ class VoxelData(object):
         # Our scene data
         self._data = self.blank_data()
         # Create empty selection
-        self._selection = []
+        self._selection = set()
         # Our cache of non-empty voxels (coordinate groups)
         self._cache = []
         # Flag indicating if our data has changed
@@ -244,19 +244,18 @@ class VoxelData(object):
         self._undoFillNew = []
 
     def select(self, x, y, z):
-        if not (x, y, z) in self._selection:
-            self._selection.append((x, y, z))
+        self._selection.add((x, y, z))
 
     def deselect(self, x, y, z):
         if (x, y, z) in self._selection:
             self._selection.remove((x, y, z))
-    
+
     def is_selected(self, x, y, z):
         return (x, y, z) in self._selection
-        
+
     def clear_selection(self):
-        self._selection = []
-        
+        self._selection.clear()
+
     # Get the state of the given voxel
     def get(self, x, y, z):
         if not self.is_valid_bounds(x, y, z):

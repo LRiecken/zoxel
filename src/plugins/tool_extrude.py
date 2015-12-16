@@ -40,14 +40,12 @@ class ExtrudeTool(Tool):
         self.zdir = True
         self.pastoffset = 0
 
-
     def drawstamp(self, data, dx, dy, dz):
         for x, y, z, col in self._stamp:
             tgt = data.voxels.get(x + dx, y + dy, z + dz)
             if tgt == 0:
                 data.voxels.set(x + dx, y + dy, z + dz, col, True, 1)
         data.voxels.completeUndoFill()
-
 
     def on_drag_start(self, target):
         if len(target.voxels._selection) > 0:
@@ -60,7 +58,7 @@ class ExtrudeTool(Tool):
         self.ydir = True
         self.zdir = True
         self.pastoffset = 0
-    
+
     # When dragging, create the selection
     def on_drag(self, target):
         # In case the first click has missed a valid target.
@@ -126,5 +124,5 @@ class ExtrudeTool(Tool):
             self.ydir = False
             self.pastoffset += tz
             self.drawstamp(target, 0, 0, self.pastoffset)
-                  
+
 register_plugin(ExtrudeTool, "Extrude Tool", "1.0")

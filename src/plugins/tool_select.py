@@ -82,8 +82,7 @@ class SelectionTool(Tool):
                         data.voxels.deselect(data.world_x, data.world_y, data.world_z)
                     else:
                         data.voxels.select(data.world_x, data.world_y, data.world_z)
-                    
-    
+
     # Start a drag
     def on_drag_start(self, data):
         voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
@@ -99,5 +98,5 @@ class SelectionTool(Tool):
         if voxel != 0:
             data.voxels.clear_selection()
             self.select(data, data.world_x, data.world_y, data.world_z)
-            
+
 register_plugin(SelectionTool, "Selection Tool", "1.0")
