@@ -222,11 +222,15 @@ class QubicleFile(object):
                                 voxels.set((width - x - 1), y, iz, self.formatVox(vox, format))
             # restore attachment point
             if matrix_count == 1 and dx <= 0 and dy <= 0 and dz <= 0 and (dx < 0 or dy < 0 or dz < 0):
-                t = "It looks like your are opening a voxel model exported by Trove.\
-                     Should we try to restore the attachment point out of the .qb's metadata for you?"
-                r = QMessageBox.question(None, "Restore attachment point?", t, QMessageBox.No, QMessageBox.Yes)
+                r = QMessageBox.question(None, "Restore attachment point?",
+                                         ("It looks like your are opening a voxel model exported by Trove.\nShould we"
+                                          " try to restore the attachment point out of the .qb's metadata for you?"),
+                                         QMessageBox.No, QMessageBox.Yes)
                 if r == QMessageBox.Yes:
-                    voxels.set((max_width + dx - 1), -dy, -dz, 0xff00ffff)
+                    iz = -dz
+                    if coords == 1:
+                        iz = max_depth + dz - 1
+                    voxels.set(max_width + dx - 1, -dy, iz, 0xff00ffff)
 
         f.close()
 
