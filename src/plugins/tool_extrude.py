@@ -125,4 +125,12 @@ class ExtrudeTool(Tool):
             self.pastoffset += tz
             self.drawstamp(target, 0, 0, self.pastoffset)
 
+    def on_drag_end(self, data):
+        data.voxels.clear_selection()
+        dx = self.xdir and self.pastoffset or 0
+        dy = self.ydir and self.pastoffset or 0
+        dz = self.zdir and self.pastoffset or 0
+        for x, y, z, col in self._stamp:
+            data.voxels.select(x + dx, y + dy, z + dz)
+
 register_plugin(ExtrudeTool, "Extrude Tool", "1.0")
