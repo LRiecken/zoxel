@@ -1,28 +1,28 @@
 language: objective-c
 
 before_install:
-- brew update
+  - brew update
 
 install:
-- brew install python
-- brew install qt
-- brew install pyside
-- brew install pyside-tools
-- pip install -U PyOpenGL
-- pip install -U PyOpenGL_accelerate
-- pip install -U py2app
+  - brew install python
+  - brew install qt
+  - brew install pyside
+  - brew install pyside-tools
+  - pip install -U PyOpenGL
+  - pip install -U PyOpenGL_accelerate
+  - pip install -U py2app
 
 script:
-- cp LICENSE blender_addon
-- cd blender_addon
-- zip zoxel-$TRAVIS_TAG-blender-addon.zip *
-- cd ..
-- ./build
-- cd src
-- python setup.py py2app
-- cd dist
-- tar czf zoxel-$TRAVIS_TAG-osx.tar.gz zoxel.app
-- cd ../../
+  - cp LICENSE blender_addon
+  - cd blender_addon
+  - zip zoxel-$TRAVIS_TAG-blender-addon.zip *
+  - cd ..
+  - ./build
+  - cd src
+  - python setup.py py2app
+  - cd dist
+  - tar czf zoxel-$TRAVIS_TAG-osx.tar.gz zoxel.app
+  - cd ../../
 
 cache:
   directories:
