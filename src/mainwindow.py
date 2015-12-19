@@ -27,6 +27,7 @@ import os
 import webbrowser
 import urllib
 import sys
+import copy
 from constants import ZOXEL_TAG
 
 
@@ -245,7 +246,7 @@ class MainWindow(QtGui.QMainWindow):
                                                self.display.voxels.get_frame_number() + 1, 1,
                                                self.display.voxels.get_frame_count())
         if res:
-            self.display.voxels.add_frame(value, True)
+            self.display.voxels.insert_frame(value, True)
             self.display.refresh()
             self.refresh_actions()
 
@@ -255,7 +256,7 @@ class MainWindow(QtGui.QMainWindow):
                                                self.display.voxels.get_frame_number() + 1, 1,
                                                self.display.voxels.get_frame_count())
         if res:
-            self.display.voxels.add_frame(value, False)
+            self.display.voxels.insert_frame(value, False)
             self.display.refresh()
             self.refresh_actions()
 
@@ -374,6 +375,33 @@ class MainWindow(QtGui.QMainWindow):
         from plugins.io_troxel import TroxelLink
         tl = TroxelLink()
         webbrowser.open(tl.export(), 2)
+
+    @QtCore.Slot()
+    def on_action_copy_selection_to_frame_triggered(self):
+        target_frame, res = QtGui.QInputDialog.getInt(
+            self, "Copy selection", "Copy selection to frame:", 1, 1, self.display.voxels.get_frame_count())
+        if res:
+            target_frame -= 1
+            original_frame = self.display.voxels.get_frame_number()
+            original_selection = copy.deepcopy(self.display.voxels._selection)
+            if target_frame != original_frame:
+                stamp = []
+                for x, y, z in self.display.voxels._selection:
+                    col = self.display.voxels.get(x, y, z)
+                    stamp.append((x, y, z, col))
+                self.display.voxels.select_frame(target_frame)
+                btns = QtGui.QMessageBox.StandardButton.Abort | QtGui.QMessageBox.StandardButton.Ignore
+                if (self.display.voxels.is_free(stamp) or
+                        QtGui.QMessageBox.question(self, "Copy selection",
+                                                   "This would override voxel data in the targeted frame!",
+                                                   btns) == QtGui.QMessageBox.Ignore):
+                    for x, y, z, col in stamp:
+                        self.display.voxels.set(x, y, z, col)
+
+            self.display.voxels.select_frame(original_frame)
+            self.display.voxels._selection = original_selection
+            self.display.refresh()
+            self.refresh_actions()
 
     def on_tool_mouse_click(self):
         tool = self.get_active_tool()

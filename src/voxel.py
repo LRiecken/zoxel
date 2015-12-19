@@ -150,8 +150,7 @@ class VoxelData(object):
         self.changed = True
         self.clear_selection()
 
-    # Add a new frame by copying the current one
-    def add_frame(self, index, copy_current=True):
+    def insert_frame(self, index, copy_current=True):
         if copy_current:
             data = self.get_data()
         else:
@@ -164,6 +163,18 @@ class VoxelData(object):
         self._undo.add_frame(index)
         self._frame_count += 1
         self.select_frame(index)
+
+    # Add a new frame by copying the current one
+    def add_frame(self, copy_current=True):
+        if copy_current:
+            data = self.get_data()
+        else:
+            data = self.blank_data()
+
+        self._frames.insert(self._current_frame+1, data)
+        self._undo.add_frame(self._current_frame+1)
+        self._frame_count += 1
+        self.select_frame(self._current_frame+1)
 
     def copy_to_current(self, index):
         data = self._frames[index - 1]
@@ -206,6 +217,12 @@ class VoxelData(object):
     # Get current frame number
     def get_frame_number(self):
         return self._current_frame
+
+    def is_free(self, data):
+        for x, y, z, col in data:
+            if self.get(x, y, z) != 0:
+                return False
+        return True
 
     # Set a voxel to the given state
     def set(self, x, y, z, state, undo=True, fill=0):

@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -117,10 +117,17 @@
     <addaction name="separator"/>
     <addaction name="action_anim_delete"/>
    </widget>
+   <widget class="QMenu" name="menuUtilities">
+    <property name="title">
+     <string>Utilities</string>
+    </property>
+    <addaction name="action_copy_selection_to_frame"/>
+   </widget>
    <addaction name="menu_file"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuAnimation"/>
+   <addaction name="menuUtilities"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -705,6 +712,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="action_copy_selection_to_frame">
+   <property name="text">
+    <string>Copy selection to frame</string>
    </property>
   </action>
  </widget>
