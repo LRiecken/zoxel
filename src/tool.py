@@ -123,6 +123,14 @@ class EventData(object):
     def key_modifiers(self, value):
         self._key_modifiers = value
 
+    @property
+    def keys(self):
+        return self._keys
+
+    @keys.setter
+    def keys(self, value):
+        self._keys = value
+
     def __repr__(self):
         return ('EventData(face={0},world_x={1},world_y={2},world_z={3},'
                 'mouse_x={4},mouse_y={5},mouse_button={6},key_modifiers={7})'.format(
@@ -140,13 +148,15 @@ class EventData(object):
         self._mouse_button = None
         self._key_modifiers = None
         self._voxels = None
+        self._keys = set()
 
     def __eq__(self, other):
         return ((self._x == other._x) and
                 (self._y == other._y) and
                 (self._z == other._z) and
                 (self._face == other._face) and
-                (self._voxels == other._voxels))
+                (self._voxels == other._voxels) and
+                (self._keys == other._keys))
 
     # Returns the coordinates of the voxel next to the selected face.
     # Or None if there is not one.

@@ -105,6 +105,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         if not ver & QtOpenGL.QGLFormat.OpenGL_Version_1_1:
             raise Exception("Requires OpenGL Version 1.1 or above.")
         # Default values
+        self.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._background_color = QtGui.QColor("silver")
         self._display_wireframe = False
         self._voxel_color = QtGui.QColor.fromHsvF(0, 1.0, 1.0)
@@ -144,6 +145,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self._dragging = False
         self._rotating = False
         self._key_modifiers = 0
+        self._keystate = set()
 
     # Reset the control and clear all data
     def clear(self):
@@ -318,8 +320,14 @@ class GLWidget(QtOpenGL.QGLWidget):
     def build_grids(self):
         self.grids.update_grid_plane(self.voxels)
 
-    def mousePressEvent(self, event):
+    def keyPressEvent(self, event):
+        self._keystate.add(event.key())
 
+    def keyReleaseEvent(self, event):
+        if event.key() in self._keystate:
+            self._keystate.remove(event.key())
+
+    def mousePressEvent(self, event):
         self._key_modifiers = event.modifiers()
         self._mousedown_time = time.time()
 
@@ -550,6 +558,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         data.mouse_button = self._button_down
         data.key_modifiers = self._key_modifiers
         data.voxels = self.voxels
+        data.keys = self._keystate
         return data
 
     def send_mouse_click(self, x, y, z, mouse_x, mouse_y, face):
