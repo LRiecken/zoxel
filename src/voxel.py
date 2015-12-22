@@ -884,6 +884,7 @@ class VoxelData(object):
 
     # Undo previous operation
     def undo(self):
+        self.clear_selection()
         op = self._undo.undo()
         # Voxel edit
         if op and op.operation == Undo.SET_VOXEL:

@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from PySide import QtGui, QtCore
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
@@ -39,6 +40,7 @@ class ExtrudeTool(Tool):
         self.ydir = True
         self.zdir = True
         self.pastoffset = 0
+        self.fixeddirection = False
 
     def drawstamp(self, data, dx, dy, dz):
         for x, y, z, col in self._stamp:
@@ -54,9 +56,26 @@ class ExtrudeTool(Tool):
                 col = target.voxels.get(x, y, z)
                 self._stamp.append((x, y, z, col))
         self._mouse = (target.mouse_x, target.mouse_y)
-        self.xdir = True
-        self.ydir = True
-        self.zdir = True
+        if QtCore.Qt.Key_X in target.keys:
+            self.xdir = True
+            self.ydir = False
+            self.zdir = False
+            self.fixeddirection = True
+        elif QtCore.Qt.Key_Y in target.keys:
+            self.xdir = False
+            self.ydir = True
+            self.zdir = False
+            self.fixeddirection = True
+        elif QtCore.Qt.Key_Z in target.keys:
+            self.xdir = False
+            self.ydir = False
+            self.zdir = True
+            self.fixeddirection = True
+        else:
+            self.xdir = True
+            self.ydir = True
+            self.zdir = True
+            self.fixeddirection = False
         self.pastoffset = 0
 
     # When dragging, create the selection
@@ -109,21 +128,33 @@ class ExtrudeTool(Tool):
 
         if ty != 0 or tx != 0 or tz != 0:
             self._mouse = (target.mouse_x, target.mouse_y)
-        if tx != 0 and self.xdir:
-            self.ydir = False
-            self.zdir = False
-            self.pastoffset += tx
-            self.drawstamp(target, self.pastoffset, 0, 0)
-        if ty != 0 and self.ydir:
-            self.xdir = False
-            self.zdir = False
-            self.pastoffset += ty
-            self.drawstamp(target, 0, self.pastoffset, 0)
-        if tz != 0 and self.zdir:
-            self.xdir = False
-            self.ydir = False
-            self.pastoffset += tz
-            self.drawstamp(target, 0, 0, self.pastoffset)
+
+        if self.fixeddirection:
+            delt = tx + ty + tz
+            if delt != 0:
+                self.pastoffset += delt
+                if self.xdir:
+                    self.drawstamp(target, self.pastoffset, 0, 0)
+                if self.ydir:
+                    self.drawstamp(target, 0, self.pastoffset, 0)
+                if self.zdir:
+                    self.drawstamp(target, 0, 0, self.pastoffset)
+        else:
+            if tx != 0 and self.xdir:
+                self.ydir = False
+                self.zdir = False
+                self.pastoffset += tx
+                self.drawstamp(target, self.pastoffset, 0, 0)
+            if ty != 0 and self.ydir:
+                self.xdir = False
+                self.zdir = False
+                self.pastoffset += ty
+                self.drawstamp(target, 0, self.pastoffset, 0)
+            if tz != 0 and self.zdir:
+                self.xdir = False
+                self.ydir = False
+                self.pastoffset += tz
+                self.drawstamp(target, 0, 0, self.pastoffset)
 
     def on_drag_end(self, data):
         data.voxels.clear_selection()
