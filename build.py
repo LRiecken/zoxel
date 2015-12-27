@@ -23,7 +23,7 @@ def main():
         site_packages_path = get_python_lib()
         pyside_rcc_path = os.path.join(site_packages_path, "PySide", "pyside-rcc.exe")
         cx_freeze_path = os.path.join(os.path.dirname(os.path.dirname(site_packages_path)), "Scripts", "cxfreeze")
-        dist = os.path.expanduser(options.dist)
+        dist = os.path.abspath(os.path.expanduser(options.dist))
     else:
         pyside_rcc_path = "pyside-rcc"
 
@@ -62,6 +62,13 @@ def main():
                           "OpenGL.arrays.numbers,OpenGL.arrays.ctypesarrays,OpenGL.arrays.ctypesparameters,"
                           "OpenGL.arrays.ctypespointers --include-path \"") + src_path + "\"")
 
+        if os.environ.get("APPVEYOR_REPO_TAG_NAME"):
+            if options.verbose:
+                print "Zipping Windows binary ..."
+
+            os.system("7z a zoxel-" + os.environ["APPVEYOR_REPO_TAG_NAME"] + "-" + os.environ["PYTHON_ARCH"] +
+                      ".zip -r \"" + dist + "\*\"")
+
         if options.verbose:
             print "Zoxel Windows binary build completed!"
 
@@ -85,7 +92,7 @@ def main():
                 print "Creating .tar.gz from App ..."
 
             os.chdir(dist)
-            os.system("tar czf zoxel-" + os.environ['TRAVIS_TAG'] + "-osx.tar.gz zoxel.app")
+            os.system("tar czf zoxel-" + os.environ["TRAVIS_TAG"] + "-osx.tar.gz zoxel.app")
 
         if options.verbose:
             print "Zoxel OS X App build completed!"

@@ -12,6 +12,7 @@ environment:
 init:
   - ps: "ls -Name \"C:/\""
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - IF NOT DEFINED APPVEYOR_REPO_TAG_NAME set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,7%
 
 install:
   - ps: Start-FileDownload 'https://bootstrap.pypa.io/get-pip.py'
@@ -26,22 +27,18 @@ install:
   - pip install -U PyOpenGL_accelerate
 
 build_script:
-  - cd /D %APPVEYOR_BUILD_FOLDER%
   - python build.py --verbose --with-exe
-  - cd dist
-  - IF NOT DEFINED APPVEYOR_REPO_TAG_NAME set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,7%
-  - ps: "& 7z a -r zoxel-$env:APPVEYOR_REPO_TAG_NAME-$env:PYTHON_ARCH.zip ."
 
 test: off
 
 artifacts:
-  - path: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
+  - path: zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
 
 deploy:
   provider: GitHub
   auth_token:
     secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
-  artifact: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
+  artifact: zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
   prerelease: true
   on:
     appveyor_repo_tag: true
