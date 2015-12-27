@@ -350,7 +350,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_export_image_triggered(self):
-        png = QtGui.QPixmap.grabWidget(self.display)
+        self.display.paintGL()
+        png = QtGui.QPixmap(self.display.grabFrameBuffer())
         choices = "PNG Image (*.png);;JPEG Image (*.jpg)"
 
         # Grab our default location
