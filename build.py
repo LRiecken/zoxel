@@ -28,34 +28,34 @@ def main():
         pyside_rcc_path = "pyside-rcc"
 
     if options.verbose:
-        print("Compiling PySide resources ...")
+        print "Compiling PySide resources ..."
         os.system(pyside_rcc_path + " -o \"" + os.path.join(src_path, "resources_rc.py") + "\" \"" +
                   os.path.join(src_path, "resources.qrc") + "\"")
 
     if options.verbose:
-        print("Generating PySide ui code ...")
+        print "Generating PySide ui code ..."
     for r in os.listdir(src_path):
         if r.endswith(".ui"):
             ui = os.path.join(src_path, r)
             out = "ui_" + os.path.splitext(r)[0] + ".py"
             os.system("pyside-uic -o \"" + os.path.join(src_path, out) + "\" \"" + ui + "\"")
             if options.verbose:
-                print("Generated " + out)
+                print "Generated " + out
 
     if options.verbose:
-        print("Completed building Zoxel!")
+        print "Completed building Zoxel!"
 
     if platform.system() == "Windows" and options.exe:
         if options.verbose:
-            print("Generating Zoxel Windows binary to " + dist + " ...")
+            print "Generating Zoxel Windows binary to " + dist + " ..."
 
         if os.path.exists(dist):
             if options.verbose:
-                print("Removing existing dist directory")
+                print "Removing existing dist directory"
             shutil.rmtree(dist)
 
         if options.verbose:
-            print("Launching cx_freeze ...")
+            print "Launching cx_freeze ..."
         os.system("python " + cx_freeze_path + " \"" + os.path.join(src_path, "zoxel.py") + "\" --target-dir=\"" +
                   dist + ("\" --base-name=Win32GUI --include-modules atexit,PySide.QtNetwork,PySide.QtWebKit,OpenGL,"
                           "OpenGL.platform.win32,OpenGL.arrays.nones,OpenGL.arrays.lists,OpenGL.arrays.strings,"
@@ -63,36 +63,36 @@ def main():
                           "OpenGL.arrays.ctypespointers --include-path \"") + src_path + "\"")
 
         if options.verbose:
-            print("Zoxel Windows binary build completed!")
+            print "Zoxel Windows binary build completed!"
 
     if platform.system() == "Darwin" and options.app:
         dist = os.path.join(src_path, "dist")
         if options.verbose:
-            print("Generating Zoxel OS X App to " + dist + "/zoxel.app ...")
+            print "Generating Zoxel OS X App to " + dist + "/zoxel.app ..."
 
         if os.path.exists(dist):
             if options.verbose:
-                print("Removing existing dist directory")
+                print "Removing existing dist directory"
             shutil.rmtree(dist)
 
         if options.verbose:
-            print("Launching Py2App ...")
+            print "Launching Py2App ..."
         os.chdir(src_path)
         os.system("python setup.py py2app")
 
         if os.environ.get('TRAVIS_TAG'):
             if options.verbose:
-                print("Creating .tar.gz from App ...")
+                print "Creating .tar.gz from App ..."
 
             os.chdir(dist)
             os.system("tar czf zoxel-" + os.environ['TRAVIS_TAG'] + "-osx.tar.gz zoxel.app")
 
         if options.verbose:
-            print("Zoxel OS X App build completed!")
+            print "Zoxel OS X App build completed!"
 
     if options.start:
         if options.verbose:
-            print("starting Zoxel ...\n")
+            print "starting Zoxel ...\n"
 
         os.chdir(src_path)
         os.system("python zoxel.py")
