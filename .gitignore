@@ -9,6 +9,7 @@
 *.egg
 *.egg-info
 dist/
+build/
 
 # Unit test / coverage reports
 .coverage
@@ -30,4 +31,3 @@ nosetests.xml
 # UI stuff
 resources_rc.py
 ui_*.py
-

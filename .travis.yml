@@ -17,12 +17,7 @@ script:
   - cd blender_addon
   - zip zoxel-$TRAVIS_TAG-blender-addon.zip *
   - cd ..
-  - ./build
-  - cd src
-  - python setup.py py2app
-  - cd dist
-  - tar czf zoxel-$TRAVIS_TAG-osx.tar.gz zoxel.app
-  - cd ../../
+  - python build.py --verbose --with-app
 
 cache:
   directories:
