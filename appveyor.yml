@@ -1,9 +1,17 @@
 os: Visual Studio 2015
 version: '{branch}-b{build}'
 
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27"
+      PYTHON_ARCH: "win32"
+
+    - PYTHON: "C:\\Python27-x64"
+      PYTHON_ARCH: "win64"
+
 init:
   - ps: "ls -Name \"C:/\""
-  - SET PATH=C:\Python27;C:\Python27\Scripts;%PATH%
+  - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 install:
   - ps: Start-FileDownload 'https://bootstrap.pypa.io/get-pip.py'
@@ -22,18 +30,18 @@ build_script:
   - python build.py --verbose --with-exe
   - cd dist
   - IF NOT DEFINED APPVEYOR_REPO_TAG_NAME set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,7%
-  - ps: "& 7z a -r zoxel-$env:APPVEYOR_REPO_TAG_NAME-win32.zip ."
+  - ps: "& 7z a -r zoxel-$env:APPVEYOR_REPO_TAG_NAME-$env:PYTHON_ARCH.zip ."
 
 test: off
 
 artifacts:
-  - path: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-win32.zip
+  - path: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
 
 deploy:
   provider: GitHub
   auth_token:
     secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
-  artifact: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-win32.zip
+  artifact: dist/zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
   prerelease: true
   on:
     appveyor_repo_tag: true
