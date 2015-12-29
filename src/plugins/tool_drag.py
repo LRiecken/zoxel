@@ -1,6 +1,6 @@
 # tool_drag.py
 # Model moving tool.
-# Copyright (c) 2013, Graham R King
+# Copyright (c) 2013, Graham R King, Lennart Riecken
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
@@ -32,11 +32,81 @@ class DragTool(Tool):
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+4"))
         # Register the tool
         self.api.register_tool(self)
+        self._stamp = []
+        self._lastdraw = []
+        self._original = []
+        self.xdir = True
+        self.ydir = True
+        self.zdir = True
+        self.pastoffset = 0
+        self.fixeddirection = False
+        self.keeporiginal = False
+
+        self._mouse = ()
+
+    def check_free_space(self, data, dx, dy, dz, keeporiginal=False):
+        for x, y, z, col in self._stamp:
+            newx = (x + dx) % data.voxels.width
+            newy = (y + dy) % data.voxels.height
+            newz = (z + dz) % data.voxels.depth
+            if data.voxels.get(newx, newy, newz) != 0 and (not (newx, newy, newz) in data.voxels._selection or
+                                                               (keeporiginal and (newx, newy, newz) in self._original)):
+                return False
+        return True
+
+    def drawstamp(self, data, dx, dy, dz, keeporiginal=False):
+        if self.check_free_space(data, dx, dy, dz, keeporiginal):
+            thisdraw = []
+            data.voxels.clear_selection()
+            for x, y, z, col in self._stamp:
+                newx = (x + dx) % data.voxels.width
+                newy = (y + dy) % data.voxels.height
+                newz = (z + dz) % data.voxels.depth
+                data.voxels.set(newx, newy, newz, col, True, 1)
+                thisdraw.append((newx, newy, newz))
+                data.voxels.select(newx, newy, newz)
+            for x, y, z in self._lastdraw:
+                if not (x, y, z) in thisdraw:
+                    if not keeporiginal or not (x, y, z) in self._original:
+                        data.voxels.set(x, y, z, 0, True, 1)
+            self._lastdraw = thisdraw
+            data.voxels.completeUndoFill()
+        else:
+            pass
 
     # Color the targeted voxel
     def on_drag_start(self, target):
-        target.voxels.clear_selection()
+        self.keeporiginal = not not target.key_modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier
         self._mouse = (target.mouse_x, target.mouse_y)
+        if len(target.voxels._selection) > 0:
+            self._stamp = []
+            self._lastdraw = []
+            for x, y, z in target.voxels._selection:
+                col = target.voxels.get(x, y, z)
+                self._stamp.append((x, y, z, col))
+                self._lastdraw.append((x, y, z))
+                self._original.append((x, y, z))
+        if QtCore.Qt.Key_X in target.keys:
+            self.xdir = True
+            self.ydir = False
+            self.zdir = False
+            self.fixeddirection = True
+        elif QtCore.Qt.Key_Y in target.keys:
+            self.xdir = False
+            self.ydir = True
+            self.zdir = False
+            self.fixeddirection = True
+        elif QtCore.Qt.Key_Z in target.keys:
+            self.xdir = False
+            self.ydir = False
+            self.zdir = True
+            self.fixeddirection = True
+        else:
+            self.xdir = True
+            self.ydir = True
+            self.zdir = True
+            self.fixeddirection = False
+        self.pastoffset = 0
 
     # Drag the model in voxel space
     def on_drag(self, target):
@@ -85,7 +155,44 @@ class DragTool(Tool):
 
         if ty != 0 or tx != 0 or tz != 0:
             self._mouse = (target.mouse_x, target.mouse_y)
+        if len(target.voxels._selection) == 0:
+            if self.fixeddirection:
+                delt = tx+ty+tz
+                if self.xdir:
+                    target.voxels.translate(delt, 0, 0)
+                if self.ydir:
+                    target.voxels.translate(0, delt, 0)
+                if self.zdir:
+                    target.voxels.translate(0, 0, delt)
+            else:
+                target.voxels.translate(tx, ty, tz)
+        else:
+            if self.fixeddirection:
+                delt = tx + ty + tz
+                if delt != 0:
+                    self.pastoffset += delt
+                    if self.xdir:
+                        self.drawstamp(target, self.pastoffset, 0, 0, self.keeporiginal)
+                    if self.ydir:
+                        self.drawstamp(target, 0, self.pastoffset, 0, self.keeporiginal)
+                    if self.zdir:
+                        self.drawstamp(target, 0, 0, self.pastoffset, self.keeporiginal)
+            else:
+                if tx != 0 and self.xdir:
+                    self.ydir = False
+                    self.zdir = False
+                    self.pastoffset += tx
+                    self.drawstamp(target, self.pastoffset, 0, 0, self.keeporiginal)
+                if ty != 0 and self.ydir:
+                    self.xdir = False
+                    self.zdir = False
+                    self.pastoffset += ty
+                    self.drawstamp(target, 0, self.pastoffset, 0, self.keeporiginal)
+                if tz != 0 and self.zdir:
+                    self.xdir = False
+                    self.ydir = False
+                    self.pastoffset += tz
+                    self.drawstamp(target, 0, 0, self.pastoffset, self.keeporiginal)
 
-        target.voxels.translate(tx, ty, tz)
 
 register_plugin(DragTool, "Drag Tool", "1.0")
