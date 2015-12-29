@@ -7,14 +7,17 @@ from optparse import OptionParser
 
 
 def main():
-    parser = OptionParser(description="build tool for Zoxel")
+    class MyParser(OptionParser):
+        def format_epilog(self, formatter):
+            return self.epilog
+    parser = MyParser(epilog="""\nExamples:\nbuild and run:\t./build.py -vs\n""")
     parser.add_option("-s", "--start", dest="start", action="store_true", help="start Zoxel after building it)")
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="print status messages to stdout")
     if platform.system() == "Windows":
-        parser.add_option("-e", "--with-exe", action="store_true", dest="exe", help="generates a .exe")
+        parser.add_option("-e", "--with-exe", action="store_true", dest="exe", help="generates a .exe (Windows only)")
         parser.add_option("-d", "--dist", dest="dist", default="dist", help="path of generated .exe (default to dist)")
     elif platform.system() == "Darwin":
-        parser.add_option("-a", "--with-app", action="store_true", dest="app", help="generates an .app")
+        parser.add_option("-a", "--with-app", action="store_true", dest="app", help="generates an .app (OS X only)")
     (options, args) = parser.parse_args()
 
     src_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "src")
@@ -102,7 +105,12 @@ def main():
             print "starting Zoxel ...\n"
 
         os.chdir(src_path)
-        os.system("python zoxel.py")
+        if options.verbose:
+            os.system("python zoxel.py")
+        elif platform.system() == "Windows":
+            os.system("start /B python zoxel.py > NUL")
+        else:
+            os.system("python zoxel.py > /dev/null 2>&1 &")
 
 
 if __name__ == "__main__":
