@@ -117,78 +117,101 @@ class DragTool(Tool):
         sy = self.api.mainwindow.height() / target.voxels.height
         dx = int(round(dx / float(sx)))
         dy = int(round(dy / float(sy)))
+        if dx == 0 and dy == 0:
+            return
         # Work out translation for x,y
         ax, ay = self.api.mainwindow.display.view_axis()
         tx = 0
         ty = 0
         tz = 0
+        tdx = 0
+        tdy = 0
+        tdz = 0
         if ax == self.api.mainwindow.display.X_AXIS:
+            tdx = dx
             if dx > 0:
                 tx = 1
             elif dx < 0:
                 tx = -1
-        if ax == self.api.mainwindow.display.Y_AXIS:
+        elif ax == self.api.mainwindow.display.Y_AXIS:
+            tdy = dx
             if dx > 0:
                 ty = 1
             elif dx < 0:
                 ty = -1
-        if ax == self.api.mainwindow.display.Z_AXIS:
+        elif ax == self.api.mainwindow.display.Z_AXIS:
+            tdz = dx
             if dx > 0:
                 tz = 1
             elif dx < 0:
                 tz = -1
         if ay == self.api.mainwindow.display.X_AXIS:
+            tdx = dy
             if dy > 0:
                 tx = 1
             elif dy < 0:
                 tx = -1
-        if ay == self.api.mainwindow.display.Y_AXIS:
+        elif ay == self.api.mainwindow.display.Y_AXIS:
+            tdy = dy
             if dy > 0:
                 ty = -1
             elif dy < 0:
                 ty = 1
-        if ay == self.api.mainwindow.display.Z_AXIS:
+        elif ay == self.api.mainwindow.display.Z_AXIS:
+            tdz = dy
             if dy > 0:
                 tz = 1
             elif dy < 0:
                 tz = -1
 
-        if ty != 0 or tx != 0 or tz != 0:
-            self._mouse = (target.mouse_x, target.mouse_y)
         if len(target.voxels._selection) == 0:
             if self.fixeddirection:
-                delt = tx+ty+tz
                 if self.xdir:
-                    target.voxels.translate(delt, 0, 0)
-                if self.ydir:
-                    target.voxels.translate(0, delt, 0)
-                if self.zdir:
-                    target.voxels.translate(0, 0, delt)
+                    if tx != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(tx, 0, 0)
+                elif self.ydir:
+                    if ty != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(0, ty, 0)
+                elif self.zdir:
+                    if tz != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(0, 0, tz)
             else:
                 target.voxels.translate(tx, ty, tz)
         else:
             if self.fixeddirection:
-                delt = tx + ty + tz
-                if delt != 0:
-                    self.pastoffset += delt
-                    if self.xdir:
+                if self.xdir:
+                    if tx != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        self.pastoffset += tx
                         self.drawstamp(target, self.pastoffset, 0, 0, self.keeporiginal)
-                    if self.ydir:
+                elif self.ydir:
+                    if ty != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        self.pastoffset += ty
                         self.drawstamp(target, 0, self.pastoffset, 0, self.keeporiginal)
-                    if self.zdir:
+                elif self.zdir:
+                    if tz != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        self.pastoffset += tz
                         self.drawstamp(target, 0, 0, self.pastoffset, self.keeporiginal)
             else:
-                if tx != 0 and self.xdir:
+                if tx != 0 and self.xdir and (not self.ydir or (abs(tdx) > abs(tdy) and abs(tdx) > abs(tdz))):
+                    self._mouse = (target.mouse_x, target.mouse_y)
                     self.ydir = False
                     self.zdir = False
                     self.pastoffset += tx
                     self.drawstamp(target, self.pastoffset, 0, 0, self.keeporiginal)
-                if ty != 0 and self.ydir:
+                elif ty != 0 and self.ydir and (not self.zdir or abs(tdy) > abs(tdz)):
+                    self._mouse = (target.mouse_x, target.mouse_y)
                     self.xdir = False
                     self.zdir = False
                     self.pastoffset += ty
                     self.drawstamp(target, 0, self.pastoffset, 0, self.keeporiginal)
-                if tz != 0 and self.zdir:
+                elif tz != 0 and self.zdir:
+                    self._mouse = (target.mouse_x, target.mouse_y)
                     self.xdir = False
                     self.ydir = False
                     self.pastoffset += tz

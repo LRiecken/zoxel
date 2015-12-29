@@ -106,13 +106,13 @@ class ExtrudeTool(Tool):
                 tx = 1
             elif dx < 0:
                 tx = -1
-        if ax == self.api.mainwindow.display.Y_AXIS:
+        elif ax == self.api.mainwindow.display.Y_AXIS:
             tdy = dx
             if dx > 0:
                 ty = 1
             elif dx < 0:
                 ty = -1
-        if ax == self.api.mainwindow.display.Z_AXIS:
+        elif ax == self.api.mainwindow.display.Z_AXIS:
             tdz = dx
             if dx > 0:
                 tz = 1
@@ -124,13 +124,13 @@ class ExtrudeTool(Tool):
                 tx = 1
             elif dy < 0:
                 tx = -1
-        if ay == self.api.mainwindow.display.Y_AXIS:
+        elif ay == self.api.mainwindow.display.Y_AXIS:
             tdy = dy
             if dy > 0:
                 ty = -1
             elif dy < 0:
                 ty = 1
-        if ay == self.api.mainwindow.display.Z_AXIS:
+        elif ay == self.api.mainwindow.display.Z_AXIS:
             tdz = dy
             if dy > 0:
                 tz = 1
