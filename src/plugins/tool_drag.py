@@ -24,9 +24,7 @@ class DragTool(Tool):
     def __init__(self, api):
         super(DragTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/arrow-in-out.png"),
-            "Move Model", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/arrow-in-out.png"), "Move Model", None)
         self.action.setStatusTip("Move Model")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+4"))

@@ -25,9 +25,7 @@ class ExtrudeTool(Tool):
     def __init__(self, api):
         super(ExtrudeTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/border-bottom-thick.png"),
-            "Extrude", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/border-bottom-thick.png"), "Extrude", None)
         self.action.setStatusTip("Extude region")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+0"))

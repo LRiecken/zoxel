@@ -120,16 +120,10 @@ class VoxelData(object):
 
     # Return an empty voxel space
     def blank_data(self):
-        return [[[0 for _ in xrange(self.depth)]
-                 for _ in xrange(self.height)]
-                for _ in xrange(self.width)]
+        return [[[0 for _ in xrange(self.depth)] for _ in xrange(self.height)] for _ in xrange(self.width)]
 
     def is_valid_bounds(self, x, y, z):
-        return (
-            x >= 0 and x < self.width and
-            y >= 0 and y < self.height and
-            z >= 0 and z < self.depth
-        )
+        return x >= 0 and x < self.width and y >= 0 and y < self.height and z >= 0 and z < self.depth
 
     # Return the number of animation frames
     def get_frame_count(self):
@@ -242,8 +236,7 @@ class VoxelData(object):
                 if fill == 2:
                     self.completeUndoFill()
             else:
-                self._undo.add(UndoItem(Undo.SET_VOXEL,
-                                        (x, y, z, self._data[x][y][z]), (x, y, z, state)))
+                self._undo.add(UndoItem(Undo.SET_VOXEL, (x, y, z, self._data[x][y][z]), (x, y, z, state)))
         # Set the voxel
         self._data[x][y][z] = state
         if state != EMPTY:
@@ -356,10 +349,8 @@ class VoxelData(object):
         # Calculate shades for our 4 occlusion levels
         shades = []
         for c in range(5):
-            shades.append((
-                int(r * math.pow(OCCLUSION, c)),
-                int(g * math.pow(OCCLUSION, c)),
-                int(b * math.pow(OCCLUSION, c))))
+            shades.append((int(r * math.pow(OCCLUSION, c)), int(g * math.pow(OCCLUSION, c)),
+                           int(b * math.pow(OCCLUSION, c))))
 
         # Encode our voxel space coordinates as colors, used for face selection
         # We use 7 bits per coordinate and the bottom 3 bits for face:
@@ -738,9 +729,7 @@ class VoxelData(object):
             width, height, depth = cwidth, cheight, cdepth
         for i, frame in enumerate(self._frames):
             # Create new data structure of the required size
-            data = [[[0 for _ in xrange(depth)]
-                     for _ in xrange(height)]
-                    for _ in xrange(width)]
+            data = [[[0 for _ in xrange(depth)] for _ in xrange(height)] for _ in xrange(width)]
             # Adjust ranges
             movewidth = min(width, cwidth)
             moveheight = min(height, cheight)
@@ -785,9 +774,7 @@ class VoxelData(object):
         for i, frame in enumerate(self._frames):
 
             # Create new temporary data structure
-            data = [[[0 for _ in xrange(depth)]
-                     for _ in xrange(height)]
-                    for _ in xrange(width)]
+            data = [[[0 for _ in xrange(depth)] for _ in xrange(height)] for _ in xrange(width)]
 
             # Copy data over at new location
             for tx in xrange(0, self.width):
@@ -825,9 +812,7 @@ class VoxelData(object):
         for i, frame in enumerate(self._frames):
 
             # Create new temporary data structure
-            data = [[[0 for _ in xrange(self.depth)]
-                     for _ in xrange(self.height)]
-                    for _ in xrange(self.width)]
+            data = [[[0 for _ in xrange(self.depth)] for _ in xrange(self.height)] for _ in xrange(self.width)]
 
             # Copy data over at new location
             for tx in xrange(0, self.width):
@@ -861,13 +846,10 @@ class VoxelData(object):
 
         # Add to undo
         if undo:
-            self._undo.add(UndoItem(Undo.TRANSLATE,
-                                    (-x, -y, -z), (x, y, z)))
+            self._undo.add(UndoItem(Undo.TRANSLATE, (-x, -y, -z), (x, y, z)))
 
         # Create new temporary data structure
-        data = [[[0 for _ in xrange(self.depth)]
-                 for _ in xrange(self.height)]
-                for _ in xrange(self.width)]
+        data = [[[0 for _ in xrange(self.depth)] for _ in xrange(self.height)] for _ in xrange(self.width)]
         # Copy data over at new location
         for tx in xrange(0, self.width):
             for ty in xrange(0, self.height):

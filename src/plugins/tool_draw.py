@@ -24,9 +24,7 @@ class DrawingTool(Tool):
     def __init__(self, api):
         super(DrawingTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/pencil.png"),
-            "Draw", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/pencil.png"), "Draw", None)
         self.action.setStatusTip("Draw Voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+1"))

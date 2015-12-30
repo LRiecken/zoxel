@@ -22,9 +22,7 @@ class FillTool(Tool):
     def __init__(self, api):
         super(FillTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/paint-can.png"),
-            "Fill", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/paint-can.png"), "Fill", None)
         self.action.setStatusTip("Flood fill with color")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+6"))

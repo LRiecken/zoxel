@@ -132,11 +132,11 @@ class EventData(object):
         self._keys = value
 
     def __repr__(self):
-        return ('EventData(face={0},world_x={1},world_y={2},world_z={3},'
-                'mouse_x={4},mouse_y={5},mouse_button={6},key_modifiers={7})'.format(
+        return ('EventData(face={0},world_x={1},world_y={2},world_z={3},mouse_x={4},'
+                'mouse_y={5},mouse_button={6},key_modifiers={7},keys={8})'.format(
                     self._face, self._world_x, self._world_y, self._world_z,
                     self._mouse_x, self._mouse_y, self._mouse_button,
-                    self._key_modifiers))
+                    self._key_modifiers, self._keys))
 
     def __init__(self):
         self._face = None
@@ -151,12 +151,8 @@ class EventData(object):
         self._keys = set()
 
     def __eq__(self, other):
-        return ((self._x == other._x) and
-                (self._y == other._y) and
-                (self._z == other._z) and
-                (self._face == other._face) and
-                (self._voxels == other._voxels) and
-                (self._keys == other._keys))
+        return (self._x == other._x and self._y == other._y and self._z == other._z and
+                self._face == other._face and self._voxels == other._voxels and self._keys == other._keys)
 
     # Returns the coordinates of the voxel next to the selected face.
     # Or None if there is not one.
@@ -191,9 +187,7 @@ class Tool(object):
     def __init__(self, api):
         self.api = api
         # Create default action
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/gfx/icons/wrench.png"),
-            "A Tool", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/gfx/icons/wrench.png"), "A Tool", None)
         self.action.setStatusTip("Unknown Tool")
 
     # Mouse click - a mouse button has been pressed and released

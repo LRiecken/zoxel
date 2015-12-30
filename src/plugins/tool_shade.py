@@ -23,9 +23,7 @@ class ShaderTool(Tool):
     def __init__(self, api):
         super(ShaderTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/Shade.png"),
-            "Lighten/Darken", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/Shade.png"), "Lighten/Darken", None)
         self.action.setStatusTip("Adjust voxel darkness a little.")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+8"))

@@ -44,8 +44,7 @@ class ZoxelFile(object):
         version = self._file_version
 
         # Build data structure
-        data = {'version': version, 'frames': voxels.get_frame_count(),
-                "creator": "Zoxel Version " + ZOXEL_VERSION}
+        data = {'version': version, 'frames': voxels.get_frame_count(), "creator": "Zoxel Version " + ZOXEL_VERSION}
 
         for f in xrange(voxels.get_frame_count()):
             frame = []

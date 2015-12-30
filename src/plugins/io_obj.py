@@ -51,8 +51,7 @@ class ObjFile(object):
         # Export vertices
         i = 0
         while i < len(vertices):
-            f.write("v %f %f %f\r\n" %
-                    (vertices[i], vertices[i + 1], vertices[i + 2]))
+            f.write("v %f %f %f\r\n" % (vertices[i], vertices[i + 1], vertices[i + 2]))
             i += 3
 
         # Build a list of unique colors we use so we can assign materials

@@ -51,8 +51,7 @@ class MainWindow(QtGui.QMainWindow):
         self.state = {}
         # Our animation timer
         self._timer = QtCore.QTimer(self)
-        self.connect(self._timer, QtCore.SIGNAL("timeout()"),
-                     self.on_animation_tick)
+        self.connect(self._timer, QtCore.SIGNAL("timeout()"), self.on_animation_tick)
         self._anim_speed = 200
         # Load our state if possible
         self.load_state()
@@ -262,8 +261,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_copy_triggered(self):
-        value, res = QtGui.QInputDialog.getInt(
-            self, "Copy frame", "Replace current frame with:", 1, 1, self.display.voxels.get_frame_count())
+        value, res = QtGui.QInputDialog.getInt(self, "Copy frame", "Replace current frame with:", 1, 1,
+                                               self.display.voxels.get_frame_count())
         if res:
             self.display.voxels.copy_to_current(value)
             self.display.refresh()
@@ -271,8 +270,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_anim_delete_triggered(self):
-        ret = QtGui.QMessageBox.question(
-            self, "Zoxel", "Do you really want to delete this frame?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        ret = QtGui.QMessageBox.question(self, "Zoxel", "Do you really want to delete this frame?",
+                                         QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
         if ret == QtGui.QMessageBox.Yes:
             self.display.voxels.delete_frame()
             self.display.refresh()
@@ -357,9 +356,7 @@ class MainWindow(QtGui.QMainWindow):
         # Grab our default location
         directory = self.get_setting("default_directory")
         # grab a filename
-        filename, filetype = QtGui.QFileDialog.getSaveFileName(self,
-                                                               caption="Export Image As",
-                                                               filter=choices,
+        filename, filetype = QtGui.QFileDialog.getSaveFileName(self, caption="Export Image As", filter=choices,
                                                                dir=directory)
         if not filename:
             return
@@ -379,8 +376,8 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_copy_selection_to_frame_triggered(self):
-        target_frame, res = QtGui.QInputDialog.getInt(
-            self, "Copy selection", "Copy selection to frame:", 1, 1, self.display.voxels.get_frame_count())
+        target_frame, res = QtGui.QInputDialog.getInt(self, "Copy selection", "Copy selection to frame:", 1, 1,
+                                                      self.display.voxels.get_frame_count())
         if res:
             target_frame -= 1
             original_frame = self.display.voxels.get_frame_number()
@@ -534,11 +531,8 @@ class MainWindow(QtGui.QMainWindow):
 
         # Get a filename if we need one
         if newfile or not filename:
-            filename, filetype = QtGui.QFileDialog.getSaveFileName(self,
-                                                                   caption="Save As",
-                                                                   filter=choices,
-                                                                   dir=directory,
-                                                                   selectedFilter="Zoxel Files (*.zox)")
+            filename, filetype = QtGui.QFileDialog.getSaveFileName(self, caption="Save As", filter=choices,
+                                                                   dir=directory, selectedFilter="Zoxel Files (*.zox)")
             if not filename:
                 return
             handler = None
@@ -559,8 +553,7 @@ class MainWindow(QtGui.QMainWindow):
             handler.save(filename)
             saved = True
         except Exception as Ex:
-            QtGui.QMessageBox.warning(self, "Save Failed",
-                                      str(Ex))
+            QtGui.QMessageBox.warning(self, "Save Failed", str(Ex))
 
         # If we saved, clear edited state
         if saved:
@@ -596,11 +589,8 @@ class MainWindow(QtGui.QMainWindow):
         directory = self.get_setting("default_directory")
 
         # Get a filename
-        filename, filetype = QtGui.QFileDialog.getOpenFileName(self,
-                                                               caption="Open file",
-                                                               filter=choices,
-                                                               dir=directory,
-                                                               selectedFilter="All Files (*)")
+        filename, filetype = QtGui.QFileDialog.getOpenFileName(self, caption="Open file", filter=choices,
+                                                               dir=directory, selectedFilter="All Files (*)")
         if not filename:
             return
         if filetype == "All Files (*)":
@@ -632,8 +622,7 @@ class MainWindow(QtGui.QMainWindow):
             self._filename = filename
         except Exception as Ex:
             self.display.voxels.enable_undo()
-            QtGui.QMessageBox.warning(self, "Could not load file",
-                                      str(Ex))
+            QtGui.QMessageBox.warning(self, "Could not load file", str(Ex))
 
         self.display.build_grids()
         # self.display.voxels.resize()

@@ -24,9 +24,7 @@ class PaintingTool(Tool):
     def __init__(self, api):
         super(PaintingTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/paint-brush.png"),
-            "Paint", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/paint-brush.png"), "Paint", None)
         self.action.setStatusTip("Color Voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+2"))

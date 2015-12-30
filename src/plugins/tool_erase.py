@@ -24,9 +24,7 @@ class EraseTool(Tool):
     def __init__(self, api):
         super(EraseTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/shovel.png"),
-            "Erase", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/shovel.png"), "Erase", None)
         self.action.setStatusTip("Erase voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+3"))

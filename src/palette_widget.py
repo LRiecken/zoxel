@@ -55,18 +55,15 @@ class PaletteWidget(QtGui.QWidget):
         width = self.width()
         height = self.height()
         # Hue palette
-        self._hue_rect = QRect(
-            width - self._hue_width, 0, self._hue_width, height)
+        self._hue_rect = QRect(width - self._hue_width, 0, self._hue_width, height)
         # Shades palette
-        self._shades_rect = QRect(
-            0, 0, width - (self._hue_width + self._gap), height)
+        self._shades_rect = QRect(0, 0, width - (self._hue_width + self._gap), height)
 
     # Render our palette to an image
     def _draw_palette(self):
 
         # Create an image with a white background
-        self._image = QtGui.QImage(QtCore.QSize(self.width(), self.height()),
-                                   QtGui.QImage.Format.Format_RGB32)
+        self._image = QtGui.QImage(QtCore.QSize(self.width(), self.height()), QtGui.QImage.Format.Format_RGB32)
         self._image.fill(QtGui.QColor.fromRgb(0xff, 0xff, 0xff))
 
         # Draw on our image with no pen
@@ -87,8 +84,7 @@ class PaletteWidget(QtGui.QWidget):
 
         # Render hue selection marker
         qp.setBrush(QtGui.QColor.fromRgb(0xff, 0xff, 0xff))
-        qp.drawRect(rect.x(), self._hue * rect.height(),
-                    rect.width(), 2)
+        qp.drawRect(rect.x(), self._hue * rect.height(), rect.width(), 2)
 
         # Render shades
         rect = self._shades_rect
@@ -131,17 +127,15 @@ class PaletteWidget(QtGui.QWidget):
             # Click on hues?
             if self._hue_rect.contains(mouse.x(), mouse.y()):
                 y = mouse.y()
-                c = QtGui.QColor.fromHsvF(
-                    float(y) / self.height(), self._saturation, self._value)
+                c = QtGui.QColor.fromHsvF(float(y) / self.height(), self._saturation, self._value)
                 self.color = c
             # Click on colors?
             elif self._shades_rect.contains(mouse.x(), mouse.y()):
                 # calculate saturation and value
                 x = mouse.x()
                 y = mouse.y()
-                c = QtGui.QColor.fromHsvF(
-                    self._hue, 1 - float(y) / self._shades_rect.height(),
-                    float(x) / self._shades_rect.width())
+                c = QtGui.QColor.fromHsvF(self._hue, 1 - float(y) / self._shades_rect.height(),
+                                          float(x) / self._shades_rect.width())
                 self.color = c
 
     def mouseMoveEvent(self, event):

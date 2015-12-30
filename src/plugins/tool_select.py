@@ -24,9 +24,7 @@ class SelectionTool(Tool):
     def __init__(self, api):
         super(SelectionTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/border.png"),
-            "Select", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/border.png"), "Select", None)
         self.action.setStatusTip("Select voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+9"))

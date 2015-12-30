@@ -141,9 +141,8 @@ class QubicleFile(object):
 
         # Warn about multiple matrices
         if matrix_count > 1:
-            self.api.warning("Qubicle files with more than 1 matrix"
-                             " are not yet properly supported. All "
-                             " matrices will be (badly) merged.")
+            self.api.warning("Qubicle files with more than 1 matrix are not yet properly supported. "
+                             "All matrices will be (badly) merged.")
 
         max_width = 0
         max_height = 0

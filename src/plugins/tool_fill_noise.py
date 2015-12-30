@@ -26,9 +26,7 @@ class FillNoiseTool(Tool):
     def __init__(self, api):
         super(FillNoiseTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/color.png"),
-            "Noisy fill", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/color.png"), "Noisy fill", None)
         self.action.setStatusTip("Flood fill with color noise")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+7"))

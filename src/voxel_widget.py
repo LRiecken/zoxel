@@ -131,12 +131,10 @@ class GLWidget(QtOpenGL.QGLWidget):
         # Grid manager
         self._grids = VoxelGrid(self.voxels)
         # create the default _grids
-        self.grids.add_grid_plane(GridPlanes.X, offset=0, visible=True,
-                                  color=QtGui.QColor(0x6c, 0x7d, 0x67))
-        self.grids.add_grid_plane(GridPlanes.Y, offset=0, visible=True,
-                                  color=QtGui.QColor(0x65, 0x65, 0x7b))
-        self.grids.add_grid_plane(GridPlanes.Z, offset=self.voxels.depth,
-                                  visible=True, color=QtGui.QColor(0x7b, 0x65, 0x68))
+        self.grids.add_grid_plane(GridPlanes.X, offset=0, visible=True, color=QtGui.QColor(0x6c, 0x7d, 0x67))
+        self.grids.add_grid_plane(GridPlanes.Y, offset=0, visible=True, color=QtGui.QColor(0x65, 0x65, 0x7b))
+        self.grids.add_grid_plane(GridPlanes.Z, offset=self.voxels.depth, visible=True,
+                                  color=QtGui.QColor(0x7b, 0x65, 0x68))
         # Used to track the z component of various mouse activity
         self._depth_focus = 1
         # Keep track how long mouse buttons are down for
@@ -310,8 +308,7 @@ class GLWidget(QtOpenGL.QGLWidget):
     # Build a mesh from our current voxel data
     def build_mesh(self):
         # Grab the voxel vertices
-        (self._vertices, self._colors, self._normals,
-         self._color_ids, self._uvs) = self.voxels.get_vertices()
+        self._vertices, self._colors, self._normals, self._color_ids, self._uvs = self.voxels.get_vertices()
         self._num_vertices = len(self._vertices) // 3
         self._vertices = array.array("f", self._vertices).tostring()
         self._colors = array.array("B", self._colors).tostring()
@@ -402,8 +399,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         else:
             # Remember the mouse deltas
             self.mouse_delta_relative = (dx, dy)
-            self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(),
-                                         event.y() - self._mouse_absolute.y())
+            self.mouse_delta_absolute = (event.x() - self._mouse_absolute.x(), event.y() - self._mouse_absolute.y())
 
             # Maybe we are dragging
             if time.time() - self._mousedown_time > 0.3 and not self._dragging:
@@ -496,10 +492,8 @@ class GLWidget(QtOpenGL.QGLWidget):
         # XXX origin assumes planes are at zero offsets, should really
         # XXX respect any grid plane offset here
         origin = self.voxels.voxel_to_world(0, 0, self.voxels.depth)
-        planes = (
-            Plane(Vector3(1, 0, 0), origin[0]),
-            Plane(Vector3(0, 1, 0), origin[1]),
-            Plane(Vector3(0, 0, 1), origin[2] + 0.001))
+        planes = (Plane(Vector3(1, 0, 0), origin[0]), Plane(Vector3(0, 1, 0), origin[1]),
+                  Plane(Vector3(0, 0, 1), origin[2] + 0.001))
         intersection = None, None, None
         distance = sys.maxint
         for plane in planes:
@@ -507,8 +501,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             intersect = plane.intersect(ray)
             if intersect:
                 # Adjust to voxel space coordinates
-                x, y, z = self.voxels.world_to_voxel(intersect.x,
-                                                     intersect.y, intersect.z)
+                x, y, z = self.voxels.world_to_voxel(intersect.x, intersect.y, intersect.z)
                 x = int(x)
                 y = int(y)
                 z = int(z)

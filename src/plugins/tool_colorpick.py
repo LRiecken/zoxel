@@ -24,9 +24,7 @@ class ColorPickTool(Tool):
     def __init__(self, api):
         super(ColorPickTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(
-            QtGui.QPixmap(":/images/gfx/icons/pipette.png"),
-            "Color Pick", None)
+        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/pipette.png"), "Color Pick", None)
         self.action.setStatusTip("Choose a color from an existing voxel.")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+5"))
