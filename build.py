@@ -20,12 +20,11 @@ def main():
         parser.add_option("-a", "--with-app", action="store_true", dest="app", help="generates an .app (OS X only)")
     (options, args) = parser.parse_args()
 
-    src_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "src")
+    build_path = os.path.dirname(os.path.realpath(__file__))
+    src_path = os.path.join(build_path, "src")
     if platform.system() == "Windows":
         from distutils.sysconfig import get_python_lib
-        site_packages_path = get_python_lib()
-        pyside_rcc_path = os.path.join(site_packages_path, "PySide", "pyside-rcc.exe")
-        cx_freeze_path = os.path.join(os.path.dirname(os.path.dirname(site_packages_path)), "Scripts", "cxfreeze")
+        pyside_rcc_path = os.path.join(get_python_lib(), "PySide", "pyside-rcc.exe")
         dist = os.path.abspath(os.path.expanduser(options.dist))
     else:
         pyside_rcc_path = "pyside-rcc"
@@ -59,16 +58,14 @@ def main():
 
         if options.verbose:
             print "Launching cx_freeze ..."
-        os.system("python " + cx_freeze_path + " \"" + os.path.join(src_path, "zoxel.py") + "\" --target-dir=\"" +
-                  dist + ("\" --base-name=Win32GUI --include-modules atexit,PySide.QtNetwork,PySide.QtWebKit,OpenGL,"
-                          "OpenGL.platform.win32,OpenGL.arrays.nones,OpenGL.arrays.lists,OpenGL.arrays.strings,"
-                          "OpenGL.arrays.numbers,OpenGL.arrays.ctypesarrays,OpenGL.arrays.ctypesparameters,"
-                          "OpenGL.arrays.ctypespointers --include-path \"") + src_path + "\"")
+        os.chdir(src_path)
+        os.system("python setup.py build_exe -b \"" + dist + "\"")
 
         if os.environ.get("APPVEYOR_REPO_TAG_NAME"):
             if options.verbose:
                 print "Zipping Windows binary ..."
 
+            os.chdir(build_path)
             os.system("7z a zoxel-" + os.environ["APPVEYOR_REPO_TAG_NAME"] + "-" + os.environ["PYTHON_ARCH"] +
                       ".zip -r \"" + dist + "\*\"")
 
