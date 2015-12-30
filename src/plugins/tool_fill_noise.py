@@ -36,10 +36,10 @@ class FillNoiseTool(Tool):
         self.api.register_tool(self)
 
     # Fill all connected voxels of the same color with a new color
-    def on_mouse_click(self, target):
-        target.voxels.clear_selection()
+    def on_mouse_click(self, data):
+        data.voxels.clear_selection()
         # We need to have a selected voxel
-        voxel = target.voxels.get(target.world_x, target.world_y, target.world_z)
+        voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
         if not voxel:
             return
         # Grab the target color
@@ -49,39 +49,39 @@ class FillNoiseTool(Tool):
         fill_color = c[0] << 24 | c[1] << 16 | c[2] << 8 | 0xff
         # Initialise our search list
         search = set()
-        search.add((target.world_x, target.world_y, target.world_z))
+        search.add((data.world_x, data.world_y, data.world_z))
         searched = []
         color = self.color
         i = QtGui.QInputDialog.getDouble(self.api.mainwindow, "Intensity", "Intensity:", 0.3, 0.0, 1.0, 3.0)[0]
         # Keep iterating over the search list until no more to do
         while len(search):
             x, y, z = search.pop()
-            voxel = target.voxels.get(x, y, z)
+            voxel = data.voxels.get(x, y, z)
             if not voxel or voxel != search_color:
                 continue
             # Add all likely neighbours into our search list
-            if target.voxels.get(x - 1, y, z) == search_color and not (x - 1, y, z) in searched:
+            if data.voxels.get(x - 1, y, z) == search_color and not (x - 1, y, z) in searched:
                 search.add((x - 1, y, z))
-            if target.voxels.get(x + 1, y, z) == search_color and not (x + 1, y, z) in searched:
+            if data.voxels.get(x + 1, y, z) == search_color and not (x + 1, y, z) in searched:
                 search.add((x + 1, y, z))
-            if target.voxels.get(x, y + 1, z) == search_color and not (x, y + 1, z) in searched:
+            if data.voxels.get(x, y + 1, z) == search_color and not (x, y + 1, z) in searched:
                 search.add((x, y + 1, z))
-            if target.voxels.get(x, y - 1, z) == search_color and not (x, y - 1, z) in searched:
+            if data.voxels.get(x, y - 1, z) == search_color and not (x, y - 1, z) in searched:
                 search.add((x, y - 1, z))
-            if target.voxels.get(x, y, z + 1) == search_color and not (x, y, z + 1) in searched:
+            if data.voxels.get(x, y, z + 1) == search_color and not (x, y, z + 1) in searched:
                 search.add((x, y, z + 1))
-            if target.voxels.get(x, y, z - 1) == search_color and not (x, y, z - 1) in searched:
+            if data.voxels.get(x, y, z - 1) == search_color and not (x, y, z - 1) in searched:
                 search.add((x, y, z - 1))
             # Set the color of the current voxel
-            if target.mouse_button == MouseButtons.LEFT:
+            if data.mouse_button == MouseButtons.LEFT:
                 nc = color.lighter(random() * 200 * i + 100 - 100 * i)
-            elif target.mouse_button == MouseButtons.RIGHT:
+            elif data.mouse_button == MouseButtons.RIGHT:
                 nc = QtGui.QColor(color)
                 nc.setHsvF((nc.hueF() + (random() * 0.2 * i - 0.1 * i)) % 1,
                            max(0, min(1, nc.saturationF() + (random() * 2 * i - i))),
                            max(0, min(1, nc.valueF() + (random() * 2 * i - i))))
-            target.voxels.set(x, y, z, nc, True, 1)
+            data.voxels.set(x, y, z, nc, True, 1)
             searched.append((x, y, z))
-        target.voxels.completeUndoFill()
+        data.voxels.completeUndoFill()
 
 register_plugin(FillNoiseTool, "Noisy Fill Tool", "1.0")

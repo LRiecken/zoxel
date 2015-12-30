@@ -32,10 +32,10 @@ class FillTool(Tool):
         self.api.register_tool(self)
 
     # Fill all connected voxels of the same color with a new color
-    def on_mouse_click(self, target):
-        target.voxels.clear_selection()
+    def on_mouse_click(self, data):
+        data.voxels.clear_selection()
         # We need to have a selected voxel
-        voxel = target.voxels.get(target.world_x, target.world_y, target.world_z)
+        voxel = data.voxels.get(data.world_x, data.world_y, data.world_z)
         if not voxel:
             return
         # Grab the target color
@@ -47,28 +47,28 @@ class FillTool(Tool):
             return
         # Initialise our search list
         search = set()
-        search.add((target.world_x, target.world_y, target.world_z))
+        search.add((data.world_x, data.world_y, data.world_z))
         # Keep iterating over the search list until no more to do
         while len(search):
             x, y, z = search.pop()
-            voxel = target.voxels.get(x, y, z)
+            voxel = data.voxels.get(x, y, z)
             if not voxel or voxel != search_color:
                 continue
             # Add all likely neighbours into our search list
-            if target.voxels.get(x - 1, y, z) == search_color:
+            if data.voxels.get(x - 1, y, z) == search_color:
                 search.add((x - 1, y, z))
-            if target.voxels.get(x + 1, y, z) == search_color:
+            if data.voxels.get(x + 1, y, z) == search_color:
                 search.add((x + 1, y, z))
-            if target.voxels.get(x, y + 1, z) == search_color:
+            if data.voxels.get(x, y + 1, z) == search_color:
                 search.add((x, y + 1, z))
-            if target.voxels.get(x, y - 1, z) == search_color:
+            if data.voxels.get(x, y - 1, z) == search_color:
                 search.add((x, y - 1, z))
-            if target.voxels.get(x, y, z + 1) == search_color:
+            if data.voxels.get(x, y, z + 1) == search_color:
                 search.add((x, y, z + 1))
-            if target.voxels.get(x, y, z - 1) == search_color:
+            if data.voxels.get(x, y, z - 1) == search_color:
                 search.add((x, y, z - 1))
             # Set the color of the current voxel
-            target.voxels.set(x, y, z, self.color, True, 1)
-        target.voxels.completeUndoFill()
+            data.voxels.set(x, y, z, self.color, True, 1)
+        data.voxels.completeUndoFill()
 
 register_plugin(FillTool, "Fill Tool", "1.0")

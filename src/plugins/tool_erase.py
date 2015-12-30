@@ -34,13 +34,13 @@ class EraseTool(Tool):
         self.api.register_tool(self)
 
     # Clear the targeted voxel
-    def on_mouse_click(self, target):
-        if len(target.voxels._selection) > 0:
-            for x, y, z in target.voxels._selection:
-                target.voxels.set(x, y, z, 0, True, 1)
-            target.voxels.completeUndoFill()
-            target.voxels.clear_selection()
+    def on_mouse_click(self, data):
+        if len(data.voxels._selection) > 0:
+            for x, y, z in data.voxels._selection:
+                data.voxels.set(x, y, z, 0, True, 1)
+            data.voxels.completeUndoFill()
+            data.voxels.clear_selection()
         else:
-            target.voxels.set(target.world_x, target.world_y, target.world_z, 0)
+            data.voxels.set(data.world_x, data.world_y, data.world_z, 0)
 
 register_plugin(EraseTool, "Erasing Tool", "1.0")

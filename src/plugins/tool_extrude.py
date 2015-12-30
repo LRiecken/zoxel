@@ -49,24 +49,24 @@ class ExtrudeTool(Tool):
                 data.voxels.set(x + dx, y + dy, z + dz, col, True, 1)
         data.voxels.completeUndoFill()
 
-    def on_drag_start(self, target):
-        if len(target.voxels._selection) > 0:
+    def on_drag_start(self, data):
+        if len(data.voxels._selection) > 0:
             self._stamp = []
-            for x, y, z in target.voxels._selection:
-                col = target.voxels.get(x, y, z)
+            for x, y, z in data.voxels._selection:
+                col = data.voxels.get(x, y, z)
                 self._stamp.append((x, y, z, col))
-        self._mouse = (target.mouse_x, target.mouse_y)
-        if QtCore.Qt.Key_X in target.keys:
+        self._mouse = (data.mouse_x, data.mouse_y)
+        if QtCore.Qt.Key_X in data.keys:
             self.xdir = True
             self.ydir = False
             self.zdir = False
             self.fixeddirection = True
-        elif QtCore.Qt.Key_Y in target.keys:
+        elif QtCore.Qt.Key_Y in data.keys:
             self.xdir = False
             self.ydir = True
             self.zdir = False
             self.fixeddirection = True
-        elif QtCore.Qt.Key_Z in target.keys:
+        elif QtCore.Qt.Key_Z in data.keys:
             self.xdir = False
             self.ydir = False
             self.zdir = True
@@ -79,15 +79,15 @@ class ExtrudeTool(Tool):
         self.pastoffset = 0
 
     # When dragging, create the selection
-    def on_drag(self, target):
+    def on_drag(self, data):
         # In case the first click has missed a valid target.
         if self._mouse is None or len(self._stamp) == 0:
             return
-        dx = target.mouse_x - self._mouse[0]
-        dy = target.mouse_y - self._mouse[1]
+        dx = data.mouse_x - self._mouse[0]
+        dy = data.mouse_y - self._mouse[1]
         # Work out some sort of vague translation between screen and voxels
-        sx = self.api.mainwindow.width() / target.voxels.width
-        sy = self.api.mainwindow.height() / target.voxels.height
+        sx = self.api.mainwindow.width() / data.voxels.width
+        sy = self.api.mainwindow.height() / data.voxels.height
         dx = int(round(dx / float(sx)))
         dy = int(round(dy / float(sy)))
         if dx == 0 and dy == 0:
@@ -140,34 +140,34 @@ class ExtrudeTool(Tool):
         if self.fixeddirection:
             if self.xdir:
                 if tx != 0:
-                    self._mouse = (target.mouse_x, target.mouse_y)
+                    self._mouse = (data.mouse_x, data.mouse_y)
                     self.pastoffset += tx
-                    self.drawstamp(target, self.pastoffset, 0, 0)
+                    self.drawstamp(data, self.pastoffset, 0, 0)
             elif self.ydir:
                 if ty != 0:
-                    self._mouse = (target.mouse_x, target.mouse_y)
+                    self._mouse = (data.mouse_x, data.mouse_y)
                     self.pastoffset += ty
-                    self.drawstamp(target, 0, self.pastoffset, 0)
+                    self.drawstamp(data, 0, self.pastoffset, 0)
             elif self.zdir:
                 if tz != 0:
-                    self._mouse = (target.mouse_x, target.mouse_y)
+                    self._mouse = (data.mouse_x, data.mouse_y)
                     self.pastoffset += tz
-                    self.drawstamp(target, 0, 0, self.pastoffset)
+                    self.drawstamp(data, 0, 0, self.pastoffset)
         else:
             if tx != 0 and self.xdir and (not self.ydir or (abs(tdx) > abs(tdy) and abs(tdx) > abs(tdz))):
-                self._mouse = (target.mouse_x, target.mouse_y)
+                self._mouse = (data.mouse_x, data.mouse_y)
                 self.ydir = False
                 self.zdir = False
                 self.pastoffset += tx
-                self.drawstamp(target, self.pastoffset, 0, 0)
+                self.drawstamp(data, self.pastoffset, 0, 0)
             elif ty != 0 and self.ydir and (not self.zdir or abs(tdy) > abs(tdz)):
-                self._mouse = (target.mouse_x, target.mouse_y)
+                self._mouse = (data.mouse_x, data.mouse_y)
                 self.xdir = False
                 self.zdir = False
                 self.pastoffset += ty
-                self.drawstamp(target, 0, self.pastoffset, 0)
+                self.drawstamp(data, 0, self.pastoffset, 0)
             elif tz != 0 and self.zdir:
-                self._mouse = (target.mouse_x, target.mouse_y)
+                self._mouse = (data.mouse_x, data.mouse_y)
                 self.xdir = False
                 self.ydir = False
                 self.pastoffset += tz

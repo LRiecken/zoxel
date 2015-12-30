@@ -39,35 +39,35 @@ class DrawingTool(Tool):
     # param choosen_target: The place where the new voxel should be inserted.
     # returns A Target object indicating the actual place where the voxel were
     # inserted. Returns None when no insertion was made.
-    def _draw_voxel(self, target, shift_down, erase):
+    def _draw_voxel(self, data, shift_down, erase):
         # Works out where exactly the new voxel goes. It can collide with an existing voxel
         # or with the bottom of the 'y' plane, in which case, pos will be different than None.
         color = self.color
         if erase:
             color = 0
         else:
-            pos = target.get_neighbour()
+            pos = data.get_neighbour()
             if pos:
-                target.world_x = pos[0]
-                target.world_y = pos[1]
-                target.world_z = pos[2]
+                data.world_x = pos[0]
+                data.world_y = pos[1]
+                data.world_z = pos[2]
 
         if shift_down and self.first_voxel is None:
-            self.first_voxel = (target.world_x, target.world_y, target.world_z)
+            self.first_voxel = (data.world_x, data.world_y, data.world_z)
         elif self.first_voxel is None:
-            if target.voxels.set(target.world_x, target.world_y, target.world_z, color):
-                return target
+            if data.voxels.set(data.world_x, data.world_y, data.world_z, color):
+                return data
             else:
                 return None
         else:
-            dx = 1 if target.world_x < self.first_voxel[0] else -1
-            for x in xrange(target.world_x, self.first_voxel[0] + dx, dx):
-                dy = 1 if target.world_y < self.first_voxel[1] else -1
-                for y in xrange(target.world_y, self.first_voxel[1] + dy, dy):
-                    dz = 1 if target.world_z < self.first_voxel[2] else -1
-                    for z in xrange(target.world_z, self.first_voxel[2] + dz, dz):
-                        target.voxels.set(x, y, z, color, True, 1)
-            target.voxels.completeUndoFill()
+            dx = 1 if data.world_x < self.first_voxel[0] else -1
+            for x in xrange(data.world_x, self.first_voxel[0] + dx, dx):
+                dy = 1 if data.world_y < self.first_voxel[1] else -1
+                for y in xrange(data.world_y, self.first_voxel[1] + dy, dy):
+                    dz = 1 if data.world_z < self.first_voxel[2] else -1
+                    for z in xrange(data.world_z, self.first_voxel[2] + dz, dz):
+                        data.voxels.set(x, y, z, color, True, 1)
+            data.voxels.completeUndoFill()
             self.first_voxel = None
         return None
 
