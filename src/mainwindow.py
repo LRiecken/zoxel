@@ -58,12 +58,11 @@ class MainWindow(QtGui.QMainWindow):
         self.load_state()
         # Create our GL Widget
         try:
-            voxels = GLWidget(self.ui.glparent)
-            self.ui.glparent.layout().addWidget(voxels)
-            self.display = voxels
+            glw = GLWidget(self.ui.glparent)
+            self.ui.glparent.layout().addWidget(glw)
+            self.display = glw
         except Exception as E:
-            QtGui.QMessageBox.warning(self, "Initialisation Failed",
-                                      str(E))
+            QtGui.QMessageBox.warning(self, "Initialisation Failed", str(E))
             exit(1)
         # Load default model dimensions
         width = self.get_setting("default_model_width")
@@ -111,6 +110,7 @@ class MainWindow(QtGui.QMainWindow):
         # Setup window
         self.update_caption()
         self.refresh_actions()
+        self.display.ready = True
         # Update Check
         try:
             latest_tag = urllib.urlopen("https://github.com/chrmoritz/zoxel/releases/latest").geturl()

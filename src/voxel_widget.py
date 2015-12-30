@@ -146,6 +146,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         self._rotating = False
         self._key_modifiers = 0
         self._keystate = set()
+        self.ready = False
 
     # Reset the control and clear all data
     def clear(self):
@@ -193,6 +194,8 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     # Render our scene
     def paintGL(self):
+        if not self.ready:
+            return
         self.qglClearColor(self._background_color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
