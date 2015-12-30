@@ -397,7 +397,7 @@ class GLWidget(QtOpenGL.QGLWidget):
             # Work out the translation in 3d space
             self._translate_x = self._translate_x + dx * self._htranslate
             self._translate_y = self._translate_y + ((-dy) * self._vtranslate)
-            self.refresh()
+            self.updateGL()
 
         else:
             # Remember the mouse deltas
@@ -427,11 +427,13 @@ class GLWidget(QtOpenGL.QGLWidget):
         if self._dragging:
             self._dragging = False
             self.send_drag(self.DRAG_END, x, y, z, event.x(), event.y(), face)
+            self.updateGL()
         elif self._rotating:
             self._rotating = False
+            self.updateGL()
         else:
             self.send_mouse_click(x, y, z, event.x(), event.y(), face)
-        self.refresh()
+            self.refresh()
 
     def zoom_in(self):
         self._translate_z *= 1 - self._zoom_speed
