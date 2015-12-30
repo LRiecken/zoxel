@@ -60,11 +60,11 @@ class DrawingTool(Tool):
             else:
                 return None
         else:
-            dx = target.world_x < self.first_voxel[0] and 1 or -1
+            dx = 1 if target.world_x < self.first_voxel[0] else -1
             for x in xrange(target.world_x, self.first_voxel[0] + dx, dx):
-                dy = target.world_y < self.first_voxel[1] and 1 or -1
+                dy = 1 if target.world_y < self.first_voxel[1] else -1
                 for y in xrange(target.world_y, self.first_voxel[1] + dy, dy):
-                    dz = target.world_z < self.first_voxel[2] and 1 or -1
+                    dz = 1 if target.world_z < self.first_voxel[2] else -1
                     for z in xrange(target.world_z, self.first_voxel[2] + dz, dz):
                         target.voxels.set(x, y, z, color, True, 1)
             target.voxels.completeUndoFill()

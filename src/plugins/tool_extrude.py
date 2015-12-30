@@ -175,9 +175,9 @@ class ExtrudeTool(Tool):
 
     def on_drag_end(self, data):
         data.voxels.clear_selection()
-        dx = self.xdir and self.pastoffset or 0
-        dy = self.ydir and self.pastoffset or 0
-        dz = self.zdir and self.pastoffset or 0
+        dx = self.pastoffset if self.xdir else 0
+        dy = self.pastoffset if self.ydir else 0
+        dz = self.pastoffset if self.zdir else 0
         for x, y, z, col in self._stamp:
             data.voxels.select(x + dx, y + dy, z + dz)
 

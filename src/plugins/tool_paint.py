@@ -47,11 +47,11 @@ class PaintingTool(Tool):
             elif self.first_voxel is None:  # and shift pressed
                 self.first_voxel = (data.world_x, data.world_y, data.world_z)
             else:
-                dx = data.world_x < self.first_voxel[0] and 1 or -1
+                dx = 1 if data.world_x < self.first_voxel[0] else -1
                 for x in xrange(data.world_x, self.first_voxel[0] + dx, dx):
-                    dy = data.world_y < self.first_voxel[1] and 1 or -1
+                    dy = 1 if data.world_y < self.first_voxel[1] else -1
                     for y in xrange(data.world_y, self.first_voxel[1] + dy, dy):
-                        dz = data.world_z < self.first_voxel[2] and 1 or -1
+                        dz = 1 if data.world_z < self.first_voxel[2] else -1
                         for z in xrange(data.world_z, self.first_voxel[2] + dz, dz):
                             data.voxels.set(x, y, z, self.color, True, 1)
                 data.voxels.completeUndoFill()

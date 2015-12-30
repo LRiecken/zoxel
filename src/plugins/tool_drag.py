@@ -41,7 +41,7 @@ class DragTool(Tool):
         self.pastoffset = 0
         self.fixeddirection = False
         self.keeporiginal = False
-
+        self.hasSelection = False
         self._mouse = ()
 
     def check_free_space(self, data, dx, dy, dz, keeporiginal=False):
@@ -102,11 +102,9 @@ class DragTool(Tool):
             self.zdir = True
             self.fixeddirection = True
         else:
-            self.xdir = True
-            self.ydir = True
-            self.zdir = True
             self.fixeddirection = False
-        self.pastoffset = 0
+        self.hasSelection = len(target.voxels._selection) != 0
+        self.pastoffset = 0 if self.fixeddirection else [0, 0, 0]
 
     # Drag the model in voxel space
     def on_drag(self, target):
@@ -124,63 +122,44 @@ class DragTool(Tool):
         tx = 0
         ty = 0
         tz = 0
-        tdx = 0
-        tdy = 0
-        tdz = 0
+        mxx = False
+        mxy = False
+        mxz = False
         if ax == self.api.mainwindow.display.X_AXIS:
-            tdx = dx
+            mxx = True
             if dx > 0:
                 tx = 1
             elif dx < 0:
                 tx = -1
         elif ax == self.api.mainwindow.display.Y_AXIS:
-            tdy = dx
+            mxy = True
             if dx > 0:
                 ty = 1
             elif dx < 0:
                 ty = -1
         elif ax == self.api.mainwindow.display.Z_AXIS:
-            tdz = dx
+            mxz = True
             if dx > 0:
                 tz = 1
             elif dx < 0:
                 tz = -1
         if ay == self.api.mainwindow.display.X_AXIS:
-            tdx = dy
             if dy > 0:
                 tx = 1
             elif dy < 0:
                 tx = -1
         elif ay == self.api.mainwindow.display.Y_AXIS:
-            tdy = dy
             if dy > 0:
                 ty = -1
             elif dy < 0:
                 ty = 1
         elif ay == self.api.mainwindow.display.Z_AXIS:
-            tdz = dy
             if dy > 0:
                 tz = 1
             elif dy < 0:
                 tz = -1
 
-        if len(target.voxels._selection) == 0:
-            if self.fixeddirection:
-                if self.xdir:
-                    if tx != 0:
-                        self._mouse = (target.mouse_x, target.mouse_y)
-                        target.voxels.translate(tx, 0, 0)
-                elif self.ydir:
-                    if ty != 0:
-                        self._mouse = (target.mouse_x, target.mouse_y)
-                        target.voxels.translate(0, ty, 0)
-                elif self.zdir:
-                    if tz != 0:
-                        self._mouse = (target.mouse_x, target.mouse_y)
-                        target.voxels.translate(0, 0, tz)
-            else:
-                target.voxels.translate(tx, ty, tz)
-        else:
+        if self.hasSelection:
             if self.fixeddirection:
                 if self.xdir:
                     if tx != 0:
@@ -197,25 +176,47 @@ class DragTool(Tool):
                         self._mouse = (target.mouse_x, target.mouse_y)
                         self.pastoffset += tz
                         self.drawstamp(target, 0, 0, self.pastoffset, self.keeporiginal)
+            elif tx != 0:  # no fixed direction
+                if mxx:
+                    self._mouse = (target.mouse_x, self._mouse[1])
+                else:
+                    self._mouse = (self._mouse[0], target.mouse_y)
+                self.pastoffset[0] += tx
+                self.drawstamp(target, self.pastoffset[0], self.pastoffset[1], self.pastoffset[2], self.keeporiginal)
+            elif ty != 0:
+                if mxy:
+                    self._mouse = (target.mouse_x, self._mouse[1])
+                else:
+                    self._mouse = (self._mouse[0], target.mouse_y)
+                self.pastoffset[1] += ty
+                self.drawstamp(target, self.pastoffset[0], self.pastoffset[1], self.pastoffset[2], self.keeporiginal)
+            elif tz != 0:
+                if mxz:
+                    self._mouse = (target.mouse_x, self._mouse[1])
+                else:
+                    self._mouse = (self._mouse[0], target.mouse_y)
+                self.pastoffset[2] += tz
+                self.drawstamp(target, self.pastoffset[0], self.pastoffset[1], self.pastoffset[2], self.keeporiginal)
+        else:  # has no selection
+            if self.fixeddirection:
+                if self.xdir:
+                    if tx != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(tx, 0, 0)
+                elif self.ydir:
+                    if ty != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(0, ty, 0)
+                elif self.zdir:
+                    if tz != 0:
+                        self._mouse = (target.mouse_x, target.mouse_y)
+                        target.voxels.translate(0, 0, tz)
             else:
-                if tx != 0 and self.xdir and (not self.ydir or (abs(tdx) > abs(tdy) and abs(tdx) > abs(tdz))):
-                    self._mouse = (target.mouse_x, target.mouse_y)
-                    self.ydir = False
-                    self.zdir = False
-                    self.pastoffset += tx
-                    self.drawstamp(target, self.pastoffset, 0, 0, self.keeporiginal)
-                elif ty != 0 and self.ydir and (not self.zdir or abs(tdy) > abs(tdz)):
-                    self._mouse = (target.mouse_x, target.mouse_y)
-                    self.xdir = False
-                    self.zdir = False
-                    self.pastoffset += ty
-                    self.drawstamp(target, 0, self.pastoffset, 0, self.keeporiginal)
-                elif tz != 0 and self.zdir:
-                    self._mouse = (target.mouse_x, target.mouse_y)
-                    self.xdir = False
-                    self.ydir = False
-                    self.pastoffset += tz
-                    self.drawstamp(target, 0, 0, self.pastoffset, self.keeporiginal)
+                if (tx != 0 and mxx) or (ty != 0 and mxy) or (tz != 0 and mxz):
+                    self._mouse = (target.mouse_x, self._mouse[1])
+                if (tx != 0 and not mxx) or (ty != 0 and not mxy) or (tz != 0 and not mxz):
+                    self._mouse = (self._mouse[0], target.mouse_y)
+                target.voxels.translate(tx, ty, tz)
 
 
 register_plugin(DragTool, "Drag Tool", "1.0")

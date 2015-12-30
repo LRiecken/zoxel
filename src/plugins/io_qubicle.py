@@ -195,10 +195,7 @@ class QubicleFile(object):
                                     x = index % width
                                     y = index / width
                                     index += 1
-                                    iz = z
-                                    if coords == 1:
-                                        iz = depth - z - 1
-                                    voxels.set((width - x - 1), y, iz, vox)
+                                    voxels.set((width - x - 1), y, depth - z - 1 if coords == 1 else z, vox)
                             else:
                                 index += count
                         else:
@@ -206,20 +203,16 @@ class QubicleFile(object):
                             y = index / width
                             index += 1
                             if (data & 0xff000000) >> 24:
-                                iz = z
-                                if coords == 1:
-                                    iz = depth - z - 1
-                                voxels.set((width - x - 1), y, iz, self.formatVox(data, format))
+                                voxels.set((width - x - 1), y, depth - z - 1 if coords == 1 else z,
+                                           self.formatVox(data, format))
             else:
                 for z in xrange(depth):
                     for y in xrange(height):
                         for x in xrange(width):
                             vox = self.uint32(f)
                             if (vox & 0xff000000) >> 24:
-                                iz = z
-                                if coords == 1:
-                                    iz = depth - z - 1
-                                voxels.set((width - x - 1), y, iz, self.formatVox(vox, format))
+                                voxels.set((width - x - 1), y, depth - z - 1 if coords == 1 else z,
+                                           self.formatVox(vox, format))
             # restore attachment point
             if matrix_count == 1 and dx <= 0 and dy <= 0 and dz <= 0 and (dx < 0 or dy < 0 or dz < 0):
                 r = QMessageBox.question(None, "Restore attachment point?",
@@ -227,10 +220,7 @@ class QubicleFile(object):
                                           " try to restore the attachment point out of the .qb's metadata for you?"),
                                          QMessageBox.No, QMessageBox.Yes)
                 if r == QMessageBox.Yes:
-                    iz = -dz
-                    if coords == 1:
-                        iz = max_depth + dz - 1
-                    voxels.set(max_width + dx - 1, -dy, iz, 0xff00ffff)
+                    voxels.set(max_width + dx - 1, -dy, max_depth + dz - 1 if coords == 1 else -dz, 0xff00ffff)
 
         f.close()
 

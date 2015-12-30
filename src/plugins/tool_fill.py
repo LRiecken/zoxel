@@ -68,6 +68,7 @@ class FillTool(Tool):
             if target.voxels.get(x, y, z - 1) == search_color:
                 search.add((x, y, z - 1))
             # Set the color of the current voxel
-            target.voxels.set(x, y, z, self.color, True, len(search) == 0 and 2 or 1)
+            target.voxels.set(x, y, z, self.color, True, 1)
+        target.voxels.completeUndoFill()
 
 register_plugin(FillTool, "Fill Tool", "1.0")
