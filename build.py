@@ -28,6 +28,8 @@ def main():
         dist = os.path.abspath(os.path.expanduser(options.dist))
     else:
         pyside_rcc_path = "pyside-rcc"
+        dist = os.path.join(src_path, "dist")
+        build = os.path.join(src_path, "build")
 
     if options.verbose:
         print "Compiling PySide resources ..."
@@ -73,7 +75,6 @@ def main():
             print "Zoxel Windows binary build completed!"
 
     if platform.system() == "Darwin" and options.app:
-        dist = os.path.join(src_path, "dist")
         if options.verbose:
             print "Generating Zoxel OS X App to " + dist + "/zoxel.app ..."
 
@@ -81,6 +82,11 @@ def main():
             if options.verbose:
                 print "Removing existing dist directory"
             shutil.rmtree(dist)
+
+        if os.path.exists(build):
+            if options.verbose:
+                print "Removing existing build directory"
+            shutil.rmtree(build)
 
         if options.verbose:
             print "Launching Py2App ..."

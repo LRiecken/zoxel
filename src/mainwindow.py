@@ -654,7 +654,7 @@ class MainWindow(QtGui.QMainWindow):
 
     # Load and initialise all plugins
     def load_plugins(self):
-        import plugins
+        import plugin_loader
 
     # Update the state of the UI actions
     def refresh_actions(self):
