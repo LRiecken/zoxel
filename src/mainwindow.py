@@ -29,6 +29,7 @@ import urllib
 import sys
 import copy
 from constants import ZOXEL_TAG
+import platform
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -47,8 +48,21 @@ class MainWindow(QtGui.QMainWindow):
         self._file_handlers = []
         # Update our window caption
         self._caption = "Zoxel"
-        # Our global state
-        self.settings = QtCore.QSettings("Zoxel", "Zoxel")
+        # Our global state + user plugins
+        if platform.system() == "Windows":
+            appdata = os.path.expandvars("%APPDATA%")
+        elif platform.system() == "Darwin":
+            appdata = os.path.expanduser("~/Library/Application Support")
+        else:
+            appdata = os.path.expanduser("~/.local/share")
+        self.user_plugins_path = os.path.join(appdata, "Zoxel", "plugins")
+        if not os.path.isdir(self.user_plugins_path):
+            os.makedirs(self.user_plugins_path, 16877)
+        QtCore.QCoreApplication.setOrganizationName("Zoxel")
+        QtCore.QCoreApplication.setApplicationName("Zoxel")
+        QtCore.QSettings.setDefaultFormat(QtCore.QSettings.IniFormat)
+        QtCore.QSettings.setPath(QtCore.QSettings.IniFormat, QtCore.QSettings.UserScope, appdata)
+        self.settings = QtCore.QSettings()
         self.state = {}
         # Our animation timer
         self._timer = QtCore.QTimer(self)
@@ -406,6 +420,7 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_reload_plugins_triggered(self):
+        # reset plugin state
         self.ui.toolbar_drawing.clear()
         for a in self._tool_group.actions():
             self._tool_group.removeAction(a)
@@ -413,10 +428,16 @@ class MainWindow(QtGui.QMainWindow):
         self._tools_priorities.clear()
         self._file_handlers = []
         self._last_file_handler = None
+        # reload default plugins
         from plugins import __all__ as plugins
         from sys import modules
         for p in plugins:
             reload(modules["plugins." + p])
+        # reload user plugins
+        from imp import load_source
+        for p in os.listdir(self.user_plugins_path):
+            if p.endswith(".py"):
+                load_source(os.path.splitext(p)[0], os.path.join(self.user_plugins_path, p))
 
     def on_tool_mouse_click(self):
         tool = self.get_active_tool()
@@ -679,10 +700,16 @@ class MainWindow(QtGui.QMainWindow):
 
     # Load and initialise all plugins
     def load_plugins(self):
+        # load default plugins
         from plugins import __all__ as plugins
         from importlib import import_module
         for p in plugins:
             import_module('plugins.' + p)
+        # load user plugins
+        from imp import load_source
+        for p in os.listdir(self.user_plugins_path):
+            if p.endswith(".py"):
+                load_source(os.path.splitext(p)[0], os.path.join(self.user_plugins_path, p))
 
     # Update the state of the UI actions
     def refresh_actions(self):
