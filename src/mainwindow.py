@@ -41,6 +41,7 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.setupUi(self)
         # Current file
         self._filename = None
+        self._filetype = None
         self._last_file_handler = None
         # Importers / Exporters
         self._file_handlers = []
@@ -158,7 +159,8 @@ class MainWindow(QtGui.QMainWindow):
             if not self.confirm_save():
                 return
         # Clear our data
-        self._filename = ""
+        self._filename = None
+        self._filetype = None
         self.display.clear()
         self.display.voxels.saved()
         self.update_caption()
@@ -410,6 +412,7 @@ class MainWindow(QtGui.QMainWindow):
         self._tools = []
         self._tools_priorities.clear()
         self._file_handlers = []
+        self._last_file_handler = None
         from plugins import __all__ as plugins
         from sys import modules
         for p in plugins:
@@ -530,9 +533,8 @@ class MainWindow(QtGui.QMainWindow):
 
         saved = False
         filename = self._filename
+        filetype = self._filetype
         handler = self._last_file_handler
-        if handler:
-            filetype = handler.filetype
 
         # Build list of available types
         choices = []
@@ -572,6 +574,7 @@ class MainWindow(QtGui.QMainWindow):
         # If we saved, clear edited state
         if saved:
             self._filename = filename
+            self._filetype = filetype
             self._last_file_handler = handler
             self.display.voxels.saved()
             self.update_caption()
@@ -634,6 +637,7 @@ class MainWindow(QtGui.QMainWindow):
         try:
             handler.load(filename)
             self._filename = filename
+            self._filetype = filetype
         except Exception as Ex:
             self.display.voxels.enable_undo()
             QtGui.QMessageBox.warning(self, "Could not load file", str(Ex))
