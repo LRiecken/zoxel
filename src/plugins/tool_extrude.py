@@ -30,6 +30,7 @@ class ExtrudeTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+0"))
         # Register the tool
+        self.priority = 10
         self.api.register_tool(self)
         # Area tool helper
         self._mouse = None

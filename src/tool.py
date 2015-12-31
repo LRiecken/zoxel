@@ -189,6 +189,7 @@ class Tool(object):
         # Create default action
         self.action = QtGui.QAction(QtGui.QPixmap(":/gfx/icons/wrench.png"), "A Tool", None)
         self.action.setStatusTip("Unknown Tool")
+        self.priority = 9223372036854775807
 
     # Mouse click - a mouse button has been pressed and released
     def on_mouse_click(self, data):

@@ -29,6 +29,7 @@ class DragTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+4"))
         # Register the tool
+        self.priority = 4
         self.api.register_tool(self)
         self._stamp = []
         self._lastdraw = []

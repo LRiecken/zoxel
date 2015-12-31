@@ -106,6 +106,7 @@ class MainWindow(QtGui.QMainWindow):
         # Initialise our tools
         self._tool_group = QtGui.QActionGroup(self.ui.toolbar_drawing)
         self._tools = []
+        self._tools_priorities = {}
         # Setup window
         self.update_caption()
         self.refresh_actions()
@@ -637,7 +638,14 @@ class MainWindow(QtGui.QMainWindow):
     def register_tool(self, tool, activate=False):
         self._tools.append(tool)
         self._tool_group.addAction(tool.get_action())
-        self.ui.toolbar_drawing.addAction(tool.get_action())
+        before = None
+        bp = 9223372036854775807
+        for p, action in self._tools_priorities.iteritems():
+            if p > tool.priority and p < bp:
+                bp = p
+                before = action
+        self.ui.toolbar_drawing.insertAction(before, tool.get_action())
+        self._tools_priorities[tool.priority] = tool.get_action()
         if activate:
             tool.get_action().setChecked(True)
 

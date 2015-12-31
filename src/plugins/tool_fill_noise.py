@@ -31,6 +31,7 @@ class FillNoiseTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+7"))
         # Register the tool
+        self.priority = 7
         self.api.register_tool(self)
 
     # Fill all connected voxels of the same color with a new color

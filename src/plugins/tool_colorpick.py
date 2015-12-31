@@ -29,6 +29,7 @@ class ColorPickTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+5"))
         # Register the tool
+        self.priority = 5
         self.api.register_tool(self)
 
     # Grab the color of the selected voxel

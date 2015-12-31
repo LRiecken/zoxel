@@ -29,6 +29,7 @@ class PaintingTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+2"))
         # Register the tool
+        self.priority = 2
         self.api.register_tool(self)
         # Area tool helper
         self.first_voxel = None

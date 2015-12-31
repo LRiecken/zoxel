@@ -28,6 +28,7 @@ class ShaderTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+8"))
         # Register the tool
+        self.priority = 8
         self.api.register_tool(self)
 
     # Color the targeted voxel

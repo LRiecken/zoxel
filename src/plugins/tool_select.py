@@ -29,6 +29,7 @@ class SelectionTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+9"))
         # Register the tool
+        self.priority = 9
         self.api.register_tool(self)
         # Area tool helper
         self._first_target = None

@@ -27,6 +27,7 @@ class FillTool(Tool):
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+6"))
         # Register the tool
+        self.priority = 6
         self.api.register_tool(self)
 
     # Fill all connected voxels of the same color with a new color

@@ -23,7 +23,7 @@ class TroxelLink(object):
                     else:
                         vox.append(None)
 
-        rcolors = dict()
+        rcolors = {}
         for v in vox:
             if v:
                 hex = v[2] + 256 * v[1] + 65536 * v[0]
