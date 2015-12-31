@@ -402,6 +402,19 @@ class MainWindow(QtGui.QMainWindow):
             self.display.refresh()
             self.refresh_actions()
 
+    @QtCore.Slot()
+    def on_action_reload_plugins_triggered(self):
+        self.ui.toolbar_drawing.clear()
+        for a in self._tool_group.actions():
+            self._tool_group.removeAction(a)
+        self._tools = []
+        self._tools_priorities.clear()
+        self._file_handlers = []
+        from plugins import __all__ as plugins
+        from sys import modules
+        for p in plugins:
+            reload(modules["plugins." + p])
+
     def on_tool_mouse_click(self):
         tool = self.get_active_tool()
         if not tool:
@@ -662,7 +675,10 @@ class MainWindow(QtGui.QMainWindow):
 
     # Load and initialise all plugins
     def load_plugins(self):
-        import plugin_loader
+        from plugins import __all__ as plugins
+        from importlib import import_module
+        for p in plugins:
+            import_module('plugins.' + p)
 
     # Update the state of the UI actions
     def refresh_actions(self):

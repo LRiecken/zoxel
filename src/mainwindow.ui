@@ -122,6 +122,8 @@
      <string>Utilities</string>
     </property>
     <addaction name="action_copy_selection_to_frame"/>
+    <addaction name="separator"/>
+    <addaction name="action_reload_plugins"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menuEdit"/>
@@ -717,6 +719,11 @@
   <action name="action_copy_selection_to_frame">
    <property name="text">
     <string>Copy selection to frame</string>
+   </property>
+  </action>
+  <action name="action_reload_plugins">
+   <property name="text">
+    <string>Reload plugins</string>
    </property>
   </action>
  </widget>
