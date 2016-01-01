@@ -170,7 +170,7 @@ class ExtrudeTool(Tool):
                 self.xdir = False
                 self.ydir = False
                 self.pastoffset += tz
-                self.drawstamp(target, 0, 0, self.pastoffset)
+                self.drawstamp(data, 0, 0, self.pastoffset)
 
     def on_drag_end(self, data):
         data.voxels.clear_selection()
