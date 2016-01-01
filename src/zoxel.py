@@ -16,8 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import traceback
 from PySide import QtGui
 from mainwindow import MainWindow
+
+
+def exception_handler(type, value, tb):
+    traceback.print_exception(type, value, tb)
+    msg = ""
+    for line in traceback.format_exception(type, value, tb):
+        msg += line
+    dialog = QtGui.QMessageBox(QtGui.QMessageBox.Critical, "Zoxel has crashed!", "Sorry, Zoxel has just crashed. " +
+                               "Please report the following error so it can be fixed:", QtGui.QMessageBox.Close)
+    dialog.setDetailedText(msg)
+    dialog.exec_()
+
+sys.excepthook = exception_handler
 
 
 def main():
