@@ -423,7 +423,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         if self._dragging:
             self._dragging = False
             self.send_drag(self.DRAG_END, x, y, z, event.x(), event.y(), face)
-            self.updateGL()
+            self.refresh()
         elif self._rotating:
             self._rotating = False
             self.updateGL()
