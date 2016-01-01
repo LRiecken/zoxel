@@ -439,6 +439,10 @@ class MainWindow(QtGui.QMainWindow):
             if p.endswith(".py"):
                 load_source(os.path.splitext(p)[0], os.path.join(self.user_plugins_path, p))
 
+    @QtCore.Slot()
+    def on_action_manage_plugins_triggered(self):
+        webbrowser.open('file://' + self.user_plugins_path)
+
     def on_tool_mouse_click(self):
         tool = self.get_active_tool()
         if not tool:
