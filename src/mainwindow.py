@@ -359,8 +359,14 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_paletteRGBvalue_editingFinished(self):
-        color = QtGui.QColor(0, 0, 0)
-        color.setNamedColor(self.ui.paletteRGBvalue.text())
+        s = self.ui.paletteRGBvalue.text()
+        i = s.find('rgb(')
+        if i >= 0:
+            c = map(int, s[i+4:s.find(')')].split(','))
+            color = QtGui.QColor(c[0], c[1], c[2])
+        else:
+            color = QtGui.QColor()
+            color.setNamedColor(s)
         if color.isValid():
             self.color_palette.color = color
 
