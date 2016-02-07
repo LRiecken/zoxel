@@ -67,8 +67,8 @@ class QubicleFile(object):
         self.uint32(f, 0x00000101)
         # Color format RGBA
         self.uint32(f, 0)
-        # Left handed coords
-        self.uint32(f, 0)
+        # Right handed z-coords
+        self.uint32(f, 1)
         # Uncompressed
         self.uint32(f, 0)
         # Visability mask
@@ -93,7 +93,7 @@ class QubicleFile(object):
         self.uint32(f, 0)
 
         # Data
-        for z in xrange(voxels.depth):
+        for z in xrange(voxels.depth - 1, -1, -1):
             for y in xrange(voxels.height):
                 for x in xrange(voxels.width - 1, -1, -1):
                     vox = voxels.get(x, y, z)
