@@ -16,6 +16,7 @@ def main():
     if platform.system() == "Windows":
         parser.add_option("-e", "--with-exe", action="store_true", dest="exe", help="generates a .exe (Windows only)")
         parser.add_option("-d", "--dist", dest="dist", default="dist", help="path of generated .exe (default to dist)")
+        parser.add_option("-m", "--with-msi", action="store_true", dest="msi", help="generates a .msi (Windows only)")
     elif platform.system() == "Darwin":
         parser.add_option("-a", "--with-app", action="store_true", dest="app", help="generates an .app (OS X only)")
     (options, args) = parser.parse_args()
@@ -73,6 +74,30 @@ def main():
 
         if options.verbose:
             print "Zoxel Windows binary build completed!"
+
+    if platform.system() == "Windows" and options.msi:
+        if options.verbose:
+            print "Generating Zoxel Windows MSI installer to " + src_path + "\\dist\\ ..."
+
+        build_path = os.path.join(src_path, "build")
+        if os.path.exists(build_path):
+            if options.verbose:
+                print "Removing existing build directory"
+            shutil.rmtree(build_path)
+
+        dist_path = os.path.join(src_path, "dist")
+        if os.path.exists(dist_path):
+            if options.verbose:
+                print "Removing existing dist directory"
+            shutil.rmtree(dist_path)
+
+        if options.verbose:
+            print "Launching cx_freeze ..."
+        os.chdir(src_path)
+        os.system("python setup.py bdist_msi")
+
+        if options.verbose:
+            print "Zoxel Windows MSI installer build completed!"
 
     if platform.system() == "Darwin" and options.app:
         if options.verbose:

@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import json
 from plugin_api import register_plugin
-from constants import ZOXEL_VERSION
+from constants import ZOXEL_TAG
 
 
 class ZoxelFile(object):
@@ -44,7 +44,7 @@ class ZoxelFile(object):
         version = self._file_version
 
         # Build data structure
-        data = {'version': version, 'frames': voxels.get_frame_count(), "creator": "Zoxel Version " + ZOXEL_VERSION}
+        data = {'version': version, 'frames': voxels.get_frame_count(), "creator": "Zoxel Version " + ZOXEL_TAG}
 
         for f in xrange(voxels.get_frame_count()):
             frame = []

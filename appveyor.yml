@@ -27,18 +27,19 @@ install:
   - pip install -U PyOpenGL_accelerate
 
 build_script:
-  - python build.py --verbose --with-exe
+  - python build.py --verbose --with-exe --with-msi
 
 test: off
 
 artifacts:
   - path: zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
+  - path: src\dist\Zoxel-*.msi
 
 deploy:
   provider: GitHub
   auth_token:
     secure: DUZQbCQFI4HKfOcnF+S9Krti2Kz1agHaSLFUJv8mK8Ov/DjeOhR9YyEkqLGY/I9J
-  artifact: zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip
+  artifact: zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).zip,src\dist\Zoxel-$(APPVEYOR_REPO_TAG_NAME)-$(PYTHON_ARCH).msi
   prerelease: true
   on:
     appveyor_repo_tag: true
