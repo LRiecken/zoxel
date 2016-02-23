@@ -11,13 +11,14 @@ install:
   - pip install -U PyOpenGL
   - pip install -U PyOpenGL_accelerate
   - pip install -U py2app
+  - pip install -U dmgbuild
 
 script:
   - cp LICENSE blender_addon
   - cd blender_addon
   - zip zoxel-$TRAVIS_TAG-blender-addon.zip *
   - cd ..
-  - python build.py --verbose --with-app
+  - python build.py --verbose --with-app --with-dmg
 
 cache:
   directories:
@@ -30,6 +31,7 @@ deploy:
   api_key: $GITHUB_OAUTH_TOKEN
   file:
     - src/dist/zoxel-$TRAVIS_TAG-osx.tar.gz
+    - src/dist/Zoxel-$TRAVIS_TAG-osx.dmg
     - blender_addon/zoxel-$TRAVIS_TAG-blender-addon.zip
   on:
     repo: chrmoritz/zoxel

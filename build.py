@@ -19,6 +19,7 @@ def main():
         parser.add_option("-m", "--with-msi", action="store_true", dest="msi", help="generates a .msi (Windows only)")
     elif platform.system() == "Darwin":
         parser.add_option("-a", "--with-app", action="store_true", dest="app", help="generates an .app (OS X only)")
+        parser.add_option("-i", "--with-dmg", action="store_true", dest="dmg", help="generates an .dmg (OS X only)")
     (options, args) = parser.parse_args()
 
     build_path = os.path.dirname(os.path.realpath(__file__))
@@ -123,10 +124,17 @@ def main():
                 print "Creating .tar.gz from App ..."
 
             os.chdir(dist)
-            os.system("tar czf zoxel-" + os.environ["TRAVIS_TAG"] + "-osx.tar.gz zoxel.app")
+            os.system("tar czf zoxel-" + os.environ["TRAVIS_TAG"] + "-osx.tar.gz Zoxel.app")
 
         if options.verbose:
             print "Zoxel OS X App build completed!"
+
+        if options.dmg:
+            if options.verbose:
+                print "Generating Zoxel OS X dmg installer to " + dist + "/ ..."
+
+            os.chdir(src_path)
+            os.system("dmgbuild -s dmgConfig.py Zoxel \"" + dist + "/Zoxel-osx.dmg\"")
 
     if options.start:
         if options.verbose:
