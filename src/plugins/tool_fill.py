@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
@@ -22,7 +22,7 @@ class FillTool(Tool):
     def __init__(self, api):
         super(FillTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/paint-can.png"), "Fill", None)
+        self.action = QtWidgets.QAction(QtGui.QPixmap(":/images/gfx/icons/paint-can.png"), "Fill", None)
         self.action.setStatusTip("Flood fill with color")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+6"))

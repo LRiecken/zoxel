@@ -17,7 +17,7 @@
 
 import sys
 import traceback
-from PySide import QtGui
+from PySide2 import QtWidgets
 from mainwindow import MainWindow
 
 
@@ -26,8 +26,8 @@ def exception_handler(type, value, tb):
     msg = ""
     for line in traceback.format_exception(type, value, tb):
         msg += line
-    dialog = QtGui.QMessageBox(QtGui.QMessageBox.Critical, "Zoxel has crashed!", "Sorry, Zoxel has just crashed. " +
-                               "Please report the following error so it can be fixed:", QtGui.QMessageBox.Close)
+    dialog = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical, "Zoxel has crashed!", "Sorry, Zoxel has just crashed. " +
+                               "Please report the following error so it can be fixed:", QtWidgets.QMessageBox.Close)
     dialog.setDetailedText(msg)
     dialog.exec_()
 
@@ -36,7 +36,7 @@ sys.excepthook = exception_handler
 
 def main():
     # create application
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     # create mainWindow
     mainwindow = MainWindow()

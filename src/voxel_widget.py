@@ -18,7 +18,7 @@
 import math
 import array
 import sys
-from PySide import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtOpenGL
 from OpenGL.GL import *
 from OpenGL.GLU import gluUnProject, gluProject
 import voxel
@@ -418,6 +418,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     def mouseReleaseEvent(self, event):
         self._mouse = QtCore.QPoint(event.pos())
+
         x, y, z, face = self.window_to_voxel(event.x(), event.y())
         # Send event depenand if this is a click or a drag
         if self._dragging:
@@ -451,6 +452,8 @@ class GLWidget(QtOpenGL.QGLWidget):
     # If the background was clicked on rather than a voxel, calculate and return
     # the location on the floor grid.
     def window_to_voxel(self, x, y):
+        x *= self.devicePixelRatio()
+        y *= self.devicePixelRatio()
         # We must invert y coordinates
         y = self._height - y
         # Render our scene (to the back buffer) using color IDs

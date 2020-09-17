@@ -14,12 +14,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 from ui_dialog_about import Ui_AboutDialog
 from constants import ZOXEL_VERSION
 
 
-class AboutDialog(QtGui.QDialog):
+class AboutDialog(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         # Initialise the UI

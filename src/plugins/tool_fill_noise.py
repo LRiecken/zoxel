@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 from random import random
@@ -26,7 +26,7 @@ class FillNoiseTool(Tool):
     def __init__(self, api):
         super(FillNoiseTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/color.png"), "Noisy fill", None)
+        self.action = QtWidgets.QAction(QtGui.QPixmap(":/images/gfx/icons/color.png"), "Noisy fill", None)
         self.action.setStatusTip("Flood fill with color noise")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+7"))
@@ -51,7 +51,7 @@ class FillNoiseTool(Tool):
         search.add((data.world_x, data.world_y, data.world_z))
         searched = []
         color = self.color
-        i = QtGui.QInputDialog.getDouble(self.api.mainwindow, "Intensity", "Intensity:", 0.3, 0.0, 1.0, 3.0)[0]
+        i = QtWidgets.QInputDialog.getDouble(self.api.mainwindow, "Intensity", "Intensity:", 0.3, 0.0, 1.0, 3.0)[0]
         # Keep iterating over the search list until no more to do
         while len(search):
             x, y, z = search.pop()

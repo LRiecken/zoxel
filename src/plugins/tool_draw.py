@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 from tool import Tool, EventData, MouseButtons, KeyModifiers, Face
 from plugin_api import register_plugin
 
@@ -24,7 +24,7 @@ class DrawingTool(Tool):
     def __init__(self, api):
         super(DrawingTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/pencil.png"), "Draw", None)
+        self.action = QtWidgets.QAction(QtGui.QPixmap(":/images/gfx/icons/pencil.png"), "Draw", None)
         self.action.setStatusTip("Draw Voxels")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+1"))

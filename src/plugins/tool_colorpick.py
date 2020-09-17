@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtWidgets, QtGui
 from tool import Tool
 from plugin_api import register_plugin
 
@@ -24,7 +24,7 @@ class ColorPickTool(Tool):
     def __init__(self, api):
         super(ColorPickTool, self).__init__(api)
         # Create our action / icon
-        self.action = QtGui.QAction(QtGui.QPixmap(":/images/gfx/icons/pipette.png"), "Color Pick", None)
+        self.action = QtWidgets.QAction(QtGui.QPixmap(":/images/gfx/icons/pipette.png"), "Color Pick", None)
         self.action.setStatusTip("Choose a color from an existing voxel.")
         self.action.setCheckable(True)
         self.action.setShortcut(QtGui.QKeySequence("Ctrl+5"))

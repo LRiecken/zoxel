@@ -14,11 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtCore, QtGui
-from PySide.QtCore import QRect, QPoint
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import QRect, QPoint
 
 
-class PaletteWidget(QtGui.QWidget):
+class PaletteWidget(QtWidgets.QWidget):
 
     # Color changed signal
     changed = QtCore.Signal()

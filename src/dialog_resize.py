@@ -14,11 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 from ui_dialog_resize import Ui_ResizeDialog
 
 
-class ResizeDialog(QtGui.QDialog):
+class ResizeDialog(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         # Initialise the UI

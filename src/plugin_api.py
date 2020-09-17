@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from PySide import QtGui
+from PySide2 import QtWidgets
 
 
 class PluginManager(object):
@@ -25,7 +25,7 @@ class PluginAPI(object):
 
     def __init__(self):
         # All plugins get a reference to our application
-        self.application = QtGui.QApplication.instance()
+        self.application = QtWidgets.QApplication.instance()
         # And our main window
         self.mainwindow = self.application.mainwindow
 
@@ -67,7 +67,7 @@ class PluginAPI(object):
 
     # Display a warning message
     def warning(self, message):
-        QtGui.QMessageBox.warning(self.mainwindow, "Warning", message)
+        QtWidgets.QMessageBox.warning(self.mainwindow, "Warning", message)
 
 # Plugin registration
 # Plugins call this function to register with the system.  A plugin

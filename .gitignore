@@ -24,6 +24,7 @@ nosetests.xml
 .project
 .pydevproject
 .externalToolBuilders
+.idea
 
 # Log files
 *.log
@@ -31,3 +32,6 @@ nosetests.xml
 # UI stuff
 resources_rc.py
 ui_*.py
+
+# Virutal Environment
+venv

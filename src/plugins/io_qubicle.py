@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from plugin_api import register_plugin
-from PySide.QtGui import QMessageBox
+from PySide2.QtWidgets import QMessageBox
 from struct import unpack
 
 # http://www.minddesk.com/wiki/index.php?title=Qubicle_Constructor_1:Data_Exchange_With_Qubicle_Binary

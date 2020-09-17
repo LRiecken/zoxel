@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PySide import QtCore
-from PySide import QtGui
+from PySide2 import QtCore
+from PySide2 import QtGui, QtWidgets
 from dialog_about import AboutDialog
 from dialog_resize import ResizeDialog
 from ui_mainwindow import Ui_MainWindow
@@ -32,7 +32,7 @@ from constants import ZOXEL_TAG
 import platform
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
         # Initialise the UI
@@ -76,7 +76,7 @@ class MainWindow(QtGui.QMainWindow):
             self.ui.glparent.layout().addWidget(glw)
             self.display = glw
         except Exception as E:
-            QtGui.QMessageBox.warning(self, "Initialisation Failed", str(E))
+            QtWidgets.QMessageBox.warning(self, "Initialisation Failed", str(E))
             exit(1)
         # Load default model dimensions
         width = self.get_setting("default_model_width")
@@ -119,7 +119,7 @@ class MainWindow(QtGui.QMainWindow):
         if self.color_palette:
             self.color_palette.changed.connect(self.on_color_changed)
         # Initialise our tools
-        self._tool_group = QtGui.QActionGroup(self.ui.toolbar_drawing)
+        self._tool_group = QtWidgets.QActionGroup(self.ui.toolbar_drawing)
         self._tools = []
         self._tools_priorities = {}
         # Setup window
@@ -130,11 +130,11 @@ class MainWindow(QtGui.QMainWindow):
         try:
             latest_tag = urllib.urlopen("https://github.com/chrmoritz/zoxel/releases/latest").geturl()
             if not latest_tag.endswith(ZOXEL_TAG):
-                responce = QtGui.QMessageBox.question(self, "Outdated Zoxel version",
+                responce = QtWidgets.QMessageBox.question(self, "Outdated Zoxel version",
                                                       "A new version of Zoxel is available! Do you want to update now?",
-                                                      buttons=(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No),
-                                                      defaultButton=QtGui.QMessageBox.Yes)
-                if responce == QtGui.QMessageBox.Yes:
+                                                      buttons=(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No),
+                                                      defaultButton=QtWidgets.QMessageBox.Yes)
+                if responce == QtWidgets.QMessageBox.Yes:
                     webbrowser.open(latest_tag, 2)
                     sys.exit(0)
         except IOError:
@@ -442,7 +442,7 @@ class MainWindow(QtGui.QMainWindow):
 
     @QtCore.Slot()
     def on_action_copy_selection_to_frame_triggered(self):
-        target_frame, res = QtGui.QInputDialog.getInt(self, "Copy selection", "Copy selection to frame:", 1, 1,
+        target_frame, res = QtWidgets.QInputDialog.getInt(self, "Copy selection", "Copy selection to frame:", 1, 1,
                                                       self.display.voxels.get_frame_count())
         if res:
             target_frame -= 1
@@ -454,11 +454,11 @@ class MainWindow(QtGui.QMainWindow):
                     col = self.display.voxels.get(x, y, z)
                     stamp.append((x, y, z, col))
                 self.display.voxels.select_frame(target_frame)
-                btns = QtGui.QMessageBox.StandardButton.Abort | QtGui.QMessageBox.StandardButton.Ignore
+                btns = QtWidgets.QMessageBox.StandardButton.Abort | QtWidgets.QMessageBox.StandardButton.Ignore
                 if (self.display.voxels.is_free(stamp) or
-                        QtGui.QMessageBox.question(self, "Copy selection",
+                        QtWidgets.QMessageBox.question(self, "Copy selection",
                                                    "This would override voxel data in the targeted frame!",
-                                                   btns) == QtGui.QMessageBox.Ignore):
+                                                   btns) == QtWidgets.QMessageBox.Ignore):
                     for x, y, z, col in stamp:
                         self.display.voxels.set(x, y, z, col)
 
@@ -523,14 +523,14 @@ class MainWindow(QtGui.QMainWindow):
     # Confirm if user wants to save before doing something drastic.
     # returns True if we should continue
     def confirm_save(self):
-        responce = QtGui.QMessageBox.question(self, "Save changes?",
+        responce = QtWidgets.QMessageBox.question(self, "Save changes?",
                                               "Save changes before discarding?",
-                                              buttons=(QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel |
-                                                       QtGui.QMessageBox.No))
-        if responce == QtGui.QMessageBox.StandardButton.Save:
+                                              buttons=(QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Cancel |
+                                                       QtWidgets.QMessageBox.No))
+        if responce == QtWidgets.QMessageBox.StandardButton.Save:
             if not self.save():
                 return False
-        elif responce == QtGui.QMessageBox.StandardButton.Cancel:
+        elif responce == QtWidgets.QMessageBox.StandardButton.Cancel:
             return False
         return True
 
@@ -569,7 +569,7 @@ class MainWindow(QtGui.QMainWindow):
             self.settings.setValue("system/state", state)
         except Exception as E:
             # XXX Fail. Never displays because we're on our way out
-            error = QtGui.QErrorMessage(self)
+            error = QtWidgets.QErrorMessage(self)
             error.showMessage(str(E))
 
     # Load our state
@@ -579,7 +579,7 @@ class MainWindow(QtGui.QMainWindow):
             if state:
                 self.state = json.loads(state)
         except Exception as E:
-            error = QtGui.QErrorMessage(self)
+            error = QtWidgets.QErrorMessage(self)
             error.showMessage(str(E))
 
     # Update the window caption to reflect the current state
@@ -621,7 +621,7 @@ class MainWindow(QtGui.QMainWindow):
 
         # Get a filename if we need one
         if newfile or not filename:
-            filename, filetype = QtGui.QFileDialog.getSaveFileName(self, caption="Save As", filter=choices,
+            filename, filetype = QtWidgets.QFileDialog.getSaveFileName(self, caption="Save As", filter=choices,
                                                                    dir=directory, selectedFilter="Zoxel Files (*.zox)")
             if not filename:
                 return
@@ -643,7 +643,7 @@ class MainWindow(QtGui.QMainWindow):
             handler.save(filename)
             saved = True
         except Exception as Ex:
-            QtGui.QMessageBox.warning(self, "Save Failed", str(Ex))
+            QtWidgets.QMessageBox.warning(self, "Save Failed", str(Ex))
 
         # If we saved, clear edited state
         if saved:
@@ -680,7 +680,7 @@ class MainWindow(QtGui.QMainWindow):
         directory = self.get_setting("default_directory")
 
         # Get a filename
-        filename, filetype = QtGui.QFileDialog.getOpenFileName(self, caption="Open file", filter=choices,
+        filename, filetype = QtWidgets.QFileDialog.getOpenFileName(self, caption="Open file", filter=choices,
                                                                dir=directory, selectedFilter="All Files (*)")
         if not filename:
             return
@@ -714,7 +714,7 @@ class MainWindow(QtGui.QMainWindow):
             self._filetype = filetype
         except Exception as Ex:
             self.display.voxels.enable_undo()
-            QtGui.QMessageBox.warning(self, "Could not load file", str(Ex))
+            QtWidgets.QMessageBox.warning(self, "Could not load file", str(Ex))
 
         self.display.build_grids()
         # self.display.voxels.resize()

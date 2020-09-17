@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import array
-from PySide import QtGui
+from PySide2 import QtWidgets, QtGui
 from OpenGL.GL import *
 # from OpenGL.GLU import gluUnProject, gluProject
 

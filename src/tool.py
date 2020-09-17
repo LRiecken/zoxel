@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 
 # Enumeration type
 
@@ -187,7 +187,7 @@ class Tool(object):
     def __init__(self, api):
         self.api = api
         # Create default action
-        self.action = QtGui.QAction(QtGui.QPixmap(":/gfx/icons/wrench.png"), "A Tool", None)
+        self.action = QtWidgets.QAction(QtGui.QPixmap(":/gfx/icons/wrench.png"), "A Tool", None)
         self.action.setStatusTip("Unknown Tool")
         self.priority = 9223372036854775807
 

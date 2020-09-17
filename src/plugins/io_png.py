@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from plugin_api import register_plugin
-from PySide import QtGui
+from PySide2 import QtGui
 
 
 class PngFile(object):
